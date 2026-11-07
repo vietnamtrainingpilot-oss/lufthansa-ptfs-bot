@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My dashboard · VietJet PTFS</title>
+  <meta name="description" content="Your VietJet PTFS loyalty balance, status tier, VJ Credits, flight history and transactions.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <span>Dashboard</span></nav>
+        <h1 class="page-title" id="dash-greeting">Your dashboard</h1>
+        <p class="page-lead" id="dash-sub">Balances, status progress and flight records for your Discord account.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <!-- Signed-out state -->
+        <div id="signed-out" hidden>
+          <div class="empty">
+            <p class="empty-title">Sign in to view your dashboard</p>
+            <p class="empty-body">
+              Your loyalty balance, VJ Credits, flight history and redemptions are private to your
+              Discord account. Sign in to see your own record.
+            </p>
+            <div class="mt-6 flex gap-3 wrap" style="justify-content:center" id="signed-out-actions"></div>
+          </div>
+        </div>
+
+        <!-- Authenticated state -->
+        <div id="signed-in" hidden>
+          <!-- Overview -->
+          <div class="stat-grid mb-6">
+            <div class="stat">
+              <p class="stat-label" id="stat-points-label">Loyalty points</p>
+              <p class="stat-value" id="stat-points">—</p>
+              <p class="stat-sub" id="stat-points-sub">Available balance</p>
+            </div>
+            <div class="stat">
+              <p class="stat-label">Status</p>
+              <p class="stat-value stat-value-sm" id="stat-tier">—</p>
+              <p class="stat-sub" id="stat-tier-sub">Loading</p>
+            </div>
+            <div class="stat">
+              <p class="stat-label" id="stat-credits-label">VJ Credits</p>
+              <p class="stat-value" id="stat-credits">—</p>
+              <p class="stat-sub">Separate balance</p>
+            </div>
+            <div class="stat">
+              <p class="stat-label">Flights completed</p>
+              <p class="stat-value" id="stat-flights">—</p>
+              <p class="stat-sub" id="stat-flights-sub">Verified flights</p>
+            </div>
+          </div>
+
+          <!-- Tier progress -->
+          <div class="card mb-6">
+            <div class="tier-progress" style="margin-top:0">
+              <div class="tier-head">
+                <span class="tier-name" id="tier-progress-name">Status progress</span>
+                <span class="pct" id="tier-progress-pct">—</span>
+              </div>
+              <div class="bar" role="progressbar" aria-labelledby="tier-progress-name" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="tier-bar">
+                <div class="bar-fill" id="tier-bar-fill" style="width:0%"></div>
+              </div>
+              <div class="tier-foot">
+                <span id="tier-foot-left">—</span>
+                <span id="tier-foot-right">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tabs" role="tablist" aria-label="Dashboard sections">
+            <button class="tab" role="tab" id="tab-activity" aria-selected="true" aria-controls="panel-activity">Activity</button>
+            <button class="tab" role="tab" id="tab-flights" aria-selected="false" aria-controls="panel-flights">Flights</button>
+            <button class="tab" role="tab" id="tab-missions" aria-selected="false" aria-controls="panel-missions">Missions</button>
+            <button class="tab" role="tab" id="tab-redeem" aria-selected="false" aria-controls="panel-redeem">Redeem</button>
+            <button class="tab" role="tab" id="tab-profile" aria-selected="false" aria-controls="panel-profile">Profile</button>
+          </div>
+
+          <!-- Panels -->
+          <div id="panel-activity" role="tabpanel" aria-labelledby="tab-activity" class="mt-6">
+            <div class="between wrap mb-4">
+              <h2 class="card-title" style="margin:0">Transactions</h2>
+              <div class="flex gap-2 wrap">
+                <label class="visually-hidden" for="hist-currency">Filter by currency</label>
+                <select class="select" id="hist-currency" style="width:auto;min-height:36px;padding-block:6px">
+                  <option value="">All currencies</option>
+                  <option value="points">Loyalty points</option>
+                  <option value="credits">VJ Credits</option>
+                </select>
+                <button class="btn btn-secondary btn-sm" id="hist-prev" disabled>Previous</button>
+                <span class="small soft" id="hist-page" style="align-self:center">Page 1</span>
+                <button class="btn btn-secondary btn-sm" id="hist-next" disabled>Next</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr><th scope="col">Date</th><th scope="col">Type</th><th scope="col">Details</th><th scope="col" style="text-align:right">Amount</th></tr>
+                </thead>
+                <tbody id="hist-body">
+                  <tr><td colspan="4"><div class="skeleton skeleton-line" style="width:80%"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="panel-flights" role="tabpanel" aria-labelledby="tab-flights" class="mt-6" hidden>
+            <h2 class="card-title mb-4">Your flights</h2>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr><th scope="col">Date</th><th scope="col">Flight</th><th scope="col">Route</th><th scope="col">Cabin</th><th scope="col">Attendance</th><th scope="col" style="text-align:right">Rewards</th></tr>
+                </thead>
+                <tbody id="flights-body">
+                  <tr><td colspan="6"><div class="skeleton skeleton-line" style="width:70%"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="panel-missions" role="tabpanel" aria-labelledby="tab-missions" class="mt-6" hidden>
+            <h2 class="card-title mb-4">Missions</h2>
+            <div id="missions-list"><div class="skeleton" style="height:96px"></div></div>
+          </div>
+
+          <div id="panel-redeem" role="tabpanel" aria-labelledby="tab-redeem" class="mt-6" hidden>
+            <h2 class="card-title">Redeem</h2>
+            <p class="card-body mt-2 mb-6">Redemptions spend your balance immediately. Prices and availability are always read from the server.</p>
+            <div class="tabs mb-6" role="tablist" aria-label="Catalogue type">
+              <button class="tab" role="tab" id="cat-points-tab" aria-selected="true">Loyalty catalogue</button>
+              <button class="tab" role="tab" id="cat-credits-tab" aria-selected="false">VJ Credits shop</button>
+            </div>
+            <div class="grid grid-2" id="redeem-grid"><div class="skeleton" style="height:170px"></div></div>
+          </div>
+
+          <div id="panel-profile" role="tabpanel" aria-labelledby="tab-profile" class="mt-6" hidden>
+            <div class="grid grid-2" style="gap:var(--s6);align-items:start">
+              <div class="card">
+                <h2 class="card-title">Linked Discord identity</h2>
+                <div class="flex gap-4 mt-4" style="align-items:center">
+                  <span class="avatar avatar-lg" id="profile-avatar" aria-hidden="true">—</span>
+                  <div>
+                    <p style="font-weight:600" id="profile-name">—</p>
+                    <p class="mono xs muted" id="profile-id">—</p>
+                  </div>
+                </div>
+                <hr class="divider mt-6 mb-6">
+                <dl class="stack" style="font-size:var(--t-sm)">
+                  <div class="between"><dt class="muted">Lifetime points earned</dt><dd class="mono" id="profile-lifetime">—</dd></div>
+                  <div class="between"><dt class="muted">Qualifying points</dt><dd class="mono" id="profile-qualifying">—</dd></div>
+                  <div class="between"><dt class="muted">Verified flights</dt><dd class="mono" id="profile-flights">—</dd></div>
+                </dl>
+              </div>
+              <div class="card">
+                <h2 class="card-title">Account</h2>
+                <p class="card-body mt-2">Your Discord account is the single source of your loyalty record. There are no separate website credentials to manage.</p>
+                <button class="btn btn-secondary btn-block mt-6" id="profile-signout">Sign out</button>
+                <p class="hint mt-3">Signing out clears the session on this device only. Your balances are unaffected.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <!-- Redemption confirmation dialog -->
+  <dialog id="redeem-dialog" aria-labelledby="redeem-dialog-title">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="redeem-dialog-title">Confirm redemption</h2>
+          <p class="modal-sub">Your balance is deducted only once you confirm.</p>
+        </div>
+        <button class="icon-btn" type="button" data-redeem-close aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <dl class="receipt" id="redeem-receipt"></dl>
+        <div class="alert alert-info mt-4">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Items marked as needing staff review are not delivered until a staff member confirms them.</span>
+        </div>
+        <div class="alert alert-danger mt-4" id="redeem-error" hidden></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" type="button" data-redeem-close>Cancel</button>
+        <button class="btn btn-primary" id="redeem-confirm">Confirm redemption</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="/js/pages/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+# Flight Operations System
+
+## 1. Introduction and Specifications
+
+Develop a complete flight operations system for TUI Airways, integrated with Discord, Firebase, and a web-based booking service.
+
+## 2. Flight Creation — `/createflight`
+
+The user runs `/createflight` and provides all required flight information.
+
+### Required Inputs
+- Flight Number
+- Flight Time (must use Unix timestamp)
+- Operating Aircraft
+- Departure Airport
+- Arrival Airport
+- Roblox Private Server Link
+- Available Classes
+- PTFS Spawn Location
+- Gate Number
+- Estimated Flight Duration
+- Flight Host
+- Any additional information required for the event
+
+### Execution Workflow
+1. Validate all required inputs.
+2. Create the flight event using the provided information.
+3. Retrieve and save the event link.
+4. Generate and send the flight preview using the specified format.
+5. Post a staff briefing in the designated staff server, not the main server.
+6. Include separate buttons for staff role-claiming.
+7. Save all flight information in Firebase for persistent storage and future retrieval.
+8. Confirm successful completion to the user only after all required operations succeed.
+
+## 3. Flight Check-In
+
+The bot automatically monitors the scheduled flight time using the stored Unix timestamp.
+
+### Execution Workflow
+1. When check-in begins, send the passenger joining message using the specified format.
+2. Include the event link and Roblox private server link.
+3. Display the PTFS spawn location and gate number.
+4. Automatically delete the joining message after 10 minutes to close check-in.
+
+## 4. Flight Completion — `/logflight`
+
+The flight host runs `/logflight` and provides the flight number.
+
+### Execution Workflow
+1. Verify that the flight exists and is eligible for completion.
+2. Log the completed flight in the staff server using the established logging format.
+3. Log all staff members who claimed roles for the flight.
+4. Preserve the flight and staff logs permanently in Firebase.
+5. Delete the active flight information and temporary operational messages, excluding the permanent logs.
+6. Mark the flight as completed and finalize the entire flight workflow.
+
+## 5. Flight Updates and Delays — `/flightupdate`
+
+The flight host runs `/flightupdate` and provides the required update information.
+
+### Execution Workflow
+1. Verify that the flight exists.
+2. Accept the appropriate update details, such as a delay, revised departure time, or cancellation.
+3. Send an update announcement using the specified message format.
+4. Modify the existing flight event and flight preview message where supported.
+5. If delayed, update the scheduled Unix timestamp and reschedule all relevant automated tasks.
+6. If cancelled, remove the active flight information and related temporary messages without generating completion logs.
+7. Ensure all changes are synchronized with Firebase.
+
+## 6. Flight Booking System
+
+### Flight Preview Integration
+- Add a booking button to every flight preview message.
+- When clicked, direct the passenger to the web-based booking service.
+- Allow passengers to book flights by submitting the required personal, account, and booking information.
+- Require passengers to verify their Discord account through the bot before accessing account-dependent features.
+- Use verified account information to determine eligibility for Economy, Premium Economy, Business Class, and other available classes.
+- Complete the booking workflow and provide confirmation to the passenger.
+- Send booking notifications to a designated staff channel so staff can review passenger bookings.
+
+### Additional Requirements
+Design the booking system architecture independently. Research and propose a practical, secure, and scalable implementation, including booking validation, duplicate prevention, seat or capacity management, booking references, cancellations, and persistent Firebase storage.
+
+Do not assume that a booking is complete until the system has successfully saved and confirmed it.

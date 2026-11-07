@@ -1,0 +1,1059 @@
+- generic [ref=e11]:
+  - generic [ref=e12]:
+    - generic [ref=e13]: KLM • Royal Dutch Airlines | PTFS
+    - generic [ref=e17]:
+      - button "Inbox" [ref=e20] [cursor=pointer]
+      - link [ref=e24] [cursor=pointer]:
+        - /url: https://support.discord.com
+        - button "Help" [ref=e25]
+  - generic [ref=e29]:
+    - generic [ref=e30]:
+      - navigation "Servers sidebar" [ref=e31]:
+        - generic: new
+        - tree [ref=e34]:
+          - generic [ref=e35]:
+            - treeitem "Direct Messages Direct Messages" [level=1] [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]: Direct Messages
+              - group "Direct Messages" [ref=e49]:
+                - generic [ref=e51]:
+                  - generic [ref=e55]:
+                    - treeitem "Carl-bot , 24 unread messages" [level=2] [ref=e57]
+                    - generic:
+                      - generic [aria-hidden]: "24"
+                  - generic [ref=e59]: Carl-bot
+                - generic [ref=e61]:
+                  - generic [ref=e65]:
+                    - treeitem "Ticket Tool , 1 unread message" [level=2] [ref=e67]
+                    - generic:
+                      - generic [aria-hidden]: "1"
+                  - generic [ref=e69]: Ticket Tool
+                - generic [ref=e71]:
+                  - generic [ref=e75]:
+                    - treeitem "Bloxlink , 30 unread messages" [level=2] [ref=e77]
+                    - generic:
+                      - generic [aria-hidden]: "30"
+                  - generic [ref=e79]: Bloxlink
+            - group "Servers" [ref=e82]:
+              - generic [ref=e83]:
+                - 'treeitem "Unread messages, Botique | #CodingTo100" [level=1] [ref=e93] [cursor=pointer]'
+                - generic [ref=e95]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: "Botique | #CodingTo100"
+              - generic [ref=e96]:
+                - treeitem "Unread messages, Brussels Airlines PTFS" [level=1] [ref=e106] [cursor=pointer]
+                - generic [ref=e108]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: Brussels Airlines PTFS
+              - generic [ref=e109]:
+                - treeitem "Unread messages, realiiconic dezyns" [level=1] [ref=e119] [cursor=pointer]
+                - generic [ref=e121]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: realiiconic dezyns
+              - generic [ref=e122]:
+                - treeitem "Unread messages, Wizz Air PTFS" [level=1] [ref=e132] [cursor=pointer]
+                - generic [ref=e134]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: Wizz Air PTFS
+              - generic [ref=e135]:
+                - generic [ref=e140]:
+                  - treeitem "17 mentions, PTFS Tour Company" [level=1] [ref=e145] [cursor=pointer]
+                  - generic: "17"
+                - generic [ref=e147]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: PTFS Tour Company
+              - generic [ref=e148]:
+                - generic [ref=e153]:
+                  - 'treeitem "5 mentions, PTC Star Awards™ | #2026" [level=1] [ref=e158] [cursor=pointer]'
+                  - generic: "5"
+                - generic [ref=e160]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: "PTC Star Awards™ | #2026"
+              - generic [ref=e161]:
+                - generic [ref=e166]:
+                  - treeitem "46 mentions, Ryanair PTFS" [level=1] [ref=e171] [cursor=pointer]
+                  - generic: "46"
+                - generic [ref=e173]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                        - generic:
+                          - generic: No Level
+                          - generic: 3 Boosts
+                      - generic: Ryanair PTFS
+              - generic [ref=e174]:
+                - treeitem "Unread messages, دناتا [-] dnata Logistics PTFS" [level=1] [ref=e184] [cursor=pointer]
+                - generic [ref=e186]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: دناتا [-] dnata Logistics PTFS
+              - generic [ref=e187]:
+                - generic [ref=e192]:
+                  - treeitem "26 mentions, oneworld Alliance | PTFS" [level=1] [ref=e197] [cursor=pointer]
+                  - generic: "26"
+                - generic [ref=e199]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: oneworld Alliance | PTFS
+              - generic [ref=e200]:
+                - 'treeitem "Unread messages, PTC Services™ | Spooking to #100" [level=1] [ref=e210] [cursor=pointer]'
+                - generic [ref=e212]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: "PTC Services™ | Spooking to #100"
+              - treeitem "Star Alliance PTFS, folder , 9 unread mentions" [level=1] [ref=e218] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e220]:
+                  - generic: "9"
+              - generic [ref=e231]:
+                - treeitem "Unread messages, Icelandair PTFS" [level=1] [ref=e241] [cursor=pointer]
+                - generic [ref=e243]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: Icelandair PTFS
+              - generic [ref=e244]:
+                - generic [ref=e249]:
+                  - treeitem "6 mentions, FlowBot Teaser" [level=1] [ref=e254] [cursor=pointer]
+                  - generic: "6"
+                - generic [ref=e256]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                        - generic:
+                          - generic: Level 1
+                          - generic: 5 Boosts
+                      - generic: FlowBot Teaser
+              - generic [ref=e257]:
+                - 'treeitem "Unread messages, Ludiko | #BOOSTYOURSKILLS" [level=1] [ref=e267] [cursor=pointer]'
+                - generic [ref=e269]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: "Ludiko | #BOOSTYOURSKILLS"
+              - generic [ref=e270]:
+                - treeitem "Unread messages, Etihad Airways PTFS" [level=1] [ref=e280] [cursor=pointer]
+                - generic [ref=e282]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: Etihad Airways PTFS
+              - generic [ref=e283]:
+                - treeitem "Unread messages, China Eastern 中国东方航空 PTFS" [level=1] [ref=e293] [cursor=pointer]
+                - generic [ref=e295]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                      - generic: China Eastern 中国东方航空 PTFS
+              - generic [ref=e296]:
+                - treeitem "KLM | Appeals" [level=1] [ref=e306] [cursor=pointer]
+                - generic [ref=e308]: KLM | Appeals
+              - treeitem "Working, folder , 54 unread mentions Working" [expanded] [level=1] [ref=e315] [cursor=pointer]:
+                - generic [ref=e316]: Working, folder , 54 unread mentions
+                - group "Working" [ref=e331]:
+                  - generic [ref=e332]:
+                    - treeitem "Unread messages, WestJet Staff Server" [level=2] [ref=e342]
+                    - generic [ref=e344]: WestJet Staff Server
+                  - generic [ref=e345]:
+                    - treeitem "Unread messages, WestJet | PTFS" [level=2] [ref=e355]
+                    - generic [ref=e357]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: WestJet | PTFS
+                  - generic [ref=e358]:
+                    - treeitem "Unread messages, Vietnam Airlines PTFS" [level=2] [ref=e368]
+                    - generic [ref=e370]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: Vietnam Airlines PTFS
+                  - generic [ref=e371]:
+                    - treeitem "Wizz Air | Crew" [level=2] [ref=e381]
+                    - generic [ref=e383]: Wizz Air | Crew
+                  - generic [ref=e384]:
+                    - treeitem "Vietjet Air | PTFS (IN-REBRANDING)" [level=2] [ref=e394]
+                    - generic [ref=e396]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: Vietjet Air | PTFS (IN-REBRANDING)
+                  - generic [ref=e397]:
+                    - generic [ref=e402]:
+                      - treeitem "48 mentions, British Airways PTFS" [level=2] [ref=e407]
+                      - generic: "48"
+                    - generic [ref=e409]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: Anyone can join this server.
+                            - generic:
+                              - generic: Level 1
+                              - generic: 5 Boosts
+                          - generic: British Airways PTFS
+                  - generic [ref=e410]:
+                    - treeitem "Unread messages, khoinguyen0513's server" [level=2] [ref=e420]:
+                      - generic [aria-hidden] [ref=e422]: ks
+                    - generic [ref=e423]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: khoinguyen0513's server
+                  - generic [ref=e424]:
+                    - treeitem "Unread messages, PTC Web Service" [level=2] [ref=e434]
+                    - generic [ref=e436]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: PTC Web Service
+                  - generic [ref=e437]:
+                    - treeitem "Unread messages, PTFS Roleplay Group" [level=2] [ref=e447]
+                    - generic [ref=e449]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: Anyone can join this server.
+                            - generic:
+                              - generic: Level 3
+                              - generic: 19 Boosts
+                          - generic: PTFS Roleplay Group
+                  - generic [ref=e450]:
+                    - treeitem "Unread messages, Swiss International Airlines | PTFS" [level=2] [ref=e460]
+                    - generic [ref=e462]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: Swiss International Airlines | PTFS
+                  - generic [ref=e463]:
+                    - treeitem "TUI PTFS | Staff Department" [level=2] [ref=e473]
+                    - generic [ref=e475]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: TUI PTFS | Staff Department
+                  - generic [ref=e476]:
+                    - treeitem "Unread messages, TUI Airways PTFS" [level=2] [ref=e486]
+                    - generic [ref=e488]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: Anyone can join this server.
+                            - generic:
+                              - generic: Level 1
+                              - generic: 2 Boosts
+                          - generic: TUI Airways PTFS
+                  - generic [ref=e489]:
+                    - treeitem "Unread messages, PTFS Media Company" [level=2] [ref=e499]
+                    - generic [ref=e501]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: Anyone can join this server.
+                            - generic:
+                              - generic: No Level
+                              - generic: 2 Boosts
+                          - generic: PTFS Media Company
+                  - generic [ref=e502]:
+                    - treeitem "KLM Academy" [level=2] [ref=e512]
+                    - generic [ref=e514]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: KLM Academy
+                  - generic [ref=e515]:
+                    - generic [ref=e520]:
+                      - treeitem "6 mentions, KLM • Royal Dutch Airlines | PTFS" [level=2] [selected] [ref=e525]
+                      - generic: "6"
+                    - generic [ref=e527]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: Anyone can join this server.
+                            - generic:
+                              - generic: Level 2
+                              - generic: 10 Boosts
+                          - generic: KLM • Royal Dutch Airlines | PTFS
+                  - generic [ref=e528]:
+                    - treeitem "Unread messages, Creator Syndicate" [level=2] [ref=e538]
+                    - generic [ref=e540]:
+                      - generic:
+                        - generic:
+                          - img "Community Server"
+                          - generic:
+                            - generic:
+                              - generic: Community Server
+                              - generic: People with an invite link can join.
+                          - generic: Creator Syndicate
+              - treeitem "Affiliates, folder , 402 unread mentions" [level=1] [ref=e546] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e548]:
+                  - generic: "402"
+              - treeitem "Advertisements, folder , 343 unread mentions" [level=1] [ref=e567] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e569]:
+                  - generic: "343"
+              - treeitem "Clearline Graphics | 1980s GSRP, Jalapeno | Official, ..., folder , 63 unread mentions" [level=1] [ref=e588] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e590]:
+                  - generic: "63"
+              - treeitem "PTFS Roleplay Group, Air Premia | PTFS, Roblox Studio Community, ..., folder , 6 unread mentions" [level=1] [ref=e609] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e611]:
+                  - generic: "6"
+              - treeitem "JetBlue University, folder" [level=1] [ref=e630] [cursor=pointer]
+              - treeitem "🍙Happy giri onigiris🍙, 24FS | 24 Flight School, folder , 9 unread mentions" [level=1] [ref=e648] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e650]:
+                  - generic: "9"
+              - treeitem "Touchpoint Support, ZENITHH, CodeX Development, PTFS Roleplay Group, folder , 21 unread mentions" [level=1] [ref=e667] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e669]:
+                  - generic: "21"
+              - treeitem "Vietjet Air.rblx, folder" [level=1] [ref=e688] [cursor=pointer]
+              - treeitem "PTFS Roleplay, United Airlines | ATC24, folder , 35 unread mentions" [level=1] [ref=e706] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e708]:
+                  - generic: "35"
+              - treeitem "TechHaven, SKYtech, folder , 1 unread mention" [level=1] [ref=e725] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e727]:
+                  - generic: "1"
+              - generic [ref=e739]:
+                - treeitem "Pilot Training Camp" [level=1] [ref=e749] [cursor=pointer]
+                - generic [ref=e751]: Pilot Training Camp
+              - generic [ref=e752]:
+                - generic [ref=e757]:
+                  - treeitem "21 mentions, wes vids" [level=1] [ref=e762] [cursor=pointer]
+                  - generic: "21"
+                - generic [ref=e764]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                        - generic:
+                          - generic: Level 3
+                          - generic: 14 Boosts
+                      - generic: wes vids
+              - generic [ref=e765]:
+                - treeitem "PTFS Events Group" [level=1] [ref=e775] [cursor=pointer]:
+                  - generic [aria-hidden] [ref=e777]: PEG
+                - generic [ref=e778]: PTFS Events Group
+              - generic [ref=e779]:
+                - treeitem "Pilot Training Academy" [level=1] [ref=e789] [cursor=pointer]:
+                  - generic [aria-hidden] [ref=e791]: PTA
+                - generic [ref=e792]: Pilot Training Academy
+              - treeitem "Vietnam Airlines, folder , 9 unread mentions" [level=1] [ref=e798] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e800]:
+                  - generic: "9"
+              - generic [ref=e811]:
+                - treeitem "Unread messages, PTFS News Network | PNN" [level=1] [ref=e821] [cursor=pointer]
+                - generic [ref=e823]:
+                  - generic:
+                    - generic:
+                      - img "Community Server"
+                      - generic:
+                        - generic:
+                          - generic: Community Server
+                          - generic: People with an invite link can join.
+                        - generic:
+                          - generic: Level 1
+                          - generic: 2 Boosts
+                      - generic: PTFS News Network | PNN
+              - treeitem "7.11 + 7.12 GROW A GARDEN, FORSAKEN, STEAL A BRAINROT AND 99 NIGHTS IN THE FOREST COMMUNITY (CVA), ..., folder" [level=1] [ref=e829] [cursor=pointer]:
+                - generic [ref=e832]: SaBfTIS
+            - treeitem "Add a Server" [level=1] [ref=e850] [cursor=pointer]
+            - treeitem "Discover" [level=1] [ref=e861] [cursor=pointer]
+            - treeitem "Download Apps" [level=1] [ref=e872] [cursor=pointer]
+        - generic: new
+      - navigation "KLM • Royal Dutch Airlines | PTFS (server)" [ref=e878]:
+        - generic [ref=e881]:
+          - button "KLM • Royal Dutch Airlines | PTFS, server actions" [ref=e882] [cursor=pointer]:
+            - generic [ref=e883]:
+              - generic [ref=e884]:
+                - button "Community Server" [ref=e885]
+                - generic [ref=e889]:
+                  - generic [ref=e890]:
+                    - generic: Community Server
+                    - generic: Anyone can join this server.
+                  - generic [ref=e891]:
+                    - generic [ref=e892]: Level 2
+                    - generic [ref=e899]: 10 Boosts
+              - heading "KLM • Royal Dutch Airlines | PTFS" [level=2] [ref=e901]
+          - button "Invite to Server" [ref=e906] [cursor=pointer]
+        - heading "Channels" [level=2] [ref=e914]
+        - generic [ref=e916] [cursor=pointer]
+        - list "Channels" [ref=e918]:
+          - listitem [ref=e920]:
+            - button "Cabin VC (voice channel), unread" [ref=e924] [cursor=pointer]:
+              - generic [ref=e925]:
+                - img "Voice icon" [ref=e926]
+                - generic [ref=e930]: Voice
+                - generic [aria-hidden] [ref=e931]: Cabin VC
+                - generic: Open Chat
+          - listitem [ref=e933]:
+            - generic [ref=e934] [cursor=pointer]:
+              - button "www.klm.com/careers (category)" [expanded] [ref=e935]:
+                - heading "www.klm.com/careers" [level=3] [ref=e936]
+              - generic [ref=e940]:
+                - button "Create Channel" [ref=e941]
+                - generic [ref=e944]: Create Channel
+          - listitem [ref=e945]:
+            - link "careers (announcement channel)" [ref=e948] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1558034439316045854
+              - generic [ref=e949]:
+                - img "Announcements icon" [ref=e950]
+                - generic [ref=e954]: Announcements
+                - generic [aria-hidden] [ref=e955]: careers
+          - listitem [ref=e956]:
+            - link "application-results (announcement channel)" [ref=e959] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1498379957435367626
+              - generic [ref=e960]:
+                - img "Announcements icon" [ref=e961]
+                - generic [ref=e965]: Announcements
+                - generic [aria-hidden] [ref=e966]: application-results
+          - listitem [ref=e967]:
+            - generic [ref=e968] [cursor=pointer]:
+              - button "Engagement (category)" [expanded] [ref=e969]:
+                - heading "Engagement" [level=3] [ref=e970]
+              - generic [ref=e974]:
+                - button "Create Channel" [ref=e975]
+                - generic [ref=e978]: Create Channel
+          - listitem [ref=e979]:
+            - link "engagement (announcement channel)" [ref=e982] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1489237137424384040
+              - generic [ref=e983]:
+                - img "Announcements icon" [ref=e984]
+                - generic [ref=e988]: Announcements
+                - generic [aria-hidden] [ref=e989]: engagement
+          - listitem [ref=e990]:
+            - link "events (announcement channel)" [ref=e993] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1492900168515719268
+              - generic [ref=e994]:
+                - img "Announcements icon" [ref=e995]
+                - generic [ref=e999]: Announcements
+                - generic [aria-hidden] [ref=e1000]: events
+          - listitem [ref=e1001]:
+            - link "qotd (announcement channel)" [ref=e1004] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1498381169006346391
+              - generic [ref=e1005]:
+                - img "Announcements icon" [ref=e1006]
+                - generic [ref=e1010]: Announcements
+                - generic [aria-hidden] [ref=e1011]: qotd
+          - listitem [ref=e1012]:
+            - link "youtube-content (announcement channel)" [ref=e1015] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1501116896421085194
+              - generic [ref=e1016]:
+                - img "Announcements icon" [ref=e1017]
+                - generic [ref=e1021]: Announcements
+                - generic [aria-hidden] [ref=e1022]: youtube-content
+          - listitem [ref=e1023]:
+            - link "hall-of-fame (text channel)" [ref=e1026] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1516823584515948645
+              - generic [ref=e1027]:
+                - img "Text (Active Threads) icon" [ref=e1028]
+                - generic [ref=e1031]: Text (Active Threads)
+                - generic [aria-hidden] [ref=e1032]: hall-of-fame
+          - listitem [ref=e1033]:
+            - link "hall-of-shame (text channel)" [ref=e1036] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1516825102904463565
+              - generic [ref=e1037]:
+                - img "Text icon" [ref=e1038]
+                - generic [ref=e1041]: Text
+                - generic [aria-hidden] [ref=e1042]: hall-of-shame
+          - listitem [ref=e1043]:
+            - generic [ref=e1044] [cursor=pointer]:
+              - button "Partner Affairs (category)" [expanded] [ref=e1045]:
+                - heading "Partner Affairs" [level=3] [ref=e1046]
+              - generic [ref=e1050]:
+                - button "Create Channel" [ref=e1051]
+                - generic [ref=e1054]: Create Channel
+          - listitem [ref=e1055]:
+            - link "partnership-announcements (announcement channel), Private Channel (locked)" [ref=e1058] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1534841205521649725
+              - generic [ref=e1059]:
+                - img "Announcements (Limited) icon" [ref=e1060]
+                - generic [ref=e1065]: Announcements (Limited)
+                - generic [aria-hidden] [ref=e1066]: partnership-announcements
+          - listitem [ref=e1067]:
+            - link "partner-chat (text channel), Private Channel (locked)" [ref=e1070] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1534841156939022337
+              - generic [ref=e1071]:
+                - img "Text (Limited) icon" [ref=e1072]
+                - generic [ref=e1076]: Text (Limited)
+                - generic [aria-hidden] [ref=e1077]: partner-chat
+          - listitem [ref=e1078]:
+            - link "codeshare-requests (forum channel), Private Channel (locked)" [ref=e1081] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1534841297481891972
+              - generic [ref=e1082]:
+                - img "Forum (Limited) icon" [ref=e1083]
+                - generic [ref=e1087]: Forum (Limited)
+                - generic [aria-hidden] [ref=e1088]: codeshare-requests
+          - listitem [ref=e1089]:
+            - generic [ref=e1090] [cursor=pointer]:
+              - button "Community (category)" [expanded] [ref=e1091]:
+                - heading "Community" [level=3] [ref=e1092]
+              - generic [ref=e1096]:
+                - button "Create Channel" [ref=e1097]
+                - generic [ref=e1100]: Create Channel
+          - listitem [ref=e1101]:
+            - link "general (text channel)" [ref=e1104] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1476173052596457533
+              - generic [ref=e1105]:
+                - img "Text icon" [ref=e1106]
+                - generic [ref=e1109]: Text
+                - generic [aria-hidden] [ref=e1110]: general
+          - listitem [ref=e1111]:
+            - link "off-topic (text channel)" [ref=e1114] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1474950955371069531
+              - generic [ref=e1115]:
+                - img "Text icon" [ref=e1116]
+                - generic [ref=e1119]: Text
+                - generic [aria-hidden] [ref=e1120]: off-topic
+          - listitem [ref=e1121]:
+            - link "unread, media (text channel)" [ref=e1125] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1474951175643074762
+              - generic [ref=e1126]:
+                - img "Text icon" [ref=e1127]
+                - generic [ref=e1130]: Text
+                - generic [aria-hidden] [ref=e1131]: media
+          - listitem [ref=e1132]:
+            - link "unread, bot-commands (text channel)" [ref=e1136] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1475829985460621445
+              - generic [ref=e1137]:
+                - img "Text icon" [ref=e1138]
+                - generic [ref=e1141]: Text
+                - generic [aria-hidden] [ref=e1142]: bot-commands
+          - listitem [ref=e1143]:
+            - link "role-request (text channel)" [ref=e1146] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1538860103086776411
+              - generic [ref=e1147]:
+                - img "Text icon" [ref=e1148]
+                - generic [ref=e1151]: Text
+                - generic [aria-hidden] [ref=e1152]: role-request
+          - listitem [ref=e1153]:
+            - link "landing-competition (text channel)" [ref=e1156] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1533184036145594510
+              - generic [ref=e1157]:
+                - img "Text icon" [ref=e1158]
+                - generic [ref=e1161]: Text
+                - generic [aria-hidden] [ref=e1162]: landing-competition
+          - listitem [ref=e1163]:
+            - link "bug-reports-and-suggestions (forum channel)" [ref=e1166] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1492159518652498031
+              - generic [ref=e1167]:
+                - img "Forum icon" [ref=e1168]
+                - generic [ref=e1172]: Forum
+                - generic [aria-hidden] [ref=e1173]: bug-reports-and-suggestions
+          - listitem [ref=e1174]:
+            - link "suggestions (forum channel)" [ref=e1177] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1498381871283834922
+              - generic [ref=e1178]:
+                - img "Forum icon" [ref=e1179]
+                - generic [ref=e1183]: Forum
+                - generic [aria-hidden] [ref=e1184]: suggestions
+                - generic [ref=e1185]: "1"
+          - listitem [ref=e1188]:
+            - button "Event VC (voice channel), unread" [ref=e1192] [cursor=pointer]:
+              - generic [ref=e1193]:
+                - img "Voice icon" [ref=e1194]
+                - generic [ref=e1198]: Voice
+                - generic [aria-hidden] [ref=e1199]: Event VC
+                - generic: Open Chat
+          - listitem [ref=e1201]:
+            - generic [ref=e1202] [cursor=pointer]:
+              - button "Trainee Category (category)" [expanded] [ref=e1203]:
+                - heading "Trainee Category" [level=3] [ref=e1204]
+              - generic [ref=e1208]:
+                - button "Create Channel" [ref=e1209]
+                - generic [ref=e1212]: Create Channel
+          - listitem [ref=e1213]:
+            - link "academy-server (announcement channel), Private Channel (locked)" [ref=e1216] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1500514146050113689
+              - generic [ref=e1217]:
+                - img "Announcements (Limited) icon" [ref=e1218]
+                - generic [ref=e1223]: Announcements (Limited)
+                - generic [aria-hidden] [ref=e1224]: academy-server
+          - listitem [ref=e1225]:
+            - generic [ref=e1226] [cursor=pointer]:
+              - button "www.klm.com/customerservice (category)" [expanded] [ref=e1227]:
+                - heading "www.klm.com/customerservice" [level=3] [ref=e1228]
+              - generic [ref=e1232]:
+                - button "Create Channel" [ref=e1233]
+                - generic [ref=e1236]: Create Channel
+          - listitem [ref=e1237]:
+            - link "help-desk (text channel)" [ref=e1240] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1476169181409054731
+              - generic [ref=e1241]:
+                - img "Text icon" [ref=e1242]
+                - generic [ref=e1245]: Text
+                - generic [aria-hidden] [ref=e1246]: help-desk
+          - listitem [ref=e1247]:
+            - link "unread, live-support (text channel)" [ref=e1251] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1476169509583982663
+              - generic [ref=e1252]:
+                - img "Text icon" [ref=e1253]
+                - generic [ref=e1256]: Text
+                - generic [aria-hidden] [ref=e1257]: live-support
+          - listitem [ref=e1258]:
+            - generic [ref=e1259] [cursor=pointer]:
+              - button "www.klm.com/marketing (category)" [expanded] [ref=e1260]:
+                - heading "www.klm.com/marketing" [level=3] [ref=e1261]
+              - generic [ref=e1265]:
+                - button "Create Channel" [ref=e1266]
+                - generic [ref=e1269]: Create Channel
+          - listitem [ref=e1270]:
+            - link "klm-branding (text channel)" [ref=e1273] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487290397117124738
+              - generic [ref=e1274]:
+                - img "Text icon" [ref=e1275]
+                - generic [ref=e1278]: Text
+                - generic [aria-hidden] [ref=e1279]: klm-branding
+                - generic [ref=e1280]:
+                  - button "Invite to Channel" [ref=e1282]
+                  - button "Edit Channel" [ref=e1287]
+          - listitem [ref=e1290]:
+            - link "unread, partner-ads (text channel)" [ref=e1294] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487292760162570361
+              - generic [ref=e1295]:
+                - img "Text icon" [ref=e1296]
+                - generic [ref=e1299]: Text
+                - generic [aria-hidden] [ref=e1300]: partner-ads
+          - listitem [ref=e1301]:
+            - link "unread, public-branding (text channel)" [ref=e1305] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487291039814520832
+              - generic [ref=e1306]:
+                - img "Text icon" [ref=e1307]
+                - generic [ref=e1310]: Text
+                - generic [aria-hidden] [ref=e1311]: public-branding
+          - listitem [ref=e1312]:
+            - link "paid-ads (text channel)" [ref=e1315] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487293366675968152
+              - generic [ref=e1316]:
+                - img "Text icon" [ref=e1317]
+                - generic [ref=e1320]: Text
+                - generic [aria-hidden] [ref=e1321]: paid-ads
+          - listitem [ref=e1322]:
+            - generic [ref=e1323] [cursor=pointer]:
+              - button "www.klm.com/pc (category)" [expanded] [ref=e1324]:
+                - heading "www.klm.com/pc" [level=3] [ref=e1325]
+              - generic [ref=e1329]:
+                - button "Create Channel" [ref=e1330]
+                - generic [ref=e1333]: Create Channel
+          - listitem [ref=e1334]:
+            - link "premium-lounge (text channel), Private Channel (locked)" [ref=e1337] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487467926196846853
+              - generic [ref=e1338]:
+                - img "Text (Limited) icon" [ref=e1339]
+                - generic [ref=e1343]: Text (Limited)
+                - generic [aria-hidden] [ref=e1344]: premium-lounge
+          - listitem [ref=e1345]:
+            - link "premium-announcements (announcement channel), Private Channel (locked)" [ref=e1348] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1487468431178731614
+              - generic [ref=e1349]:
+                - img "Announcements (Limited) icon" [ref=e1350]
+                - generic [ref=e1355]: Announcements (Limited)
+                - generic [aria-hidden] [ref=e1356]: premium-announcements
+          - listitem [ref=e1357]:
+            - link "premium-flights (announcement channel), Private Channel (locked)" [ref=e1360] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1501599617656029224
+              - generic [ref=e1361]:
+                - img "Announcements (Limited) icon" [ref=e1362]
+                - generic [ref=e1367]: Announcements (Limited)
+                - generic [aria-hidden] [ref=e1368]: premium-flights
+          - listitem [ref=e1369]:
+            - link "premium-checkin (announcement channel), Private Channel (locked)" [ref=e1372] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1504504267149672609
+              - generic [ref=e1373]:
+                - img "Announcements (Limited) icon" [ref=e1374]
+                - generic [ref=e1379]: Announcements (Limited)
+                - generic [aria-hidden] [ref=e1380]: premium-checkin
+          - listitem [ref=e1381]:
+            - button "ATC24 Divison (category)" [expanded] [ref=e1383] [cursor=pointer]:
+              - heading "ATC24 Divison" [level=3] [ref=e1384]
+          - listitem [ref=e1388]:
+            - link "atc24-announcements (announcement channel)" [ref=e1391] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1541054230293512343
+              - generic [ref=e1392]:
+                - img "Announcements icon" [ref=e1393]
+                - generic [ref=e1397]: Announcements
+                - generic [aria-hidden] [ref=e1398]: atc24-announcements
+          - listitem [ref=e1399]:
+            - link "atc24-information (announcement channel)" [ref=e1402] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1515625758373056664
+              - generic [ref=e1403]:
+                - img "Announcements icon" [ref=e1404]
+                - generic [ref=e1408]: Announcements
+                - generic [aria-hidden] [ref=e1409]: atc24-information
+          - listitem [ref=e1410]:
+            - link "atc24-applications (announcement channel)" [ref=e1413] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1515692608754815076
+              - generic [ref=e1414]:
+                - img "Announcements icon" [ref=e1415]
+                - generic [ref=e1419]: Announcements
+                - generic [aria-hidden] [ref=e1420]: atc24-applications
+          - listitem [ref=e1421]:
+            - link "unread, atc24-chat (text channel)" [ref=e1425] [cursor=pointer]:
+              - /url: /channels/1474733162646081681/1515625967635398707
+              - generic [ref=e1426]:
+                - img "Text icon" [ref=e1427]
+                - generic [ref=e1430]: Text
+                - generic [aria-hidden] [ref=e1431]: atc24-chat
+        - button "6 New Mentions" [ref=e1433] [cursor=pointer]
+      - separator "Resize Sidebar" [ref=e1435]
+      - region "User status and settings" [ref=e1436]:
+        - generic [ref=e1437]:
+          - generic [ref=e1438] [cursor=pointer]:
+            - button "Manage profile and status"
+            - generic [ref=e1441]:
+              - generic [ref=e1442]: vietnamtrainingpilot
+              - generic [ref=e1446]:
+                - generic: khoinguyen0513
+                - generic:
+                  - generic: Do Not Disturb
+                  - generic:
+                    - generic:
+                      - img ":boy:"
+                      - text: https://portfolio.nguyenhuukhoinguyen082.workers.dev/
+          - generic [ref=e1447]:
+            - generic [ref=e1448]:
+              - switch "Mute" [checked] [ref=e1449] [cursor=pointer]
+              - generic [ref=e1470]: Unmute
+              - button "Input Options" [ref=e1471] [cursor=pointer]
+            - generic [ref=e1475]:
+              - switch "Deafen" [ref=e1476] [cursor=pointer]
+              - button "Output Options" [ref=e1488] [cursor=pointer]
+            - button "User Settings" [ref=e1492] [cursor=pointer]
+    - generic [ref=e1503]:
+      - region "Channel header" [ref=e1505]:
+        - generic [ref=e1506]:
+          - generic [ref=e1507]:
+            - generic [ref=e1511]: Text Channel
+            - 'heading "KLM • Royal Dutch Airlines | PTFS: klm-branding" [level=1] [ref=e1513]':
+              - generic [ref=e1514]: "KLM • Royal Dutch Airlines | PTFS:"
+              - text: klm-branding
+          - generic [ref=e1515]:
+            - button "Threads" [ref=e1516] [cursor=pointer]
+            - button "Notification Settings" [ref=e1519] [cursor=pointer]
+            - button "Pinned Messages" [ref=e1522] [cursor=pointer]
+            - button "Show Member List" [ref=e1525] [cursor=pointer]
+            - generic [ref=e1530]:
+              - combobox "Search KLM • Royal Dutch Airlines | PTFS" [ref=e1531]
+              - button [aria-hidden] [ref=e1533]
+      - main "klm-branding (channel)" [ref=e1540]:
+        - heading "klm-branding chat" [level=2] [ref=e1542]
+        - group [ref=e1544]:
+          - list "Messages in klm-branding" [ref=e1546]:
+            - generic [ref=e1547]:
+              - heading [level=3] [aria-hidden] [ref=e1551]: "Welcome to #klm-branding!"
+              - generic [ref=e1552]: "This is the start of the #klm-branding channel."
+              - button "Edit Channel" [ref=e1554] [cursor=pointer]
+            - separator "September 27, 2026"
+            - listitem [ref=e1561]:
+              - article [ref=e1562]:
+                - generic [ref=e1563]:
+                  - img [aria-hidden] [ref=e1564] [cursor=pointer]
+                  - 'heading "[LOA] CHM • AviatorJL Server Tag: SIA Role icon, [COTB] Chairman Of The Board [COTB] Chairman Of The Board 9/27/26, 7:13 AM" [level=3] [ref=e1565]':
+                    - generic [ref=e1566]:
+                      - button "[LOA] CHM • AviatorJL" [ref=e1567]
+                      - 'button "Server Tag: SIA" [ref=e1569] [cursor=pointer]':
+                        - generic [ref=e1570]:
+                          - generic [ref=e1571]: "Server Tag: SIA"
+                          - text: SIA
+                      - button [ref=e1573]:
+                        - img "Role icon, [COTB] Chairman Of The Board" [ref=e1574] [cursor=pointer]
+                      - generic [ref=e1575]: "[COTB] Chairman Of The Board"
+                    - generic:
+                      - generic:
+                        - time:
+                          - generic [aria-hidden]: —
+                          - text: 9/27/26, 7:13 AM
+                      - generic: Sunday, September 27, 2026 at 7:13 AM
+                  - generic [ref=e1576]:
+                    - button [ref=e1577] [cursor=pointer]:
+                      - img "🇳🇱" [ref=e1578]
+                    - link [ref=e1579] [cursor=pointer]:
+                      - /url: https://discord.gg/rQyFSAZ5b9
+                      - strong [ref=e1580]: "| KLM • Royal Dutch Airlines"
+                    - generic [ref=e1582]:
+                      - button [ref=e1583] [cursor=pointer]:
+                        - img "💫" [ref=e1584]
+                      - emphasis [ref=e1585]:
+                        - strong [ref=e1586]: Journeys Of Inspiration
+                    - strong [ref=e1587]:
+                      - button [ref=e1588] [cursor=pointer]:
+                        - img "ℹ️" [ref=e1589]
+                      - generic [ref=e1590]: "About Us:"
+                    - emphasis [ref=e1591]:
+                      - generic [ref=e1592]: Founded by Idk and AviatorJL at 27/3/2026
+                    - blockquote [ref=e1596]:
+                      - strong [ref=e1597]: KLM | Royal Dutch Airlines
+                      - text: ", being founded in 1919 and headquartered at Netherlands is considered one of the world's oldest airlines that are still"
+                      - strong [ref=e1598]: operating well.
+                      - text: Known for their
+                      - strong [ref=e1599]: exceptional service
+                      - text: and
+                      - strong [ref=e1600]: numerous compliments
+                      - text: from the community, KLM is considered one of the
+                      - strong [ref=e1601]: best and oldest airline
+                      - text: in the world.
+                      - strong [ref=e1602]: Welkom aan boord.
+                    - strong [ref=e1603]:
+                      - button [ref=e1604] [cursor=pointer]:
+                        - img "✈️" [ref=e1605]
+                      - generic [ref=e1606]: The Jumbo Jet
+                    - emphasis [ref=e1609]: The Return of the Queen of the Skies...
+                    - blockquote [ref=e1612]:
+                      - text: As we bring back the
+                      - strong [ref=e1613]: golden ages
+                      - text: of flying on the biggest retro
+                      - strong [ref=e1614]: aircraft
+                      - text: in the world,
+                      - strong [ref=e1615]: KLM PTFS
+                      - text: hosts retro flights on the
+                      - strong [ref=e1616]: Boeing 747-8, DC-10 or even the MD-11.
+                      - text: We strive to fly
+                      - strong [ref=e1617]: retro
+                      - text: like how we did in the past and bring back
+                      - strong [ref=e1618]: the destinations
+                      - text: we used to
+                      - strong [ref=e1619]: connect
+                      - text: . Want to join flights like these? Join
+                      - strong [ref=e1620]: KLM PTFS
+                      - text: today...
+                    - strong [ref=e1621]:
+                      - button [ref=e1622] [cursor=pointer]:
+                        - img "🛫" [ref=e1623]
+                      - generic [ref=e1624]: "What we Offer:"
+                    - button [ref=e1625] [cursor=pointer]:
+                      - img "🔹" [ref=e1626]
+                    - strong [ref=e1627]: Exceptional Service in flights
+                    - button [ref=e1628] [cursor=pointer]:
+                      - img "🔹" [ref=e1629]
+                    - strong [ref=e1630]: Professional and active staff
+                    - button [ref=e1631] [cursor=pointer]:
+                      - img "🔹" [ref=e1632]
+                    - strong [ref=e1633]: Active flights favouring all timezones
+                    - button [ref=e1634] [cursor=pointer]:
+                      - img "🔹" [ref=e1635]
+                    - strong [ref=e1636]: Events and giveaways actively hosted
+                    - button [ref=e1637] [cursor=pointer]:
+                      - img "🔹" [ref=e1638]
+                    - strong [ref=e1639]: Rewards that can be constantly earned
+                    - button [ref=e1640] [cursor=pointer]:
+                      - img "🔹" [ref=e1641]
+                    - strong [ref=e1642]: Welcoming to all new passengers
+                    - button [ref=e1643] [cursor=pointer]:
+                      - img "👋" [ref=e1644]
+                    - strong [ref=e1645]: Join now and don't miss out our flights!
+                    - generic [ref=e1646]: "\"We bring you Royal journeys, everywhere at anytime.\""
+                    - button [ref=e1648] [cursor=pointer]:
+                      - img "❤️" [ref=e1649]
+                    - strong [ref=e1650]:
+                      - text: Our New
+                      - generic [ref=e1651]: AIRBUS A350-900
+                      - text: "!"
+                    - link [ref=e1652] [cursor=pointer]:
+                      - /url: https://www.youtube.com/watch?v=mR86AyKcKtM
+                      - strong [ref=e1653]: Our first Airbus A350 has arrived! | KLM PTFS
+                    - code [ref=e1654]: "Advertisment Pictures:"
+                    - link "Welcome_to_KLMs_new_747_Jumbo_Jet..png" [ref=e1655] [cursor=pointer]:
+                      - /url: https://cdn.discordapp.com/attachments/1553192533109248081/1553339541631275109/Welcome_to_KLMs_new_747_Jumbo_Jet..png?ex=6ab98c6e&is=6ab83aee&hm=9afae4ad43dfff160b280cd6b76449e722174d1b96a489890ee5fa1e8350efb1
+                    - generic:
+                      - generic:
+                        - time:
+                          - generic: (edited)
+                      - generic: Saturday, October 10, 2026 at 10:22 AM
+                - generic [ref=e1658]:
+                  - generic [ref=e1659] [cursor=pointer]:
+                    - button "Expand"
+                    - generic [ref=e1660]:
+                      - img [ref=e1663]:
+                        - img [ref=e1666]:
+                          - img "KLM • Royal Dutch Airlines | PTFS" [ref=e1668]
+                      - generic [ref=e1669]:
+                        - generic [ref=e1670]:
+                          - button "KLM • Royal Dutch Airlines | PTFS KLM • Royal Dutch Airlines | PTFS" [ref=e1671]:
+                            - heading "KLM • Royal Dutch Airlines | PTFS" [level=3] [ref=e1672]
+                            - generic [ref=e1673]: KLM • Royal Dutch Airlines | PTFS
+                          - generic [ref=e1674]:
+                            - button "Community Server" [ref=e1675]
+                            - generic [ref=e1679]:
+                              - generic [ref=e1680]:
+                                - generic: Community Server
+                                - generic: Anyone can join this server.
+                              - generic [ref=e1681]:
+                                - generic [ref=e1682]: Level 2
+                                - generic [ref=e1689]: 10 Boosts
+                        - generic [ref=e1691]:
+                          - generic [ref=e1692]: 158 Online
+                          - generic [ref=e1695]: 1,113 Members
+                        - generic [ref=e1698]: Est. Feb 2026
+                      - generic [ref=e1700]:
+                        - generic [ref=e1701]: We are the fastest growing server among all the other KLM's. This airline was only founded on March 27 and has gained lots of member quickly! Join this airline now to experience the Royal way of flying anywhere, anytime.
+                        - generic [ref=e1703]:
+                          - button [ref=e1704]:
+                            - img "ROBLOX" [ref=e1705]
+                          - generic [ref=e1711]: ROBLOX
+                          - generic [ref=e1713]: ROBLOX
+                        - generic [ref=e1714]:
+                          - generic [ref=e1715]:
+                            - img "💙" [ref=e1716]
+                            - generic [ref=e1717]: KLM
+                          - generic [ref=e1718]:
+                            - img "🇳🇱" [ref=e1719]
+                            - generic [ref=e1720]: Dutch
+                          - generic [ref=e1721]:
+                            - img "✈️" [ref=e1722]
+                            - generic [ref=e1723]: PTFS
+                          - generic [ref=e1724]:
+                            - img "👩‍💼" [ref=e1725]
+                            - generic [ref=e1726]: Unofficial
+                          - generic [ref=e1727]:
+                            - img "🔳" [ref=e1728]
+                            - generic [ref=e1729]: Roblox
+                    - button "Go to Server" [ref=e1734]
+                  - article [ref=e1738]:
+                    - generic [ref=e1740]:
+                      - button "Remove all embeds" [ref=e1741] [cursor=pointer]
+                      - link "YouTube" [ref=e1745] [cursor=pointer]:
+                        - /url: https://www.youtube.com
+                      - link "KLM | Royal Dutch Airways PTFS" [ref=e1747] [cursor=pointer]:
+                        - /url: https://www.youtube.com/channel/UCIz9qTyuhrtcRfsSoipMkLA
+                      - link "Our first Airbus A350 has arrived! | KLM PTFS" [ref=e1749] [cursor=pointer]:
+                        - /url: https://www.youtube.com/watch?v=mR86AyKcKtM
+                      - generic [ref=e1750]:
+                        - generic [ref=e1753] [cursor=pointer]:
+                          - link [aria-hidden] [ref=e1754]:
+                            - /url: ""
+                          - button "Image" [ref=e1755]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - button "Play" [ref=e1757] [cursor=pointer]
+                              - link [ref=e1760] [cursor=pointer]:
+                                - /url: https://www.youtube.com/watch?v=mR86AyKcKtM
+                                - img "Open Link" [ref=e1761]
+                  - generic [ref=e1766] [cursor=pointer]:
+                    - link [aria-hidden] [ref=e1767]:
+                      - /url: https://cdn.discordapp.com/attachments/1553192533109248081/1553339541631275109/Welcome_to_KLMs_new_747_Jumbo_Jet..png?ex=6acc016e&is=6acaafee&hm=c6fdcdde5ec371d8a89850714b68f213e8c0ca732a75fe1aaa0a85b7528aad35&
+                    - button "Image" [ref=e1768]
+        - generic [ref=e1775]:
+          - generic:
+            - generic:
+              - generic [aria-hidden]: You do not have permission to send messages in this channel.
+              - generic "You do not have permission to send messages in this channel."

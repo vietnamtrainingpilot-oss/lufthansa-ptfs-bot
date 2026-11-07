@@ -1,0 +1,299 @@
+VIETJET PTFS — SKYJOY-INSPIRED LOYALTY AND ECONOMY SYSTEM
+FOLLOW-UP IMPLEMENTATION PROMPT FOR OPENCODE
+
+Read this entire follow-up prompt and the existing VietJet PTFS Discord Bot + Website Build Specification before making changes. This is an extension to the existing project, not a replacement for it. Inspect the current repository and implementation first. Preserve working features, naming conventions, security rules, Discord Components V2 requirements, Firestore setup, API contracts, website design system, and existing OpenCode skill workflow. Do not rebuild the project from scratch unless the current implementation makes that genuinely necessary.
+
+ABSOLUTE TEXT RULE: DO NOT ADD EMOJIS ANYWHERE. This includes bot messages, website UI, buttons, menus, command examples, documentation, test fixtures, comments, sample data, and reward names. Keep all content emoji-free until the owner adds any desired emojis manually.
+
+PROJECT GOAL
+
+Build a polished loyalty programme and virtual economy for VietJet PTFS, inspired by the general concept of an airline loyalty programme such as SkyJoy, but designed specifically for a Roblox virtual airline community. Do not claim that this is the official SkyJoy programme or an official VietJet Air service. Use a configurable working brand name such as “VietJet SkyJoy” only if the owner approves it; otherwise use “VietJet Rewards” for loyalty points and “VJ Credits” for the separate virtual economy. Keep display names configurable so the owner can rename them later without rewriting business logic.
+
+The system should make completed flights feel rewarding. When a flight has genuinely been completed and the passenger's participation has been verified, the passenger should automatically receive loyalty points and virtual economy credits. Members should be able to check their balances, track progress, reach status tiers, complete missions, view flight history, and redeem points or credits for useful virtual perks. Make the system fair, understandable, difficult to exploit, and manageable by staff.
+
+IMPORTANT: Do not assume that merely booking a seat or being in the Discord server means someone flew. Rewards must be based on verified participation in a completed flight. Never grant automatic rewards to every server member or every booking.
+
+1. FIRST, INSPECT AND PLAN
+
+Before coding:
+- Read the existing build specification, current repository, current Firestore schema, flight operations implementation, booking website/API integration, and current VietJet Rewards commands.
+- Identify what has already been implemented. Reuse existing modules and migrate data safely if necessary. Do not create a second independent points system that conflicts with the existing `/rewards` feature.
+- Review relevant installed skills before implementation. At minimum, evaluate `ptfs-va-website-builder`, `brainstorming`, `make-plan` or `writing-plans`, a suitable design skill, `ponytail`, `test-driven-development`, and `verification-before-completion`. Use `systematic-debugging` when diagnosing an actual bug and `ponytail-review` / `ponytail-audit` for review. Use connected Roblox Studio plugins only if a genuine Roblox Studio task is needed; do not invoke them just because they are installed.
+- Produce a short plan and a list of assumptions, then proceed without waiting for the owner unless a decision truly blocks safe implementation.
+- Keep the project modular, testable, and compatible with the existing Node.js, discord.js, Firestore, website, and API architecture.
+
+2. TWO DISTINCT BALANCES
+
+Keep loyalty points and spendable economy credits separate. Do not merge them into one balance.
+
+A. Loyalty Points
+- Earned mainly through verified completed flights, plus approved missions or promotional campaigns.
+- Used to redeem loyalty rewards from a configurable catalogue.
+- Should not be freely transferred between users.
+- Cannot be purchased with real money or Robux as part of this build.
+- Points should not be presented as real-world currency or have cash value.
+
+B. VJ Credits
+- A fictional, non-cash virtual economy balance for the community.
+- Earned through verified flights, approved community activities, and optional daily/weekly tasks.
+- Spent on configured virtual items and service perks such as booking extras, virtual cabin upgrades, priority check-in, or cosmetic profile items.
+- Cannot be converted to real money, withdrawn, or traded for Robux.
+- Transfers between members should be disabled by default. If transfer functionality is later enabled, it must have strict limits, a cooldown, fraud checks, and a complete audit trail.
+
+Every balance-changing operation must use a transaction ledger. Never update a balance without recording the corresponding transaction in the same safe database operation.
+
+3. VERIFIED FLIGHT REWARDS — THE CORE FEATURE
+
+Connect rewards to the existing Flight Operations and booking systems. Design the process around these states:
+
+1. A flight is created and published.
+2. A passenger books a seat through the website or an approved Discord workflow.
+3. The passenger checks in or is otherwise marked as present using a supported, auditable method.
+4. The flight takes place in PTFS.
+5. Authorized flight staff complete `/logflight` or the equivalent completion workflow and submit/confirm the final passenger manifest.
+6. The system validates the flight, eligible passengers, duplicate reward status, route data, cabin class, and any configured caps.
+7. It awards points and credits exactly once per eligible passenger, writes a ledger entry, updates flight history and mission progress, checks status-tier progress, and posts a concise summary to the configured staff log channel.
+
+Do not assume a passenger manifest exists today. Inspect the current code. If it is missing, implement a practical manifest workflow integrated with existing flight records. Staff must be able to mark passengers as present, no-show, or removed, and review the manifest before finalizing the flight. The completion interaction should show the flight number, route, eligible passenger count, and reward totals before confirming. If that preview is too large for Discord, paginate it or summarize it with a private detail view.
+
+Eligibility rules:
+- Only reward a flight with a valid flight record, valid route, a completed status, and an authorized completion action.
+- Award a passenger only when their participation has been confirmed using the configured presence/check-in workflow.
+- No-shows, cancelled flights, duplicate passenger entries, test bookings, and staff-marked ineligible entries receive no flight reward.
+- A delayed flight can still earn rewards if it is eventually completed.
+- A passenger cannot earn twice for the same flight, even if staff rerun the command, the bot restarts, a webhook retries, or a network request is duplicated.
+- Staff corrections must create reversal/adjustment ledger entries; never silently erase financial history.
+- If the flight's duration, route distance, or cabin class is unavailable, use a documented configurable fallback or ask staff to correct it. Never invent distance or flight details silently.
+- Use an idempotency key based on flight ID, Discord user ID, and reward type. Enforce uniqueness transactionally.
+
+4. FLIGHT REWARD FORMULA
+
+Implement a transparent, configurable formula. Use route distance when reliable origin/destination data is available. Otherwise use recorded flight duration with a configured fallback rate. The owner must be able to adjust rates without changing code.
+
+Suggested initial formula (these are starter values, not permanent rules):
+- Base loyalty points: 10 points per 100 km of configured route distance, rounded to a whole number.
+- Minimum award for an eligible completed flight: 25 points.
+- Maximum standard award per flight: configurable cap, initially 1,500 points.
+- Base VJ Credits: 20 credits per eligible flight hour, with a configurable minimum of 10 and a configurable maximum per flight.
+- Economy class multiplier: 1.0x.
+- Premium Economy multiplier: 1.25x.
+- Business class multiplier: 1.5x.
+- Apply the class multiplier to loyalty points only by default; credits can use a separate configurable multiplier.
+- Optional member-status bonus: modest, configurable bonus points based on the status tier, capped to prevent compounding inflation.
+- Do not award extra rewards for a flight that is merely longer because of fabricated route data. Route and duration values should come from the saved flight record or a trusted configured airport-distance table.
+
+Keep formulas and rates in Firestore configuration or a validated configuration module. Add staff-only configuration commands. Display a plain-language explanation of the award in the passenger's reward notification and history, such as route basis, cabin multiplier, bonus, points earned, and credits earned. Do not expose private staff notes.
+
+Make the formula configurable by staff, but protect it from accidental abuse: validate non-negative rates, sensible upper limits, integer/decimal rules, and configuration changes. Log every change with staff ID, timestamp, old value, new value, and reason.
+
+5. MEMBERSHIP STATUS TIERS
+
+Create three initial tiers with configurable names and thresholds. Suggested names:
+- Explorer
+- Adventurer
+- Elite
+
+Use lifetime qualifying flight points or lifetime qualifying flight count for status progression, not the currently spendable points balance. Spending points must never make a member lose status. Keep the qualification metric configurable and clearly document the selected rule.
+
+Suggested starter thresholds if points are used:
+- Explorer: automatic starting tier.
+- Adventurer: 3,000 lifetime qualifying points.
+- Elite: 10,000 lifetime qualifying points.
+
+These values are placeholders and must be staff-configurable. The member profile should show current tier, progress to the next tier, qualifying flight count, and lifetime points earned. Keep lifetime earned points separate from current redeemable points.
+
+Optional tier perks should be modest and configurable, for example:
+- A small capped points bonus on eligible flights.
+- Profile badge/title shown as text, with no emoji.
+- Access to selected cosmetic rewards.
+- Occasional priority booking windows if the booking system can support them fairly.
+
+Do not promise perks that the existing website or bot cannot actually enforce. If role assignment is configured, assign the corresponding Discord role idempotently and remove outdated tier roles when a member changes tier. Missing role configuration must not crash the bot.
+
+6. MEMBER COMMANDS AND WEBSITE PAGES
+
+Integrate with the current command structure. Avoid command collisions. Use `/rewards` as the existing loyalty namespace unless the repository has a better established convention.
+
+Suggested member commands:
+- `/rewards profile [user]`: current loyalty points, VJ Credits, status tier, next-tier progress, lifetime points, qualifying flights, and recent activity. A user may view their own profile; viewing another member should expose only public profile data.
+- `/rewards history [user]`: paginated, readable list of flight earnings, redemptions, missions, and adjustments. Hide sensitive staff notes and internal fraud signals.
+- `/rewards leaderboard [type]`: top 10 by current points, lifetime points, completed qualifying flights, or VJ Credits. Make the metric explicit and avoid leaking private information.
+- `/economy balance [user]`: VJ Credits balance and recent activity.
+- `/rewards catalogue`: available point redemptions.
+- `/economy shop`: available credit purchases.
+- `/rewards redeem <item>`: redeem an eligible loyalty reward with confirmation and safe transaction handling.
+- `/economy buy <item>`: buy an item using VJ Credits with confirmation and safe transaction handling.
+- `/rewards missions`: show available missions, progress, and claim status.
+
+Build website pages or components that match the existing website's design system:
+- Loyalty overview explaining how points are earned and spent.
+- Member dashboard/profile with balances, tier progress, recent flights, and missions.
+- Rewards catalogue with cost, eligibility, availability, and redemption status.
+- Economy shop with prices and purchase confirmation.
+- Clear empty, loading, error, and success states.
+
+Do not show a fake live balance when the user is not authenticated. Use the existing authentication approach if one exists; otherwise propose a safe integration compatible with the current project. Never expose Firebase Admin credentials, Discord bot tokens, webhook secrets, or private server IDs in browser code. Every balance-changing action must be validated server-side. Do not trust points, credits, prices, user IDs, tier, flight status, or ownership values supplied by the browser.
+
+If the current website cannot safely authenticate a member, still build the public loyalty explainer and catalogue, but keep private balances and redemption actions behind a documented authentication placeholder. Do not invent a working login or claim an integration is complete when it is not.
+
+7. MISSIONS AND COMMUNITY ENGAGEMENT
+
+Add an optional, configurable mission system that rewards participation without encouraging spam or fake activity.
+
+Example missions:
+- Complete 1 eligible flight this week.
+- Complete 3 eligible flights this month.
+- Fly a configured route for the first time.
+- Fly in a configured cabin class a set number of times.
+- Complete flights to a set of configured destinations.
+- Participate in a special event flight, once staff confirms attendance.
+
+Each mission should have a unique ID, title, description, start/end time if applicable, objective, reward type, reward amount, eligibility conditions, and per-user claim state. No emojis in mission titles or descriptions.
+
+Mission progress must be updated from verified events, not from users clicking a button or submitting arbitrary text. Enforce caps and one-time claims. Staff should be able to create, edit, enable, disable, and expire missions through staff-only commands or a safe admin interface. Keep the first implementation focused: avoid building an elaborate quest engine if a small rules-based module is enough.
+
+8. REWARDS CATALOGUE AND VIRTUAL SHOP
+
+Create two separate catalogues:
+
+Loyalty redemption catalogue, paid with points:
+- Profile titles or cosmetic profile frames.
+- A one-time priority booking window, only if technically enforceable.
+- A virtual cabin upgrade voucher, only if it can be applied to a valid future booking.
+- Limited event-flight perks configured by staff.
+- Other community-only perks approved by the owner.
+
+VJ Credits shop, paid with credits:
+- Virtual booking extras such as seat selection or preferred seating, if the booking website supports them.
+- Cosmetic profile items.
+- Optional virtual upgrades or service add-ons.
+- Other non-cash community items configured by staff.
+
+Do not sell real-world goods, cash-equivalent value, Robux, or anything that implies real airline benefits. Do not charge a user until the system has verified the item is active, the user is eligible, the balance is sufficient, and stock/availability exists. Use a Firestore transaction to deduct the balance and create the redemption/purchase record atomically. Prevent double-click and retry duplication. For limited-stock rewards, reserve/decrement stock transactionally.
+
+Every catalogue item should support: ID, display name, plain-text description, currency type, price, active flag, optional stock, eligibility rules, fulfillment type, created/updated timestamps, and staff audit metadata. If fulfillment requires staff action, create a pending request in a staff queue and notify the user that it awaits review. Do not claim the reward has been delivered until fulfillment is confirmed.
+
+9. ECONOMY BALANCING AND ANTI-EXPLOIT CONTROLS
+
+Design this as a closed virtual economy, not a real-money economy.
+- Keep points and credits non-transferable by default.
+- Do not allow members to mint points or credits through public commands, arbitrary web requests, client-side values, or unverified flight completion.
+- All staff awards, deductions, refunds, reversals, configuration changes, redemptions, and purchases require authorization and an audit record with actor, target, amount, reason, timestamp, and reference ID.
+- Add sensible per-flight, per-day, and per-mission caps where needed.
+- Rate-limit public commands and redemption requests.
+- Add idempotency for webhooks and event processing.
+- Prevent negative balances unless an explicitly audited correction mechanism requires a controlled exception; normal purchases must never overdraw.
+- Detect suspicious duplicate claims, impossible repeat rewards, and unexpected award sizes. Flag them for staff review rather than automatically accusing or punishing members.
+- Never trust a client-side success page as proof of a transaction.
+- Add safe refund/cancel workflows for failed purchases. Refunds must create a new compensating ledger entry and must not delete the original transaction.
+- Make reward configuration editable but validate it and log changes.
+- Use Firestore transactions or equivalent atomic operations for all balance/stock mutations.
+
+10. FIRESTORE MODEL AND MIGRATION
+
+Inspect the existing schema first and extend it with the smallest safe set of collections. Adapt names to current conventions rather than duplicating equivalent collections.
+
+Suggested logical records:
+- `memberEconomy/{discordUserId}`: current loyalty points, current credits, lifetime points earned, qualifying points, qualifying flight count, status tier, created/updated timestamps.
+- `economyLedger/{transactionId}`: user ID, currency (`points` or `credits`), signed amount, transaction type, reason, reference type/ID, actor ID or system actor, idempotency key, timestamp, metadata safe for display.
+- `flightManifests/{flightId}` or an extension to existing flight documents: passengers, booking IDs, check-in/presence status, cabin class, eligibility state, finalization status, staff confirmer, timestamps.
+- `rewardCatalogue/{itemId}` and `economyShop/{itemId}` or one shared catalogue with an explicit currency type.
+- `redemptions/{redemptionId}` and `shopPurchases/{purchaseId}`: user, item, price, status, fulfillment, timestamps, idempotency key.
+- `missions/{missionId}` and `missionProgress/{missionId_userId}`: progress, completion, claimed state, reward reference, timestamps.
+- `loyaltyConfig/default`: formula rates, caps, tier thresholds, multipliers, mission limits, enabled flags, catalogue settings.
+- `rewardAuditLog/{auditId}`: sensitive staff changes and administrative actions.
+
+These are suggestions, not permission to create redundant collections. Choose a schema consistent with the existing application and explain it. Add indexes required by actual queries. Include a migration plan if existing `/rewards` balances or data already exist. Preserve current member balances where possible; do not reset balances without explicit authorization. Provide a dry-run or backup-first migration where practical.
+
+11. STAFF COMMANDS AND AUDITABILITY
+
+Add staff-only commands that match the existing authorization helpers and cross-guild permission model:
+- `/rewards award <user> <amount> <reason>`: award loyalty points with audit log.
+- `/rewards deduct <user> <amount> <reason>`: deduct points with validation and audit log.
+- `/economy award <user> <amount> <reason>` and `/economy deduct ...`: manage VJ Credits with audit log.
+- `/rewards configure`: update rates, caps, status thresholds, and multipliers with validation.
+- `/rewards catalogue-manage`: add/edit/disable loyalty catalogue items.
+- `/economy shop-manage`: add/edit/disable credit shop items.
+- `/rewards mission-manage`: create/edit/disable missions.
+- `/flight manifest`: inspect and manage a flight's passenger eligibility if this is the cleanest command structure.
+- `/flight rewards-preview <flight>`: preview eligible passengers and proposed awards before finalization, if compatible with current commands.
+- `/flight rewards-reconcile <flight>`: staff-only, audited repair/reconciliation flow for exceptional cases; never use it to silently pay everyone again.
+
+Use existing staff roles and permission helpers. Do not invent or hardcode Discord IDs. Put any new channel IDs and role IDs in `.env.example` and config validation as optional/required according to actual usage. If a channel or role is unconfigured, fail safely with a clear message and log the issue. Avoid sending sensitive audit data to public channels.
+
+12. DISCORD USER EXPERIENCE
+
+Use the existing Discord Components V2 implementation and current project message patterns. Do not use classic embeds if the existing specification prohibits them. Keep responses concise, readable, and mobile-friendly. Use buttons/select menus for safe confirmation where helpful. Avoid overwhelming users with too many commands; include help text and clear validation errors.
+
+Examples of user-facing copy style, with no emojis:
+- “Flight completed: VJ 204, Hanoi to Da Nang. You earned 120 points and 40 VJ Credits.”
+- “Your Adventurer status is 72% complete. You need 840 more qualifying points to reach Elite.”
+- “Redemption submitted. Your balance has been updated, and the request is waiting for staff fulfillment.”
+
+These are examples only. Calculate actual values from stored records. Do not display sample values as if they are real balances.
+
+13. WEBSITE AND API SECURITY
+
+- Reuse the existing website and API architecture. Do not expose secrets to the frontend.
+- Add authenticated server-side routes for member profiles, balances, history, mission progress, redemption, and shop purchases.
+- Validate authentication and authorization on every private route and mutation.
+- Add rate limits and CSRF/session protections where appropriate for the chosen authentication architecture.
+- Validate request schemas and use server-side catalogue prices and eligibility rules.
+- Use transaction IDs and idempotency keys for purchases/redemptions.
+- Return safe error messages without exposing stack traces, private Discord data, or database internals.
+- Document any deployment limitation between a locally hosted Windows bot API and a public website. Do not expose the owner's PC or open unsafe inbound ports without explaining a secure deployment/tunnel approach.
+
+14. TESTS AND ACCEPTANCE CRITERIA
+
+Write and run automated tests for the reward logic and important integration paths. Include at least:
+- Correct point and credit calculation for each cabin class.
+- Minimum and maximum reward caps.
+- Missing route distance fallback behavior.
+- Cancelled flight grants no rewards.
+- No-show passenger grants no rewards.
+- Eligible passenger on completed flight gets rewards once.
+- Re-running flight finalization does not double-award.
+- Duplicate webhook or retry does not duplicate balances or ledger entries.
+- Two concurrent redemption attempts cannot overspend the same balance.
+- Out-of-stock items cannot be purchased.
+- Invalid negative, zero, decimal, or excessive amounts are handled according to the documented rules.
+- Staff-only commands reject unauthorized users.
+- Tier progress uses lifetime qualifying metrics and does not fall when points are spent.
+- Mission rewards cannot be claimed twice.
+- A failed fulfillment can be refunded with a compensating ledger entry.
+- Website requests cannot set their own prices, balances, tiers, or flight eligibility.
+- Existing bot commands, flight operations, booking website, and existing rewards data continue to work.
+
+Use test fixtures and a test Firestore emulator or mocks where appropriate. Never test by altering live member balances. Run linting, type checks if present, unit tests, integration tests that are feasible locally, and the existing project's verification steps. Report exact tests run and actual outcomes. Do not claim production deployment or real Discord verification unless performed.
+
+15. IMPLEMENTATION ORDER
+
+Implement in phases:
+1. Repository and existing Rewards/flight workflow audit.
+2. Data model and migration plan.
+3. Transaction ledger and balance service with unit tests.
+4. Verified flight manifest and exactly-once rewards workflow.
+5. Member profile, history, and leaderboard commands.
+6. Status tiers and role synchronization where configured.
+7. Catalogue, redemption, economy shop, and safe fulfillment/refund handling.
+8. Missions and configuration tools.
+9. Website pages and authenticated server-side integration.
+10. Security review, economy-balance review, tests, code review, and documentation.
+
+Keep each phase working before moving to the next. Prefer a small reliable feature set over unnecessary complexity. Do not implement gambling, loot boxes, paid random rewards, real-money payments, Robux purchases, or peer-to-peer transfers in this phase.
+
+16. REQUIRED FINAL DELIVERY
+
+When finished, provide:
+- A summary of the system and how loyalty points differ from VJ Credits.
+- The exact completed-flight reward workflow from booking to manifest verification to award.
+- The point/credit formula and all initial rates/caps, clearly identifying configurable placeholders.
+- The status tiers, qualifying metrics, missions, catalogues, and sample reward items.
+- The commands and website pages actually implemented.
+- Updated Firestore schema and any migration/backup instructions.
+- Any new `.env.example` variables and Discord role/channel setup requirements.
+- The exact tests run and their actual results.
+- Known limitations, owner decisions still needed, and any features that remain placeholders.
+- The list of skills and connected tools actually used, and which were evaluated but not applicable.
+
+Do not ask the owner to choose every minor detail. Use the starter defaults in this prompt, keep them configurable, document decisions, and proceed. Ask the owner only for essential missing assets, credentials, or decisions that cannot safely be represented as configuration. Never fabricate IDs, assets, tests, successful deployment, or completed integrations.

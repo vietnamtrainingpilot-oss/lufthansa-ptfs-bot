@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.local
+*.pem
+service-account*.json
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Local visual-review artefacts
+.shots/
+*.log
+dev-web.log
+dev-web.err
+
+# Backup output from migration scripts
+backup/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# OS temp
+*.tmp
+*.bak

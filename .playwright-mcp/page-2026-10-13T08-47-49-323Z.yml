@@ -1,0 +1,308 @@
+- generic [ref=f19e1]:
+  - link "Skip to content" [ref=f19e3] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f19e4]:
+    - generic [ref=f19e5]:
+      - link "Atelier" [ref=f19e6] [cursor=pointer]:
+        - /url: index.html
+      - navigation "Primary" [ref=f19e9]:
+        - link "Routers" [ref=f19e10] [cursor=pointer]:
+          - /url: routers.html
+        - link "Install" [ref=f19e11] [cursor=pointer]:
+          - /url: install.html
+        - link "About" [ref=f19e12] [cursor=pointer]:
+          - /url: about.html
+        - link "GitHub ↗" [ref=f19e13] [cursor=pointer]:
+          - /url: https://github.com/vietnamtrainingpilot-oss/atelier
+  - main [ref=f19e14]:
+    - generic [ref=f19e16]:
+      - generic [ref=f19e17]:
+        - paragraph [ref=f19e18]: Atelier
+        - heading "Domain routers that dispatch agent skills to the right specialist." [level=1] [ref=f19e21]
+        - paragraph [ref=f19e22]: Invoke one router instead of choosing among a hundred skills. It picks the lead, adds at most two supports, and hands off when the work crosses a boundary.
+        - generic [ref=f19e23]:
+          - link "node install.mjs" [ref=f19e24] [cursor=pointer]:
+            - /url: install.html
+          - link "Browse the routers →" [ref=f19e25] [cursor=pointer]:
+            - /url: routers.html
+      - generic [ref=f19e26]:
+        - generic [ref=f19e27]:
+          - generic [ref=f19e28]: "8"
+          - generic [ref=f19e29]: routers
+        - generic [ref=f19e30]:
+          - generic [ref=f19e31]: "105"
+          - generic [ref=f19e32]: skills
+        - generic [ref=f19e33]:
+          - generic [ref=f19e34]: "36"
+          - generic [ref=f19e35]: bundled
+        - generic [ref=f19e36]:
+          - generic [ref=f19e37]: "7"
+          - generic [ref=f19e38]: hosts
+    - generic [ref=f19e40]:
+      - generic [ref=f19e41]:
+        - generic [ref=f19e42]: web-design
+        - generic [ref=f19e43]: video-production
+        - generic [ref=f19e44]: seo
+        - generic [ref=f19e45]: backend
+        - generic [ref=f19e46]: payments
+        - generic [ref=f19e47]: security
+        - generic [ref=f19e48]: vibe-code
+        - generic [ref=f19e49]: ship-it
+      - generic [ref=f19e50]:
+        - generic [ref=f19e51]: web-design
+        - generic [ref=f19e52]: video-production
+        - generic [ref=f19e53]: seo
+        - generic [ref=f19e54]: backend
+        - generic [ref=f19e55]: payments
+        - generic [ref=f19e56]: security
+        - generic [ref=f19e57]: vibe-code
+        - generic [ref=f19e58]: ship-it
+    - generic [ref=f19e60]:
+      - generic [ref=f19e61]:
+        - heading "What actually happens when you ask." [level=2] [ref=f19e62]
+        - paragraph [ref=f19e63]: Four requests, four different routers. Each answer names one lead, at most two supports, and where the work goes next.
+      - generic [ref=f19e64]:
+        - generic [ref=f19e65]: Routing console — real selections
+        - generic [ref=f19e66]:
+          - paragraph [ref=f19e67]: You
+          - paragraph [ref=f19e68]: I need a landing page for a SaaS.
+          - generic [ref=f19e69]:
+            - term [ref=f19e70]: Router
+            - definition [ref=f19e71]:
+              - code [ref=f19e72]: web-design
+            - term [ref=f19e73]: Lead
+            - definition [ref=f19e74]:
+              - code [ref=f19e75]: ai-ui-ux-motion-engine
+            - term [ref=f19e76]: Supports
+            - definition [ref=f19e77]:
+              - code [ref=f19e78]: ui-ux-pro-max
+              - text: ·
+              - code [ref=f19e79]: awwwards-animations
+            - term [ref=f19e80]: Hand-off
+            - definition [ref=f19e81]:
+              - code [ref=f19e82]: video-production
+              - text: ", if the page turns into a launch film"
+        - generic [ref=f19e83]:
+          - paragraph [ref=f19e84]: You
+          - paragraph [ref=f19e85]: Turn the pull request we just merged into a video.
+          - generic [ref=f19e86]:
+            - term [ref=f19e87]: Router
+            - definition [ref=f19e88]:
+              - code [ref=f19e89]: video-production
+            - term [ref=f19e90]: Lead
+            - definition [ref=f19e91]:
+              - code [ref=f19e92]: pr-to-video
+            - term [ref=f19e93]: Supports
+            - definition [ref=f19e94]:
+              - code [ref=f19e95]: hyperframes-cli
+              - text: ·
+              - code [ref=f19e96]: hyperframes-animation
+            - term [ref=f19e97]: Hand-off
+            - definition [ref=f19e98]:
+              - code [ref=f19e99]: web-design
+              - text: ", to match the site's own type and palette"
+        - generic [ref=f19e100]:
+          - paragraph [ref=f19e101]: You
+          - paragraph [ref=f19e102]: I want an agent that picks the right skill on its own.
+          - generic [ref=f19e103]:
+            - term [ref=f19e104]: Router
+            - definition [ref=f19e105]:
+              - code [ref=f19e106]: backend
+            - term [ref=f19e107]: Lead
+            - definition [ref=f19e108]:
+              - code [ref=f19e109]: ponytail
+            - term [ref=f19e110]: Supports
+            - definition [ref=f19e111]:
+              - code [ref=f19e112]: smart-explore
+              - text: ·
+              - code [ref=f19e113]: make-plan
+            - term [ref=f19e114]: Hand-off
+            - definition [ref=f19e115]:
+              - code [ref=f19e116]: security
+              - text: ", the moment untrusted input enters the picture"
+        - generic [ref=f19e117]:
+          - paragraph [ref=f19e118]: You
+          - paragraph [ref=f19e119]: Audit the site before I ship it.
+          - generic [ref=f19e120]:
+            - term [ref=f19e121]: Router
+            - definition [ref=f19e122]:
+              - code [ref=f19e123]: security
+            - term [ref=f19e124]: Lead
+            - definition [ref=f19e125]:
+              - code [ref=f19e126]: claude-security
+            - term [ref=f19e127]: Supports
+            - definition [ref=f19e128]:
+              - code [ref=f19e129]: cs-scan-inventory
+              - text: ·
+              - code [ref=f19e130]: cs-scan-researcher
+            - term [ref=f19e131]: Hand-off
+            - definition [ref=f19e132]:
+              - code [ref=f19e133]: ship-it
+              - text: ", which will not move past verification without it"
+      - paragraph [ref=f19e134]:
+        - text: "Every router entry, including supports and hand-offs:"
+        - link "the full reference" [ref=f19e135] [cursor=pointer]:
+          - /url: routers.html
+        - text: .
+    - generic [ref=f19e137]:
+      - generic [ref=f19e138]:
+        - heading "Eight domains, one interface." [level=2] [ref=f19e139]
+        - paragraph [ref=f19e140]: Routers are named for the job, never for the tool. Each one hides the implementation, so the underlying skills can change without renaming anything.
+      - generic [ref=f19e141]:
+        - link [ref=f19e142] [cursor=pointer]:
+          - /url: routers.html#web-design
+          - paragraph [ref=f19e143]: "01"
+          - heading "web-design" [level=3] [ref=f19e144]
+          - paragraph [ref=f19e145]: Landing pages, portfolios, redesigns, design systems, UI, and scroll or cinematic motion.
+          - paragraph [ref=f19e146]: 46 skills
+        - link [ref=f19e147] [cursor=pointer]:
+          - /url: routers.html#video-production
+          - paragraph [ref=f19e148]: "02"
+          - heading "video-production" [level=3] [ref=f19e149]
+          - paragraph [ref=f19e150]: HTML-to-video rendering, React video, and social promo — chosen by input, not output.
+          - paragraph [ref=f19e151]: 25 skills
+        - link [ref=f19e152] [cursor=pointer]:
+          - /url: routers.html#seo
+          - paragraph [ref=f19e153]: "03"
+          - heading "seo" [level=3] [ref=f19e154]
+          - paragraph [ref=f19e155]: Keyword research, clustering, audits, competitor analysis, backlinks, AI visibility.
+          - paragraph [ref=f19e156]: 12 skills
+        - link [ref=f19e157] [cursor=pointer]:
+          - /url: routers.html#backend
+          - paragraph [ref=f19e158]: "04"
+          - heading "backend" [level=3] [ref=f19e159]
+          - paragraph [ref=f19e160]: APIs, data, auth, architecture, refactors, legacy codebases, debugging.
+          - paragraph [ref=f19e161]: 15 skills
+        - link [ref=f19e162] [cursor=pointer]:
+          - /url: routers.html#payments
+          - paragraph [ref=f19e163]: "05"
+          - heading "payments" [level=3] [ref=f19e164]
+          - paragraph [ref=f19e165]: Stripe integration, checkout, subscriptions, webhooks, tax and VAT, PCI-safe flows.
+          - paragraph [ref=f19e166]: 1 skill, 6 references
+        - link [ref=f19e167] [cursor=pointer]:
+          - /url: routers.html#security
+          - paragraph [ref=f19e168]: "06"
+          - heading "security" [level=3] [ref=f19e169]
+          - paragraph [ref=f19e170]: Repository and diff scanning, auth and secrets review, verified patch generation.
+          - paragraph [ref=f19e171]: 1 skill, 8 subagents
+        - link [ref=f19e172] [cursor=pointer]:
+          - /url: routers.html#vibe-code
+          - paragraph [ref=f19e173]: "07"
+          - heading "vibe-code" [level=3] [ref=f19e174]
+          - paragraph [ref=f19e175]: A fast path from a vague idea to something running. Deliberately skips heavyweight process.
+          - paragraph [ref=f19e176]: 4 skills
+        - link [ref=f19e177] [cursor=pointer]:
+          - /url: routers.html#ship-it
+          - paragraph [ref=f19e178]: "08"
+          - heading "ship-it" [level=3] [ref=f19e179]
+          - paragraph [ref=f19e180]: "Process-to-result delivery: decide, plan, build, verify, secure, perform, ship."
+          - paragraph [ref=f19e181]: 6 skills
+    - generic [ref=f19e183]:
+      - generic [ref=f19e184]:
+        - heading "The routing manifest." [level=2] [ref=f19e185]
+        - paragraph [ref=f19e186]: Every declared dependency, and the decision each router makes before it writes a line.
+      - table [ref=f19e188]:
+        - rowgroup [ref=f19e189]:
+          - row [ref=f19e190]:
+            - columnheader "No." [ref=f19e191]
+            - columnheader "Router" [ref=f19e192]
+            - columnheader "Deps" [ref=f19e193]
+            - columnheader "Lead skill" [ref=f19e194]
+            - columnheader "Hands off to" [ref=f19e195]
+        - rowgroup [ref=f19e196]:
+          - row [ref=f19e197]:
+            - cell "01" [ref=f19e198]
+            - cell [ref=f19e199]:
+              - link "web-design" [ref=f19e200] [cursor=pointer]:
+                - /url: routers.html#web-design
+            - cell "46" [ref=f19e201]
+            - cell [ref=f19e202]:
+              - code [ref=f19e203]: ai-ui-ux-motion-engine
+            - cell "video-production" [ref=f19e204]
+          - row [ref=f19e205]:
+            - cell "02" [ref=f19e206]
+            - cell [ref=f19e207]:
+              - link "video-production" [ref=f19e208] [cursor=pointer]:
+                - /url: routers.html#video-production
+            - cell "25" [ref=f19e209]
+            - cell [ref=f19e210]:
+              - code [ref=f19e211]: hyperframes
+            - cell "web-design" [ref=f19e212]
+          - row [ref=f19e213]:
+            - cell "03" [ref=f19e214]
+            - cell [ref=f19e215]:
+              - link "seo" [ref=f19e216] [cursor=pointer]:
+                - /url: routers.html#seo
+            - cell "12" [ref=f19e217]
+            - cell [ref=f19e218]:
+              - code [ref=f19e219]: seo-audit
+            - cell "—" [ref=f19e220]
+          - row [ref=f19e221]:
+            - cell "04" [ref=f19e222]
+            - cell [ref=f19e223]:
+              - link "backend" [ref=f19e224] [cursor=pointer]:
+                - /url: routers.html#backend
+            - cell "15" [ref=f19e225]
+            - cell [ref=f19e226]:
+              - code [ref=f19e227]: ponytail
+            - cell "payments · security · ship-it" [ref=f19e228]
+          - row [ref=f19e229]:
+            - cell "05" [ref=f19e230]
+            - cell [ref=f19e231]:
+              - link "payments" [ref=f19e232] [cursor=pointer]:
+                - /url: routers.html#payments
+            - cell "1" [ref=f19e233]
+            - cell [ref=f19e234]:
+              - code [ref=f19e235]: stripe-best-practices
+            - cell "—" [ref=f19e236]
+          - row [ref=f19e237]:
+            - cell "06" [ref=f19e238]
+            - cell [ref=f19e239]:
+              - link "security" [ref=f19e240] [cursor=pointer]:
+                - /url: routers.html#security
+            - cell "1" [ref=f19e241]
+            - cell [ref=f19e242]:
+              - code [ref=f19e243]: claude-security
+            - cell "—" [ref=f19e244]
+          - row [ref=f19e245]:
+            - cell "07" [ref=f19e246]
+            - cell [ref=f19e247]:
+              - link "vibe-code" [ref=f19e248] [cursor=pointer]:
+                - /url: routers.html#vibe-code
+            - cell "4" [ref=f19e249]
+            - cell [ref=f19e250]:
+              - code [ref=f19e251]: brainstorming
+            - cell "payments · security" [ref=f19e252]
+          - row [ref=f19e253]:
+            - cell "08" [ref=f19e254]
+            - cell [ref=f19e255]:
+              - link "ship-it" [ref=f19e256] [cursor=pointer]:
+                - /url: routers.html#ship-it
+            - cell "6" [ref=f19e257]
+            - cell [ref=f19e258]:
+              - code [ref=f19e259]: writing-plans
+            - cell "web-design · video-production · seo · payments · security · backend" [ref=f19e260]
+      - paragraph [ref=f19e261]: 110 declared dependencies, 105 distinct skills — some are shared between routers.
+    - generic [ref=f19e264]:
+      - heading "Run one line." [level=2] [ref=f19e265]
+      - paragraph [ref=f19e266]: Node 18+ and git. Then restart your agent, because skills only register at startup.
+      - paragraph [ref=f19e267]:
+        - button "node install.mjs Copy" [ref=f19e268] [cursor=pointer]:
+          - code [ref=f19e269]: node install.mjs
+          - generic [ref=f19e270]: Copy
+      - paragraph [ref=f19e271]:
+        - link "Flags, hosts, and troubleshooting →" [ref=f19e272] [cursor=pointer]:
+          - /url: install.html
+  - contentinfo [ref=f19e273]:
+    - generic [ref=f19e274]:
+      - link "Atelier" [ref=f19e275] [cursor=pointer]:
+        - /url: index.html
+      - link "Routers" [ref=f19e278] [cursor=pointer]:
+        - /url: routers.html
+      - link "Install" [ref=f19e279] [cursor=pointer]:
+        - /url: install.html
+      - link "About" [ref=f19e280] [cursor=pointer]:
+        - /url: about.html
+      - link "GitHub ↗" [ref=f19e281] [cursor=pointer]:
+        - /url: https://github.com/vietnamtrainingpilot-oss/atelier
+      - paragraph [ref=f19e282]: MIT licensed. Skills belong to their original authors.

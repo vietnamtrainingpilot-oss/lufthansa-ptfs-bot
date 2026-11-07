@@ -1,0 +1,192 @@
+# VietJet PTFS — Website Redesign, Member Sign-In, and Loyalty Dashboard Prompt
+## Visual benchmark: https://turkishairlinesptc.netlify.app/
+
+You are working inside the existing VietJet PTFS Discord bot + website repository. This is the WEBSITE IMPROVEMENT stage in a four-stage workflow:
+
+1. Implement the revised VietJet PTFS master build specification.
+2. Implement the SkyJoy-inspired loyalty and VJ Credits economy follow-up.
+3. Apply this website redesign and member-account prompt.
+4. Run the final integration, security, quality, and production-readiness prompt.
+
+Do not skip ahead by building a disconnected replacement. This prompt must extend the current implementation created by stages 1 and 2. Read those prompts if they are available in the repository or supplied context, inspect the actual code, and preserve working features and data.
+
+The reference website is https://turkishairlinesptc.netlify.app/. Treat it as a quality benchmark for information architecture, aviation atmosphere, completeness, responsive behavior, and overall polish. Do not copy its source code, exact layout, wording, assets, branding, or identity. Build an original VietJet PTFS experience.
+
+## Non-negotiable rules
+
+- DO NOT ADD EMOJIS ANYWHERE in the website, Discord bot, interface, labels, sample data, comments, documentation, logs, tests, or generated copy. The owner may add them manually later.
+- This is an unofficial Roblox virtual airline community project. Never imply it is an official VietJet Air website, service, or loyalty programme.
+- Do not fake functionality. Every visible button, navigation item, form, filter, sign-in action, and redemption action must work or be clearly presented as unavailable with a useful explanation.
+- Do not invent credentials, account balances, flights, API results, test results, or deployment status.
+- Preserve the current stack and architecture unless inspection reveals a concrete reason to change them. Avoid unnecessary rewrites and dependencies.
+- Do not ask the owner for information that can safely be handled through environment variables or documented configuration.
+
+## 1. Inspect before editing
+
+Before coding:
+
+1. Inspect the current repository, framework, routes, styling system, deployment target, API server, Firestore collections, and existing login/account code.
+2. Read the master build specification and the SkyJoy/economy follow-up prompt if present.
+3. Inspect the reference website at desktop and mobile widths. Review every accessible public page, including Home, Flights, Careers, Affiliates, and support/staff pages if available.
+4. Identify the current source of truth for a member's identity, loyalty points/miles, VJ Credits, tier, flight history, missions, and redemptions.
+5. Produce a concise plan and list any real blockers, then continue implementation. Do not stop after the plan.
+
+Use relevant installed design, planning, implementation, testing, security, and review skills where available. Use only skills that materially apply, and report accurately which were actually used. Do not claim to have inspected a page, run a tool, or completed a test unless you did.
+
+## 2. Target visual quality
+
+Redesign the website into a complete, coherent VietJet PTFS digital experience—not a generic template and not a clone of the reference.
+
+Create a strong visual hierarchy with:
+- A polished aviation-focused hero and clear primary calls to action.
+- Distinctive VietJet PTFS branding and a consistent design system.
+- Professional typography, intentional whitespace, restrained color use, strong contrast, and consistent spacing.
+- High-quality aviation imagery only where legally and technically available; use existing project assets where appropriate.
+- Well-designed route and flight cards, status labels, empty states, forms, tables, profile panels, and dashboard charts or summaries where useful.
+- Clear hover, focus, loading, success, error, disabled, and empty states.
+- Responsive navigation and layouts for mobile, tablet, and desktop.
+- Accessible semantic structure, keyboard navigation, visible focus states, labels, and appropriate contrast.
+- A footer with useful navigation, support/ticket links, careers, affiliates, community rules, and an explicit unofficial virtual-airline disclaimer.
+
+Do not overuse gradients, glassmorphism, oversized rounded cards, decorative effects, or motion. Design should feel deliberate and airline-grade, not like a generic AI-generated dashboard.
+
+## 3. Website information architecture
+
+Inspect what already exists, then implement or improve the following where appropriate:
+
+- Home: brand introduction, key calls to action, featured routes or upcoming flights based on real data, and a clear route into booking.
+- Flights / Booking: browse actual published flights, view route and schedule details, select a flight, and complete the existing supported booking workflow. If booking requires a Discord identity or other prerequisite, explain it clearly.
+- Careers: role information and the existing application workflow.
+- Affiliates / Partnerships: programme overview and actual available information.
+- Rewards / Loyalty: public explanation of the loyalty programme, tier system, earning rules, and reward catalogue.
+- Member Dashboard: authenticated account page described in section 5.
+- Support / Policies: working ticket or support path, community rules, privacy information, and the unofficial-project disclaimer.
+- Staff Portal: include only if it can be securely implemented using existing authorization. Never expose staff-only data in a public client bundle.
+
+Keep navigation concise. Do not leave dead-end links or empty pages that look finished but contain placeholder content.
+
+## 4. Member sign-in and sign-out
+
+The user specifically wants members to sign in, sign out, and track their loyalty miles/points on the website. Implement this as a real feature, not just a visual mock-up.
+
+### Authentication approach
+
+1. Inspect the current authentication and backend architecture first.
+2. Prefer Discord OAuth2 if compatible with the existing project, because the community's member identity is tied to Discord. Use the official OAuth authorization-code flow with server-side token exchange and secure session handling. Do not expose the client secret or bot token in browser code.
+3. Link the authenticated Discord account to the existing canonical member record in Firestore. Use the Discord user ID as a stable identity key where the existing data model supports it. Do not create duplicate accounts for the same Discord user.
+4. If the project already has a secure authentication provider, preserve and use it rather than adding a competing login system. Explain the chosen approach.
+5. Provide clear Sign in and Sign out actions. After sign-in, show the member's account menu/profile entry and dashboard. After sign-out, clear the session safely and return the interface to the public state.
+6. Add and document required environment variables and OAuth callback URLs in the existing environment example and setup guide. Never put real secrets in source control.
+7. Validate OAuth state and callback parameters, use secure HttpOnly cookies where session cookies are appropriate, set SameSite and Secure appropriately for the deployment, expire/revoke sessions correctly, and protect state-changing requests against CSRF. Apply rate limiting to authentication endpoints where appropriate.
+8. Do not request or store a Discord password. Do not request unnecessary profile permissions. Ask only for the minimum OAuth scopes required, normally identity (`identify`) and only request email if a demonstrated feature requires it.
+9. If OAuth cannot be completed because external credentials or callback configuration are unavailable, implement the safe server-side structure and clear setup documentation, but do not claim login works until it has been tested end-to-end. Do not invent credentials or bypass authentication for convenience.
+
+### Authentication states to design and test
+
+- Public visitor: sees public pages and a Sign in action.
+- Signing in: clear loading/progress state and understandable error handling.
+- Signed-in member: sees account identity and dashboard access.
+- Expired or invalid session: gracefully prompts the member to sign in again.
+- Signed-out member: cannot access private balances, history, or redemptions.
+- OAuth cancelled or failed: returns safely with a helpful message and no broken page.
+- Account with no flight history: sees a useful empty state, not fake activity.
+
+## 5. Member dashboard: miles, credits, flights, and rewards
+
+Build a genuinely useful member dashboard, integrated with the existing loyalty/economy implementation.
+
+### Overview panel
+
+Show only values retrieved from the authenticated member's actual server-side record:
+- Loyalty balance, using the exact existing data model. The interface may call the loyalty currency “Miles” if this fits the implemented programme, but make the display label configurable and do not create a second, competing points balance.
+- Current loyalty tier and progress toward the next tier, calculated from the actual tier rules.
+- Separate VJ Credits balance. Never merge credits with loyalty miles/points.
+- Number of completed flights and, if the backend reliably tracks it, total distance flown.
+- Active missions or challenges and their real progress.
+- Available rewards and clear redemption requirements.
+
+Use a clear hierarchy: primary loyalty balance first, tier progress second, then credits and activity. Keep the page usable on mobile and avoid overwhelming the member with too many cards.
+
+### Activity and transaction history
+
+Provide a readable history view with dates, event types, amounts, and statuses for:
+- Loyalty miles/points earned from completed flights.
+- VJ Credits earned or spent.
+- Reward redemptions.
+- Reversals, refunds, corrections, and authorized staff adjustments, where visible to the member.
+- Mission rewards, if supported by the backend.
+
+Use server-backed pagination or bounded queries. Add filters only if they work. Show clear empty, loading, and error states. Do not expose staff notes, internal audit details, other members' data, private flight links, or sensitive identifiers.
+
+### Flights and rewards
+
+- Show the signed-in member's actual completed flight history, with route, flight number, date, cabin/class, and rewards earned when those fields exist.
+- Show upcoming bookings only if the existing booking system stores them reliably.
+- Display reward catalogue items and the required currency/cost, eligibility, stock/availability, and redemption conditions.
+- Allow redemption only when the backend already supports it or can be safely completed as part of this task.
+- Confirm redemptions clearly and show a receipt/result. Handle double-clicks, retries, insufficient balances, unavailable stock, and concurrent requests safely.
+- Do not allow the browser to set a balance, choose a trusted price, grant itself miles/credits, alter tier status, or claim a flight was completed.
+
+### Member profile
+
+Provide a small profile/settings area showing the linked Discord identity and basic account information available through the approved OAuth scope. Let the member sign out. Do not create editable profile fields that are not persisted, and do not offer account unlinking unless it can be safely implemented without orphaning or duplicating reward balances.
+
+## 6. Backend, API, and Firestore integrity
+
+- Reuse the existing authenticated API and Firestore collections where possible. Inspect the current schema before proposing new collections.
+- The backend must derive the target member from the verified session, not from a client-supplied Discord user ID.
+- Every private read must enforce authentication and member-level authorization.
+- Every balance-changing mutation must be validated server-side and recorded in an auditable, idempotent transaction ledger.
+- Use Firestore transactions or equivalent atomic operations for redemptions and balance updates. Prevent duplicate flight rewards, replayed requests, double redemptions, negative balances, and race conditions.
+- Never trust a client-submitted flight status, reward amount, currency amount, tier, eligibility, redemption price, or ownership claim.
+- Keep loyalty miles/points and VJ Credits as separate currencies with separate ledgers and clear transaction types.
+- Apply pagination and limits to history endpoints; validate inputs; use safe error messages that do not leak secrets or stack traces.
+- Configure Firestore security rules so browser clients cannot directly grant or modify balances. Prefer server-mediated access for private financial-like records.
+- Do not expose Firebase Admin credentials, OAuth secrets, Discord bot tokens, private server links, staff-only data, or internal API secrets to the client.
+- Avoid logging OAuth tokens, session cookies, secrets, or unnecessary personal information.
+
+If the backend currently lacks a safe way to authenticate a member, do not fake a live dashboard. Implement the public rewards page and the documented authentication structure, then clearly report what remains blocked by external setup.
+
+## 7. Performance, accessibility, and responsive behavior
+
+- Test at minimum a narrow mobile viewport, tablet width, and desktop width.
+- Ensure navigation, sign-in, dashboard tabs, tables, dialogs, forms, and redemption flows work with keyboard and touch.
+- Avoid horizontal overflow and tiny text on mobile. Convert wide tables into mobile-friendly rows or cards.
+- Use loading skeletons or restrained progress indicators where helpful, but avoid flashing fake data.
+- Optimize images and avoid unnecessary client bundles or excessive animation.
+- Respect reduced-motion preferences.
+- Include page titles, metadata, and appropriate social previews without claiming official airline affiliation.
+
+## 8. Required implementation workflow
+
+1. Inspect the reference, current repo, master spec, and loyalty/economy implementation.
+2. Write a short implementation plan and note any blockers.
+3. Implement the design system and shared layout first.
+4. Implement public pages and connect them to actual existing data.
+5. Implement authentication using the chosen secure architecture.
+6. Implement the member dashboard, activity history, flight history, tier progress, and reward catalogue.
+7. Wire all buttons, forms, navigation, loading/error/empty states, and sign-out behavior.
+8. Run available tests, linting, type checks, and production build. Add tests for auth, authorization, dashboard data, and reward mutations where practical.
+9. Launch the site locally if possible and inspect screenshots at mobile and desktop sizes. Fix visible defects rather than merely reporting them.
+10. Review for security leaks, dead links, fake data, inaccessible controls, console errors, and unhandled API failures.
+11. Update setup documentation and the environment example. Never add actual secrets.
+12. Report precisely what changed, what was tested, what passed/failed, and any owner action required for OAuth/deployment.
+
+## 9. Acceptance criteria
+
+Do not call this task complete unless the following are true or clearly marked as blocked by external configuration:
+
+- The website is a substantial visual improvement and works across mobile, tablet, and desktop.
+- Main navigation and every displayed CTA work.
+- Public visitors can browse public information without signing in.
+- Members can sign in and sign out through the actual implemented authentication flow, once credentials are configured.
+- An authenticated member can see their own real loyalty balance, tier progress, VJ Credits balance, transaction history, and flight history when those records exist.
+- One member cannot inspect another member's private data by changing a URL, request parameter, or API call.
+- The site never fabricates balances, activity, flight records, or successful redemptions.
+- Rewards and VJ Credits remain separate.
+- Reward redemption is protected against duplicate requests and concurrent balance changes.
+- No emoji has been added anywhere.
+- Tests and build results are reported honestly, including any test that could not be run.
+- The final summary lists changed files, key design decisions, authentication configuration steps, known limitations, and exact commands used for verification.
+
+Start by inspecting the current repository and relevant prompts. Then implement the actual improvements; do not merely return advice or a mock-up.

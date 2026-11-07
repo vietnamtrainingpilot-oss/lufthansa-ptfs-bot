@@ -1,0 +1,132 @@
+# VietJet PTFS — Final Integration, Authentication Security, and Production-Readiness Prompt
+
+This is the fourth and final stage of the VietJet PTFS project workflow:
+
+1. Revised master Discord bot + website build specification.
+2. SkyJoy-inspired loyalty and VJ Credits economy.
+3. Website redesign with real member sign-in/sign-out and a loyalty dashboard.
+4. This final end-to-end integration and quality pass.
+
+Work on the existing repository. Read the earlier prompts and inspect the actual implementation before changing anything. This is not permission to replace the project with a fresh scaffold, remove features, or make a separate mock-up. Preserve working behavior and existing data.
+
+## Non-negotiable rules
+
+- Do not add emojis anywhere in the project.
+- The project is an unofficial Roblox virtual airline community. Do not represent it as an official VietJet Air service or official SkyJoy programme.
+- Do not fabricate data, credentials, IDs, integrations, test results, or deployment status.
+- Do not report a feature as complete unless the implementation exists and you have verified it to the extent possible.
+- Keep the code understandable and maintainable for a beginner working on Windows.
+- Do not reset, overwrite, or silently migrate existing member balances or transaction history.
+
+## 1. Audit the entire implementation
+
+Inspect the Discord bot, website, API routes, OAuth/session implementation, Firestore schema and rules, deployment configuration, environment examples, tests, and documentation.
+
+Verify that the following pieces agree with each other:
+- Discord member identity and website account identity.
+- Flight records, passenger manifests, completion validation, and flight reward awards.
+- Loyalty miles/points, tier progress, missions, rewards, and VJ Credits.
+- Transaction ledger entries and displayed dashboard balances.
+- Website booking records and any corresponding Discord flight workflows.
+- Staff permissions and cross-guild authorization rules.
+- API request/response contracts, environment variables, and setup instructions.
+
+Identify mismatches, duplicated logic, stale placeholder code, dead links, missing error states, and security-sensitive assumptions. Fix actual issues rather than only listing them.
+
+## 2. Authentication and member privacy audit
+
+Test or inspect the real sign-in/sign-out flow. If Discord OAuth is used:
+- Verify server-side authorization-code exchange and validated callback handling.
+- Verify OAuth state protection and safe redirect handling.
+- Verify client secret and bot token are never bundled into frontend code.
+- Verify sessions use appropriate secure cookie settings for the deployment, expire correctly, and are invalidated on sign-out.
+- Verify private endpoints derive the member ID from the verified session, never from a trusted client-supplied ID.
+- Verify signed-out users cannot read balances, histories, missions, private bookings, or redeem rewards.
+- Verify a member cannot access another member's data by changing a URL, request body, or query parameter.
+- Verify errors and logs do not expose OAuth tokens, session cookies, secrets, stack traces, or unnecessary personal data.
+- Confirm the requested OAuth scopes are minimal.
+- Document any owner-only OAuth application setup, redirect URL, environment variable, or hosting configuration still required.
+
+If credentials are unavailable, test the parts possible locally and mark end-to-end OAuth verification as blocked. Do not bypass authentication or claim success.
+
+## 3. Loyalty and economy integrity audit
+
+- Confirm loyalty miles/points and VJ Credits are distinct balances and ledgers.
+- Confirm the dashboard uses the same source of truth as the backend and does not calculate authoritative balances in the browser.
+- Confirm rewards are granted only after authorized flight completion and valid passenger participation.
+- Confirm duplicate `/logflight`, retry, replay, and concurrent event scenarios cannot award the same flight twice.
+- Confirm redemptions are atomic and idempotent, including insufficient-balance, unavailable-item, repeated-click, timeout-and-retry, and concurrent-request cases.
+- Confirm staff adjustments, refunds, reversals, purchases, and redemptions produce auditable ledger records with actor, target, amount, reason, timestamp, and reference ID as appropriate.
+- Confirm balances cannot become negative or be edited directly by a browser client.
+- Confirm tier progress uses the configured qualifying-point rules and does not incorrectly treat spendable credits as loyalty points.
+- Confirm transaction history pagination, filtering, empty states, and date/amount formatting are correct.
+- Confirm the interface's “Miles” label, if used, is only a configurable display label for the existing loyalty currency, not a duplicate currency or second balance.
+
+## 4. Website design and functional quality audit
+
+Review the site at mobile, tablet, and desktop widths. Compare quality—not copied identity—to https://turkishairlinesptc.netlify.app/.
+
+Check:
+- Clear navigation and page hierarchy.
+- Consistent typography, spacing, colors, and component behavior.
+- Working Home, Flights/Booking, Careers, Affiliates, Rewards/Loyalty, Member Dashboard, Support/Policies, and any implemented Staff Portal pages.
+- Real data rather than invented flights, balances, or activity.
+- Working Sign in, Sign out, account navigation, session-expired handling, and authentication error states.
+- Dashboard balance, tier progress, VJ Credits, mission progress, flight history, and transaction history.
+- Reward catalogue and redemption result handling.
+- Loading, empty, success, error, and disabled states.
+- Accessible labels, keyboard navigation, focus visibility, contrast, touch targets, and reduced-motion behavior.
+- No horizontal overflow, broken images, console errors, dead links, or nonfunctional CTAs.
+- A clear disclaimer that the website is an unofficial Roblox virtual airline community project.
+
+Fix the problems you can reproduce. Do not claim to have tested screen sizes or pages that you did not inspect.
+
+## 5. Discord bot and integration audit
+
+- Confirm Discord Components V2 requirements are preserved where specified by the master build spec.
+- Confirm staff-only commands and actions use the existing centralized authorization helpers and correct guild/role checks.
+- Confirm ticket, careers, flight operations, rewards, economy, and member-facing workflows still work after website changes.
+- Confirm API failures are handled without losing valid Discord interactions or leaving records half-updated.
+- Confirm cross-guild authorization does not assume role IDs from the wrong guild.
+- Confirm Discord responses and website data use consistent status names, IDs, currencies, and timestamps.
+- Confirm the website does not expose private Roblox server links, staff-only data, internal audit notes, or bot secrets.
+
+## 6. Testing and verification
+
+Run all relevant checks that are available in the repository:
+- Automated tests.
+- Linting and type checks.
+- Production build.
+- API integration tests.
+- Authentication and authorization tests.
+- Loyalty award idempotency and redemption concurrency tests.
+- Any existing Discord command/component tests.
+
+Use test accounts and local fixtures rather than real member balances. Do not send real Discord messages, grant live rewards, charge real money, or modify production data merely to test.
+
+Fix failures caused by your changes. If a test cannot run because of unavailable credentials, missing services, or environment limitations, explain the precise blocker and provide the command or manual step needed to finish verification. Never invent passing output.
+
+## 7. Documentation and delivery
+
+Update documentation so the owner can run and maintain the project on Windows:
+- Install and start commands.
+- Required environment variables, with placeholders only.
+- Discord OAuth setup and callback URL configuration, if used.
+- Firestore configuration and rules.
+- Local development and deployment instructions.
+- How a member signs in and checks their miles/points, VJ Credits, flight history, and rewards.
+- Known limitations and safe migration notes.
+
+Before finishing, inspect the final diff and remove debug code, fake data accidentally left in production paths, hardcoded secrets, dead imports, and unfinished TODOs that imply completed functionality.
+
+## 8. Final response format
+
+Return a concise but specific implementation report with:
+1. Features verified as working.
+2. Features implemented but awaiting owner configuration.
+3. Files or systems changed.
+4. Tests and exact commands run, with honest pass/fail results.
+5. Remaining blockers or risks.
+6. Exact next steps for the owner.
+
+Do not provide only a review report. Fix the issues first, run the available checks, and then report the actual outcome.

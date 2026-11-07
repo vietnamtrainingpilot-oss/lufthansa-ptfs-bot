@@ -1,0 +1,652 @@
+# VietJet PTFS Discord Bot — Full Build Specification
+
+**Read this entire document before writing any code.** This is the implementation specification for a reliable, multi-guild Discord bot for the VietJet PTFS Roblox virtual airline community.
+
+Build the project as a complete, maintainable application—not a collection of disconnected snippets. Follow the requirements below, preserve the stated workflows, and do not silently omit features. Before coding, inspect the existing repository and its conventions; then produce a short implementation plan, identify genuine blockers, and proceed. Do not ask the owner to supply values that can safely remain environment variables.
+
+**Branding standard:** Use “VietJet PTFS” for the virtual airline community and “VietJet Air” only where the airline name is needed in passenger-facing flight copy. Use a clean, energetic, aviation-focused voice. Do not retain the previous airline's names, assets, or custom emoji IDs. Use standard Unicode emoji or configurable VietJet assets instead. Do not imply this is an official airline-operated bot; it is for a Roblox virtual airline community. Where a decision was left to your judgment, it's marked `[OPENCODE DECISION]` — use good judgment and note what you chose in your final summary. Where something is a known open item the owner still needs to answer, it's marked `[ASSUMPTION]` with what was assumed — do not silently change these later.
+
+---
+
+## 1. Project Overview
+
+A single Node.js bot deployed across **two Discord servers**:
+- **Main** (`GUILD_ID_MAIN`) — the public community server. Members, ticket channels, career applications happen here, flight announcements post here.
+- **Staff** (`GUILD_ID_STAFF`) — private. Staff identity and permissions live here. Career review, flight briefings, and quota/transcript logs post here.
+
+**Critical architecture rule: staff permission checks are cross-guild.** A user's ability to claim a ticket, review a career application, etc. is determined by their **roles in the Staff guild**, not the Main guild — even though the ticket channel itself lives in Main. Implement a shared helper:
+
+```js
+async function isStaffAuthorized(client, discordUserId, requiredRoleIds) {
+  const staffGuild = await client.guilds.fetch(process.env.GUILD_ID_STAFF);
+  const member = await staffGuild.members.fetch(discordUserId).catch(() => null);
+  if (!member) return false;
+  return requiredRoleIds.some(id => member.roles.cache.has(id));
+}
+```
+Use this everywhere a "staff-only" action happens, regardless of which guild the interaction fired in.
+
+Five feature systems, built in this order (each depends on shared infra from the last):
+1. Core infra (config, Firestore client, timer poller, cross-guild helper, logger)
+2. Tickets v2
+3. Careers
+4. Flight Operations (+ booking webhook stub)
+5. VietJet Rewards (loyalty)
+6. Paid Ads
+
+---
+
+## 2. Tech Stack & Non-Negotiable Rules
+
+### Implementation quality requirements
+- Inspect the current project before modifying it. Preserve working code where possible and avoid destructive rewrites without cause.
+- Use a clear module structure: config, Firebase/Firestore, permissions, timers, logging, commands, interactions, and each feature system should be separated.
+- Validate and sanitize all command inputs, webhook payloads, URLs, and user-provided text. Prevent mention abuse by disabling unintended mentions in user-generated messages.
+- Verify Discord API and discord.js v14 support for every Components V2 builder and flag used. If the installed version does not support a required API, install/pin a compatible version rather than silently falling back to classic embeds.
+- Add structured error handling and actionable logs. Never log bot tokens, Firebase private keys, webhook secrets, or other credentials.
+- Include Firestore indexes/rules guidance where needed, a complete `.env.example`, and clear setup, deployment, backup, and troubleshooting instructions.
+- Make operations idempotent where retries or restarts are possible. Handle Discord API rate limits, missing members/channels, deleted messages, and unavailable DMs gracefully.
+- Include tests for permission gates, timer recovery, and core lifecycle flows where practical. Do not claim a feature is tested unless it was actually run.
+
+
+- **Node.js + discord.js v14.16+** (need the `ContainerBuilder`/`SectionBuilder`/`TextDisplayBuilder` classes for Components V2 — do not use `EmbedBuilder` anywhere in this bot).
+- **Firebase Admin SDK + Firestore** for all persistence.
+- **All messages use Components V2** (`flags: MessageFlags.IsComponentsV2`). No classic embeds anywhere in this bot. JSON templates for every message are in this doc — treat them as the source of truth for structure, and build them with the discord.js V2 builders.
+- **Every timed action is Firestore-backed, never a bare `setTimeout`/`setInterval` alone.** Write a `timers` collection: `{ type, dueAt, guildId, payload, fired: false }`. Run a poller every `TIMER_POLL_INTERVAL_SECONDS` (default 30s) that queries `fired == false AND dueAt <= now`, executes, marks fired. This must also run once on bot startup to catch anything missed during downtime. This applies to: career question expiry (10 min), ticket join-link deletion (10 min), any flight check-in scheduling.
+- **No hardcoded Discord IDs anywhere in source.** Everything in Section 4 comes from `.env`, loaded through a single `config.js` that validates all required vars exist on boot and crashes loudly (not silently) if any are missing.
+- **No AI-detection feature.** The careers "AI usage is prohibited" line is reviewer-facing policy text only. Do not attempt to build any AI-content detection into the bot.
+- **Role assignment is idempotent.** Check `member.roles.cache.has(id)` before adding; never throw if the role's already present.
+- **Local hosting, not cloud.** No assumptions about ephemeral filesystems, no need for Cloud Functions — this runs as a long-lived `node index.js` process on the owner's PC.
+- Use **PM2** for process management (`pm2 start index.js --name vietjet-ptfs-bot`) so it auto-restarts on crash. Include a `pm2 save` + `pm2-startup`/`pm2-windows-startup` step in the setup instructions (owner is on Windows based on context — include the Windows path as primary, note the Linux/macOS equivalent in a comment).
+- Use `discord-html-transcripts` (npm) for ticket transcript generation — upload the resulting HTML directly as a file attachment to `TICKETS_LOG_CHANNEL_ID`, per the owner's reference implementation ("Tickets V2"). No external storage bucket needed.
+
+---
+
+## 3. Environment Variables
+
+```env
+# --- Core ---
+DISCORD_BOT_TOKEN=
+DISCORD_CLIENT_ID=
+NODE_ENV=production
+TIMER_POLL_INTERVAL_SECONDS=30
+
+# --- Guilds ---
+GUILD_ID_MAIN=
+GUILD_ID_STAFF=
+
+# --- Firebase ---
+FIREBASE_PROJECT_ID=
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=
+
+# --- Tickets ---
+TICKETS_CATEGORY_ID=              # Main — ticket channels are created here
+TICKETS_LOG_CHANNEL_ID=           # Staff — quota logs + HTML transcripts land here
+ROLE_ID_BOARD_OF_DIRECTORS=       # Staff guild role — checked via isStaffAuthorized
+ROLE_ID_MANAGEMENT_TEAM=          # Staff guild role — checked via isStaffAuthorized
+STAFF_PING_ROLE_ID=                # Main guild role — pinged in ticket starter messages instead of @everyone
+ROLE_IDS_TICKET_VIEW=             # Main guild role(s), comma-separated — the ONLY roles (besides opener/claimer) that can see a ticket channel. Not listed = can't see it. No deny-list, no edge cases.
+
+# --- Careers ---
+CAREER_SETUP_CHANNEL_ID=          # Main — where /careersetup posts the department select
+CAREER_REVIEW_CHANNEL_ID=         # Staff — full Q&A + Accept/Deny buttons land here
+CAREER_RESULTS_ANNOUNCE_CHANNEL_ID=  # Main — public results feed mentioned in accept/deny copy
+SUPPORT_CONTACT_CHANNEL_ID=       # Main — linked in accept/deny messages
+ROLE_ID_FLIGHT_DECK=
+ROLE_ID_CABIN_CREW=
+ROLE_ID_GROUND_CREW=
+ROLE_ID_FLIGHT_OPERATOR=
+ROLE_ID_HUMAN_RESOURCES=
+ROLE_ID_PUBLIC_RELATIONS=
+
+# --- Flight Operations ---
+FLIGHT_ANNOUNCE_CHANNEL_ID=       # Main — flight preview posts here
+FLIGHT_BRIEFING_CHANNEL_ID=       # Staff — role-claim briefing post
+FLIGHT_LOG_CHANNEL_ID=            # Staff — /logflight output
+ROLE_ID_FLIGHT_OPS_COMMANDS=      # Main guild role — required for /createflight, /logflight, /flightupdate (BoD/Management override by default, see §7). Can be set equal to ROLE_ID_FLIGHT_OPERATOR if you'd rather reuse the career department role than mint a new one.
+FLIGHT_PING_ROLE_ID_1=            # the two roles pinged at the bottom of previews
+FLIGHT_PING_ROLE_ID_2=
+FLIGHT_BOOKING_STAFF_CHANNEL_ID=  # completed bookings get posted here for staff visibility
+BOOKING_WEBSITE_BASE_URL=         # e.g. https://booking.example.com — external site, built separately
+BOOKING_WEBHOOK_SECRET=           # shared secret; booking site POSTs here when a booking completes
+BOOKING_API_PORT=3001             # local Express server the bot runs for the webhook + read API
+
+# --- VietJet Rewards ---
+REWARDS_LOG_CHANNEL_ID=            # Staff — award/deduct audit log
+ROLE_ID_REWARDS_LEVEL_1=
+ROLE_ID_REWARDS_LEVEL_2=
+ROLE_ID_REWARDS_LEVEL_3=
+
+# --- Paid Ads ---
+ADS_CHANNEL_ID=                   # Main — where ads actually get posted once purchased
+ADS_SALES_CONTACT_USER_ID=        # currently @iamadivineprogamer per source doc
+ROLE_ID_VietJet_PARTNER=              # Main — auto-detects partner discount eligibility
+
+# --- Ops ---
+BOT_OWNER_ID=
+ERROR_LOG_CHANNEL_ID=
+```
+
+---
+
+## 4. Firestore Data Model
+
+```
+tickets/{ticketId}
+  type: "general" | "partnership" | "fastpass" | "report" | "other"
+  openerId, claimerId (nullable), status: "open" | "claimed" | "closed"
+  channelId, createdAt, closedAt, closedById, transcriptMessageId
+
+careerApplications/{appId}
+  userId, department, status: "in_progress" | "pending_review" | "accepted" | "denied"
+  answers: [{ questionIndex, questionText, answerText, answeredAt }]
+  reviewerId, reason, createdAt, decidedAt
+  departmentEnabled: bool   # mirrors /careeredit state, read on setup-menu render
+
+flights/{flightId}
+  flightNumber, hostId, departureAirport, arrivalAirport, aircraft, classes,
+  privateServerLink, spawnLocation, gateNumber, flightTimeMinutes,
+  scheduledUnixTime, discordEventId, discordEventLink,
+  status: "scheduled" | "checkin" | "completed" | "cancelled" | "delayed",
+  staffClaims: [{ userId, role }], createdAt
+
+timers/{timerId}
+  type: "careerQuestionExpiry" | "ticketJoinLinkDelete" | "flightCheckin"
+  dueAt (timestamp), guildId, payload (map), fired: bool
+
+rewardsAccounts/{discordUserId}
+  balance: number, level: 1 | 2 | 3
+  history: [{ delta, reason, byStaffId, at }]
+
+config/rewards
+  level2Threshold: number  [OPENCODE DECISION — seed with placeholder, see §8]
+  level3Threshold: number
+
+adsOrders/{orderId}
+  userId, tier: "basic" | "featured" | "premium" | "spotlight"
+  status: "pending_payment" | "confirmed" | "posted"
+  ticketChannelId, createdAt
+```
+
+---
+
+## 5. Feature Spec: Tickets v2
+
+### Commands
+| Command | Effect |
+|---|---|
+| `/ticketsetup` | Posts the Main Menu message (below) in the current channel. Staff-only (`isStaffAuthorized`). |
+
+### Main Menu message (Main guild, posted by `/ticketsetup`)
+Select menu, not buttons — 5 support types don't fit in one action row of buttons anyway (Discord caps at 5 buttons/row and you want room to grow).
+
+```json
+{
+  "flags": 32768,
+  "components": [
+    { "type": 12, "items": [{ "media": { "url": "{BANNER_TOP_IMAGE_URL}" } }] },
+    {
+      "type": 17,
+      "accent_color": 7392244,
+      "components": [
+        { "type": 10, "content": "# ✈️ | Helpdesk\n**Need assistance?** Select the option below that best matches your enquiry.\n\n> * **General** — General questions and assistance\n> * **Partnership** — Partnership enquiries\n> * **Reports** — Report a member or issue\n> * **Fast Pass** — Fast Pass requests\n> * **Other** — Anything else" },
+        { "type": 14, "spacing": 1 },
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "ticket_type_select",
+              "placeholder": "Choose Support Type",
+              "min_values": 1,
+              "max_values": 1,
+              "options": [
+                { "label": "General Support", "value": "general", "description": "General questions and assistance" },
+                { "label": "Partnership Inquiry", "value": "partnership", "description": "Partnership enquiries" },
+                { "label": "Fast Pass", "value": "fastpass", "description": "Fast Pass staff entry requests" },
+                { "label": "Report", "value": "report", "description": "Report a member or issue" },
+                { "label": "Other", "value": "other", "description": "Anything else" }
+              ]
+            }
+          ]
+        },
+        { "type": 14 }
+      ]
+    },
+    { "type": 12, "items": [{ "media": { "url": "{BANNER_BOTTOM_IMAGE_URL}" } }] }
+  ]
+}
+```
+`[ASSUMPTION]` `{BANNER_TOP_IMAGE_URL}` / `{BANNER_BOTTOM_IMAGE_URL}` are placeholders — the originals were signed CDN links that will have expired. Re-upload and hardcode fresh URLs, or strip both media-gallery blocks if you don't care about the banners.
+
+### Ticket creation flow
+On select: create channel under `TICKETS_CATEGORY_ID`, named per type (`generalsupport-{username}`, `partner-{username}`, `fastpass-{username}`, `report-{username}`, `other-{username}`). Permission overwrites, applied in this order:
+1. Deny `ViewChannel` for `@everyone`.
+2. Allow `ViewChannel`+`SendMessages` for the opener (member-specific overwrite).
+3. Allow `ViewChannel`+`SendMessages` for all roles that can has access to the catergory
+
+**Discord permission caveat — read before implementing step 4.** Role-level overwrites are combined across all of a member's roles by OR-ing the deny bits together and the allow bits together, then subtracting deny and adding allow, *in that order*. That means if a member holds both a blocked role and an allowed role (BoD, Management) on the same channel, the allow can reinstate the bit the deny just removed — the block does not reliably win. A member-specific overwrite (the opener's own) is applied last and beats every role overwrite regardless. Practical effect: `ROLE_IDS_TICKET_BLOCKED` only reliably blocks someone who doesn't *also* hold a role with an explicit allow on that channel. Put this caveat in the README — don't let the owner assume it's an absolute block if they hand that role to someone who's also BoD/Management.
+
+Ephemeral reply to the user using the Opening Message:
+
+```json
+{ "flags": 32768, "content": "✅ Your ticket has been created at {ticketChannelLink}." }
+```
+
+### Starter message — shared template, one function, parametrized by type
+Build ONE function `buildStarterMessage(type, opener)` that swaps only the container's text content. Reports and Other reuse General Support's copy with the type name swapped in, per the source spec.
+
+```json
+{
+  "flags": 32768,
+  "components": [
+    { "type": 10, "content": "{opener} <@&{STAFF_PING_ROLE_ID}>" },
+    {
+      "type": 17,
+      "accent_color": 7392244,
+      "components": [
+        { "type": 10, "content": "### ✈️ {username} ticket\n> {bodyTextForType}" },
+        { "type": 14 },
+        {
+          "type": 1,
+          "components": [
+            { "type": 2, "style": 3, "label": "Claim", "custom_id": "ticket_claim" },
+            { "type": 2, "style": 2, "label": "Unclaim", "custom_id": "ticket_unclaim" },
+            { "type": 2, "style": 4, "label": "Close", "custom_id": "ticket_close" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+`[ASSUMPTION]` Replaced literal `@everyone` from the source doc with `STAFF_PING_ROLE_ID` — pinging the whole server on every ticket is a bad default. Owner can set this role to `@everyone`'s ID if that's genuinely wanted.
+
+`bodyTextForType` — use verbatim from source docs:
+- **General/Report/Other**: "Thank you for contacting VietJet PTFS Support. Please state your support after creating the ticket. We will soon come and analyze and give you the perfect support. Thank you." (swap "support" language per type for Report/Other, e.g. "Please describe what you're reporting.")
+- **Partnership**: "Thank you for your interest in partnering with us. Please fill out the form via the format given below. We will soon analyze and discuss the partnership. Thank you." + code block: `Name: / Server/Airline: / Current Membercount (does not include bots): / Reputation within the community: / Number of raids occurred in the server: / Notes:`
+- **Fast Pass**: "Thank you for your interest in joining into the staff team via direct entry. Please fill out the form below via the format so we can analyze and give out the exact role matches your experience. Thank you." + code block: `Name: / User ID: / Fast-pass wanted roles: / Previous positions (in other servers) / Server previous employment link: / Employment Time: / Attachments:`
+
+### Claim / Unclaim / Close
+- **Claim**: `isStaffAuthorized` check → set `claimerId`, restrict channel view to opener + claimer + `ROLE_ID_BOARD_OF_DIRECTORS` (management team already has admin per source doc, no explicit overwrite needed). Re-apply the `ROLE_IDS_TICKET_BLOCKED` deny overwrites every time permissions are rebuilt here — a full permission-set rewrite must not silently drop them.
+- **Unclaim**: clear `claimerId`, restore default staff-role visibility. Same rule — keep the blocked-role denies intact.
+- **Close**: only opener or claimer can trigger. Show confirmation (buttons, not just text — the source doc implies confirmation but didn't spec buttons):
+
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "components": [
+        { "type": 10, "content": "### Closing confirmation\n> Are you sure you want to close this ticket?\n{opener}" },
+        {
+          "type": 1,
+          "components": [
+            { "type": 2, "style": 4, "label": "Confirm Close", "custom_id": "ticket_close_confirm" },
+            { "type": 2, "style": 2, "label": "Cancel", "custom_id": "ticket_close_cancel" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+On confirm: generate `discord-html-transcripts` output, upload as attachment to `TICKETS_LOG_CHANNEL_ID` with the logging embed below, DM the opener the closure status, delete the channel.
+
+### Quota log entry (posted to `TICKETS_LOG_CHANNEL_ID` on close)
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 7392244,
+      "components": [
+        { "type": 10, "content": "## {ticketType} Ticket Closed\n**Opener:** {opener}\n**Claimed by:** {claimer}\n**Interference:** {interferersList}\n**Closed by:** {closedBy}\n**Reason:** {reason}\n**Ticket Number:** {ticketId}" }
+      ]
+    }
+  ]
+}
+```
+"Interference" = any staff member who sent a message in the channel but never claimed it — track this by logging every staff message author into the ticket doc.
+
+---
+
+## 6. Feature Spec: Careers
+
+### Commands
+| Command | Effect |
+|---|---|
+| `/careersetup` | Posts the department select menu (below) in the current channel. Staff-only. |
+| `/careeredit <department> <enable\|disable>` | Toggles `departmentEnabled` in Firestore, then re-renders the setup message's options array (excluding disabled departments — **Discord select menus cannot disable a single option**, so this means editing the message with a filtered options list, not a "disabled" flag). Staff-only. |
+
+### Setup message
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 92807,
+      "components": [
+        { "type": 10, "content": "## ℹ️ VietJet PTFS Careers\n> Select a department below to begin your application." },
+        { "type": 14 },
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "career_department_select",
+              "placeholder": "Choose a department to apply for",
+              "min_values": 1,
+              "max_values": 1,
+              "options": [
+                { "label": "Flight Deck", "value": "flight_deck" },
+                { "label": "Cabin Crew", "value": "cabin_crew" },
+                { "label": "Ground Crew", "value": "ground_crew" },
+                { "label": "Flight Operator", "value": "flight_operator" },
+                { "label": "Human Resources", "value": "human_resources" },
+                { "label": "Public Relations", "value": "public_relations" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Application flow (all in DMs, matches source spec exactly)
+1. Select fires → bot DMs the user the **Application Agreement**.
+2. Agree/Disagree buttons. Disagree → stop, send "you must click Agree to start" message, done. Agree → proceed.
+3. Ask questions one at a time (full question banks are in the original upload — use them verbatim per department, 11–15 questions each). Each question gets a `timers` doc with `dueAt = now + 10min, type: careerQuestionExpiry`. User replies in the DM channel (plain message, not a modal) → record answer, cancel/mark that timer fired, ask next question.
+4. If the timer fires before an answer: `[OPENCODE DECISION]` — source doc says "the question should expire" but doesn't say what happens to the application. Treat as auto-fail: mark application `status: "denied"`, `reason: "Did not respond within 10 minutes"`, DM the user, stop the flow. Flag this decision in your build summary so the owner can override if they wanted something else (e.g., one reminder + extension).
+5. All questions done → post full Q&A to `CAREER_REVIEW_CHANNEL_ID` (Staff guild) with Accept/Deny buttons, send the "Application Recorded" message to the user.
+
+### Message templates (cleaned up, placeholders standardized to `{curlyBrace}` style, `webhook_id` stripped — not needed for bot-sent messages)
+
+**Agreement:**
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 92807,
+      "components": [
+        { "type": 10, "content": "## ℹ️ Application Agreements\n> Welcome to the {applicationType}. This test consists of {questionsAmount} questions, all of which are written. Each questions are needed to be completed in 10 minutes. Please answer as detailed as possible, as it might require some effort into it. AI Usage is prohibited in this application." },
+        { "type": 14 },
+        {
+          "type": 1,
+          "components": [
+            { "type": 2, "style": 3, "label": "Agree", "custom_id": "career_agree" },
+            { "type": 2, "style": 4, "label": "Disagree", "custom_id": "career_disagree" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Recorded:**
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 92807,
+      "components": [
+        { "type": 10, "content": "## 📝 Application Recorded \n> ✈️ Thank you for spending your time applying for this position. We will soon grade your application and results will be announced to you soon. Application results will be directed to you and sent in <#{CAREER_RESULTS_ANNOUNCE_CHANNEL_ID}> also.\n\n> ✈️ Please give us at least 48-72 hours to reach and grade your application. Thank you for your patience." }
+      ]
+    }
+  ]
+}
+```
+
+**Accept** (posted to review channel with Accept/Deny buttons attached; DM version omits the buttons and fills `{user}`, `{applicationType}`):
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 92807,
+      "components": [
+        { "type": 10, "content": "## ✅ Application accepted\n> Hello {user}. After consideration from the training department and the flight operations department, we are excited to announce that your application has been accepted.\n\n✈️ Application Type: **{applicationType}**\n\n> Please head to the training program to proceed your training. If you need any help, please contact the support team via <#{SUPPORT_CONTACT_CHANNEL_ID}>. Thanks for applying and welcome to the team" }
+      ]
+    }
+  ]
+}
+```
+
+**Deny:**
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 92807,
+      "components": [
+        { "type": 10, "content": "# ❌ Application Denied\n> Hello {user}. After consideration from the training department and the flight operations department, we are sadly to announce that your application has been denied.\n\n✈️ Application Type: **{applicationType}**\n✈️ Reason: **{reason}**\n\n> You may reapply within 24 hours. If you need any help, please contact the support team via <#{SUPPORT_CONTACT_CHANNEL_ID}>. Thanks for your time in the application." }
+      ]
+    }
+  ]
+}
+```
+
+### Accept/Deny handling
+Staff clicks Accept or Deny in `CAREER_REVIEW_CHANNEL_ID` → modal or follow-up prompt asks for a reason → assign the matching department role (`ROLE_ID_FLIGHT_DECK` etc.) in `GUILD_ID_MAIN` if accepted → post confirmation to review channel → DM applicant using the templates above.
+
+### Question banks
+Use the exact question lists from the source upload for all 6 departments (Flight Deck: 14 questions, Ground Crew: 13, Cabin Crew: 12, Flight Operator: 15, Human Resources: 15, Public Relations: 15). Store as a static config object, not hardcoded inline in the handler — keep it editable.
+
+---
+
+## 7. Feature Spec: Flight Operations
+
+### Commands
+Gated by `ROLE_ID_FLIGHT_OPS_COMMANDS` (Main guild) — a role dedicated to flight commands, separate from the ticket/careers `isStaffAuthorized` check. `ROLE_ID_BOARD_OF_DIRECTORS`/`ROLE_ID_MANAGEMENT_TEAM` (checked in Staff guild) also pass as an admin override by default — `[OPENCODE DECISION]`: drop that override in `isFlightOpsAuthorized` if the owner wants this role to be the *only* way in, no exceptions.
+
+```js
+async function isFlightOpsAuthorized(client, discordUserId) {
+  const mainGuild = await client.guilds.fetch(process.env.GUILD_ID_MAIN);
+  const member = await mainGuild.members.fetch(discordUserId).catch(() => null);
+  if (member?.roles.cache.has(process.env.ROLE_ID_FLIGHT_OPS_COMMANDS)) return true;
+  return isStaffAuthorized(client, discordUserId, [
+    process.env.ROLE_ID_BOARD_OF_DIRECTORS,
+    process.env.ROLE_ID_MANAGEMENT_TEAM,
+  ]);
+}
+```
+
+| Command | Effect |
+|---|---|
+| `/createflight` | Requires `isFlightOpsAuthorized`. Inputs: flight number, scheduled Unix time, aircraft, departure, arrival, private server link, classes, PTFS spawn location, gate number, flight duration, host (defaults to command invoker, overridable). |
+| `/logflight flightnum:` | Requires `isFlightOpsAuthorized` OR the invoker is the flight's stored `hostId`. Marks flight completed, logs to Staff guild, cleans up. |
+| `/flightupdate flightnum: ...` | Same gate as `/logflight` — role holder, admin override, or the flight's host. Delay (new time) or cancel. |
+
+### `/createflight` flow
+1. Validate flight doesn't already exist for that number.
+2. **Create a real Discord Scheduled Event** in `GUILD_ID_MAIN` using the input fields (per owner confirmation — auto-create, not link-input). Event description built from:
+```
+✈️ **{flightNumber}**
+
+🛫 | **Departure:**
+🛬 | **Arrival:**
+📍 | **Operating Aircraft:**
+
+ℹ️ | **Classes:** Premium, Economy (Business class depending on aircraft)
+🕒 | **Flight Time:**
+
+🙂 | **Thank you for choosing VietJet as your airline for this flight!**
+```
+3. Copy the resulting event link.
+4. Save the full flight record to Firestore (`flights/{flightId}`).
+5. Post the **Flight Preview** to `FLIGHT_ANNOUNCE_CHANNEL_ID` (Main):
+```json
+{
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "components": [
+        { "type": 10, "content": "## ✈️ VJ {flightNumber} \n-# ➜ Hosted By: {host} \n> 🙂 You're all set to fly! For **VJ {flightNumber}**. More information may be found in the event link and below.\n\n> 🛫➜ **Departing:** {departure}\n> 🛬➜ **Arriving:** {arrival}\n> 🕒➜ **Flight Time:** {flightTime}\n> 📍➜ **Aircraft:** {aircraft}\n> 🔗➜ **Event Link:** [Click Here]({eventLink})\n> ℹ️➜ **Classes:** {classes}\n\n-# <@&{FLIGHT_PING_ROLE_ID_1}> <@&{FLIGHT_PING_ROLE_ID_2}>" },
+        { "type": 14 },
+        {
+          "type": 1,
+          "components": [
+            { "type": 2, "style": 5, "label": "Book This Flight", "url": "{BOOKING_WEBSITE_BASE_URL}/book?flight={flightNumber}" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+6. Post the staff briefing to `FLIGHT_BRIEFING_CHANNEL_ID` (Staff) — same content, with role-claim buttons added for staff to sign up for positions on the flight (`[OPENCODE DECISION]`: build claimable role buttons for at minimum Ground Crew and Cabin Crew slots — reasonable default, source doc says "different buttons for role-claiming" without specifying which roles).
+7. Confirm to the command invoker with a "Done" ephemeral reply.
+
+### Check-in (automatic, timer-driven)
+On the flight's `scheduledUnixTime`, a `flightCheckin` timer fires:
+```
+✈️ **VJ{flightNumber}** has started check-in!
+
+📍 | **Spawn at {spawnLocation}**, go to check in at gate {gateNumber}
+ℹ️  | People who violate the rules will be **kicked**!
+
+🔗  | {eventLink}
+🔗  | {privateServerLink}
+```
+Schedule a second timer 10 minutes later to delete this message.
+
+### `/logflight`
+Post log to `FLIGHT_LOG_CHANNEL_ID` (flight details + all staff who claimed a role), delete the flight's active Firestore doc fields except a retained log record, mark event/status complete.
+
+### `/flightupdate`
+Delay: post the update notice, edit the scheduled event + flight preview message with new time, reschedule the check-in timer.
+```
+# 🙂 Delay Notice
+
+> Dear Passengers, VietJet Air Flight **VJ {flightNumber}** on service to {arrival} has been delayed by **{delayAmount}**
+
+> We apologize on this issue and hope to see everyone onboard.
+```
+Cancel: same as `/logflight` but skip the logging step per source spec.
+
+### Booking (webhook stub — external site is a separate project)
+Run a small Express server inside the bot process on `BOOKING_API_PORT`:
+- `POST /webhook/booking` (header `x-webhook-secret` must match `BOOKING_WEBHOOK_SECRET`) — payload `{ flightNumber, discordUserId, class, seat }`. On receipt: DM the user a confirmation, post to `FLIGHT_BOOKING_STAFF_CHANNEL_ID`.
+- `GET /api/flights/active` (same secret header) — read-only list of scheduled/check-in flights, for the future booking site to render.
+
+`[ASSUMPTION]` Booking site shares the bot's Firebase project. If the owner builds it as a fully separate DB, only the webhook contract above needs to stay stable — nothing else here changes.
+
+---
+
+## 8. Feature Spec: VietJet Rewards (loyalty)
+
+The loyalty system is branded “VietJet Rewards” in user-facing copy. Use “points” as the generic balance label unless the owner later chooses a specific VietJet PTFS loyalty currency. No thresholds were supplied: seed safe placeholders and make them staff-editable rather than hardcoding them.
+
+### Commands
+| Command | Effect |
+|---|---|
+| `/rewards profile [user]` | Shows balance, level, next-level progress. Anyone. |
+| `/rewards award <user> <amount> <reason>` | Staff-only. Adds Rewards, logs to `REWARDS_LOG_CHANNEL_ID`, checks level-up. |
+| `/rewards deduct <user> <amount> <reason>` | Staff-only. Same, negative. |
+| `/rewards leaderboard` | Top 10 by balance. |
+| `/rewards configure level2:<n> level3:<n>` | Staff-only. Writes `config/rewards` in Firestore — matches the owner's established pattern of keeping tier thresholds staff-adjustable rather than hardcoded. |
+
+Level-up: crossing a threshold auto-assigns `ROLE_ID_REWARDS_LEVEL_2`/`3` (idempotent) and removes the prior level's role if present.
+
+`[ASSUMPTION]` The mini-games mentioned in the source doc ("Spin the Globe," "Pack Your Bags") are **out of scope for this build**. They read as standalone gambling/engagement mechanics that deserve their own spec, not a bolt-on. Flag to the owner as a phase 2 item.
+
+`[ASSUMPTION]` No existing economy bot (e.g. Unbelievaboat) integration — built as a standalone Firestore ledger. If Unbelievaboat is already running in the VietJet server, this should instead hook into it (same pattern as the owner's Wizz Air Discount Club bot) — confirm before building if that's the case.
+
+---
+
+## 9. Feature Spec: Paid Ads (new, not in original source docs)
+
+Use the four advertising tiers below as the initial VietJet PTFS pricing configuration. Keep names and prices configurable so the owner can change them without editing command-handler logic:
+
+| Tier | Price | Duration | Pings | Custom Embed | Placement |
+|---|---|---|---|---|---|
+| VietJet Basic | 45 Robux | 1 day | None | No | Standard |
+| VietJet Featured | 125 Robux | 2 days | 1 (here) | Choice of a few | Priority over Basic |
+| VietJet Premium | 320 Robux | 4 days | 2 (here + engagement) | Fully custom | High-priority queue |
+| VietJet Spotlight | 600 Robux | 7 days | 2 (@everyone + choice) | Fully custom, pinned | Top priority |
+
+Partner discount: 5–10%, staff-applied manually by default. Do not claim that payment has been verified automatically. Robux payment verification is out of scope unless a later, separately specified Roblox integration is added.
+
+### Command
+`/ads purchase` → select menu of the 4 tiers → opens a ticket (reuse the Tickets system, type `"other"` with a pre-filled note: "Ads Purchase — {tier}") → if the buyer has `ROLE_ID_VietJet_PARTNER`, auto-note their discount eligibility in the ticket's opening message → staff confirms payment manually, then posts to `ADS_CHANNEL_ID` with the requested embed style once ready.
+
+---
+
+## 10. Command Reference (all)
+
+`/ticketsetup`, `/careersetup`, `/careeredit`, `/createflight`, `/logflight`, `/flightupdate`, `/rewards profile`, `/rewards award`, `/rewards deduct`, `/rewards leaderboard`, `/rewards configure`, `/ads purchase`, `/ping` (basic health check — build this first as your smoke test before anything else).
+
+---
+
+## 11. Local Hosting Setup (Windows, per owner's environment)
+
+```powershell
+npm install pm2 -g
+npm install pm2-windows-startup -g
+pm2-startup install
+pm2 start index.js --name vietjet-ptfs-bot
+pm2 save
+```
+This survives display disconnects and reboots as long as the PC itself is powered and logged in. Note in your README that this does NOT survive the PC being fully shut down — only sleep/display-off. If the owner wants true unattended reboot recovery, the `pm2-windows-startup` step handles that too (registers as a startup task).
+
+(Linux/macOS equivalent: `pm2 startup` + `systemctl`/`launchd` — not the primary target here but worth a one-line mention in the README.)
+
+---
+
+## 12. Acceptance Criteria
+
+In addition to the feature-specific checks below, confirm that the final implementation contains no leftover previous-airline branding, no hardcoded server/role/channel IDs, no leaked secrets, and no classic EmbedBuilder usage. Confirm that all user-facing copy consistently says VietJet PTFS or VietJet Air where appropriate.
+
+- [ ] Bot boots and validates all required env vars, crashes with a clear message if any are missing.
+- [ ] `/ping` responds.
+- [ ] Full ticket lifecycle: create → claim → unclaim → close → transcript uploaded → DM sent.
+- [ ] A member holding only `ROLE_IDS_TICKET_BLOCKED` (no BoD/Management) cannot view any ticket channel, at every stage (unclaimed, claimed, unclaimed again).
+- [ ] Full career lifecycle: select department → agree → answer all questions (including a forced 10-min timeout on at least one, tested) → review posts correctly → accept assigns role → deny sends reason.
+- [ ] `/createflight` produces a real Discord Scheduled Event, correct preview + briefing posts, check-in fires automatically at the scheduled time (test with a near-future timestamp), `/logflight` and `/flightupdate` both work.
+- [ ] Bot survives a hard restart mid-timer (kill the process while a 10-min timer is pending, restart, confirm it still fires or is caught by the startup catch-up query).
+- [ ] A user with none of `ROLE_ID_FLIGHT_OPS_COMMANDS`, BoD, Management, or flight-host status is rejected by `/createflight`, `/logflight`, and `/flightupdate`.
+- [ ] `/rewards` full loop: award → level-up role assigned → leaderboard reflects it.
+- [ ] `/ads purchase` opens a ticket with the right pre-fill.
+
+---
+
+## 13. Open Items For The Owner (not blocking — build proceeds, revisit after)
+
+1. Confirm the Main-guild equivalents of `ROLE_ID_BOARD_OF_DIRECTORS`/`ROLE_ID_MANAGEMENT_TEAM` if those roles need channel-overwrite permissions applied directly in Main (vs. just being checked against Staff-guild membership).
+2. Real VietJet Rewards level thresholds (currently placeholders via `/rewards configure`).
+3. Whether Unbelievaboat is already running in the VietJet server (changes Rewards architecture).
+4. Fresh banner image URLs for the ticket Main Menu.
+5. Whether "Spin the Globe" / "Pack Your Bags" mini-games get built later.
+
+
+---
+
+## 14. Required Delivery Format
+
+When implementation is complete, provide:
+1. A concise summary of what was implemented.
+2. The project file tree.
+3. Exact Windows setup commands, including environment setup and PM2 startup.
+4. The complete `.env.example` with every required variable documented.
+5. Discord Developer Portal setup steps and required bot permissions/intents.
+6. Firebase service-account setup and Firestore configuration steps.
+7. A checklist of acceptance tests actually performed and their results.
+8. Every owner decision still needed, clearly separated from completed work.
+9. Known limitations, especially manual Robux payment confirmation and any out-of-scope phase-two items.
+
+Do not output only example snippets or pseudocode. Create and verify the actual project files in the working repository. If a required external value is missing, use a documented environment-variable placeholder and continue where safe. Never fabricate test results, deployed URLs, Discord IDs, payment verification, or successful API calls.

@@ -1,0 +1,29 @@
+rules_version = '2';
+
+// VietJet PTFS Firestore security rules.
+//
+// DESIGN: every read and write goes through the Node bot (Firebase Admin SDK),
+// which bypasses these rules. The website never talks to Firestore directly —
+// it calls the bot's own Express API, which authenticates the member session
+// first. So the safest configuration is to deny ALL direct client access.
+//
+// If you previously left the project in "test mode" or with open rules, any
+// website visitor could read or edit member balances and the ledger directly,
+// bypassing all server-side validation. Deploying this file closes that off.
+//
+// Deploy with:  firebase deploy --only firestore:rules
+//
+// These rules are deliberately strict. If you later add a direct-to-Firestore
+// client (for example a public flight schedule read), add an explicit allow for
+// THAT collection only — never for rewardsAccounts or economyLedger.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Deny everything by default. No client SDK may touch anything.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+  }
+}

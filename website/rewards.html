@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rewards · VietJet PTFS</title>
+  <meta name="description" content="How VietJet PTFS loyalty points and VJ Credits are earned, the status tiers, and what you can redeem. A closed virtual economy with no cash value.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <span>Rewards</span></nav>
+        <h1 class="page-title">Rewards</h1>
+        <p class="page-lead" id="rewards-lead">
+          Two separate balances, both earned by flying verified completed flights.
+        </p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid grid-2" style="align-items:start;gap:var(--s6)">
+          <article class="card">
+            <p class="stat-label">Loyalty</p>
+            <h2 class="card-title mt-2" id="points-label">Loyalty points</h2>
+            <p class="card-body" id="points-earning">Loading earning rates.</p>
+            <hr class="divider mt-4 mb-4">
+            <ul class="stack" style="font-size:var(--t-sm);color:var(--text-soft)">
+              <li>Earned from verified flights, missions and staff awards.</li>
+              <li>Spent in the catalogue below.</li>
+              <li>Never purchasable, never transferable, no cash value.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <p class="stat-label">Virtual economy</p>
+            <h2 class="card-title mt-2" id="credits-label">VJ Credits</h2>
+            <p class="card-body" id="credits-earning">Loading earning rates.</p>
+            <hr class="divider mt-4 mb-4">
+            <ul class="stack" style="font-size:var(--t-sm);color:var(--text-soft)">
+              <li>A closed, fictional virtual economy balance.</li>
+              <li>Spent in the shop below on virtual perks.</li>
+              <li>Cannot be withdrawn, traded for Robux, or converted to money.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="alert alert-info mt-6">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span><strong>Booking a seat does not earn a reward.</strong> Points and credits are
+          only issued when staff complete a flight and confirm that you were present. No-shows,
+          cancelled flights and staff-excluded entries earn nothing.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-sunken" aria-labelledby="tiers-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 class="section-title" id="tiers-title">Status tiers</h2>
+          <p class="section-lead" id="tier-note">Status is based on lifetime qualifying points from verified flights.</p>
+        </header>
+        <div class="tier-grid grid" id="tier-grid">
+          <div class="skeleton" style="height:110px"></div>
+          <div class="skeleton" style="height:110px"></div>
+          <div class="skeleton" style="height:110px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="catalogue-title">
+      <div class="container">
+        <header class="section-head between wrap">
+          <div>
+            <h2 class="section-title" id="catalogue-title">Loyalty catalogue</h2>
+            <p class="section-lead">Redeem loyalty points for community perks. Redemption is confirmed from your dashboard.</p>
+          </div>
+          <a class="btn btn-primary" href="/dashboard.html">Go to dashboard</a>
+        </header>
+        <div class="grid grid-3" id="catalogue-grid">
+          <div class="skeleton" style="height:170px"></div>
+          <div class="skeleton" style="height:170px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-sunken" aria-labelledby="shop-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 class="section-title" id="shop-title">VJ Credits shop</h2>
+          <p class="section-lead">Spend VJ Credits on virtual booking extras and cosmetic items.</p>
+        </header>
+        <div class="grid grid-3" id="shop-grid">
+          <div class="skeleton" style="height:170px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid grid-2" style="gap:var(--s8);align-items:start">
+          <div class="prose">
+            <h2>Fair play</h2>
+            <p>The economy is designed so that flying more genuinely earns more, and so that it cannot be gamed.</p>
+            <ul>
+              <li>Every balance change is written to an append-only ledger entry in the same database transaction.</li>
+              <li>Each passenger can be awarded <strong>exactly once</strong> per flight. Re-running the award command, restarting the bot, or a duplicated request will not pay twice.</li>
+              <li>Staff corrections create compensating entries. History is never erased.</li>
+              <li>Purchases use a database transaction, so a double click or a retry cannot spend the same balance twice or oversell a limited item.</li>
+              <li>There are no gambling mechanics, no paid random rewards, no real-money purchases and no Robux purchases.</li>
+              <li>Points and credits cannot be transferred between members.</li>
+            </ul>
+          </div>
+          <aside class="card">
+            <h2 class="card-title">Check your balance</h2>
+            <p class="card-body mt-2">Balances and history are private. Sign in with Discord to see your own record.</p>
+            <div class="stack mt-4" id="signin-cta"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+  <script type="module" src="/js/pages/rewards.js"></script>
+</body>
+</html>

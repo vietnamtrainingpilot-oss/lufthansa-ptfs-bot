@@ -1,5 +1,5 @@
 /**
- * rewards.js — VietJet Rewards service (loyalty points + VJ Credits).
+ * rewards.js — LH Rewards service (loyalty points + LH Credits).
  *
  * MIGRATION NOTE (backwards compatible):
  *   The original build had a single `balance` field and a `level` 1/2/3 mirror.

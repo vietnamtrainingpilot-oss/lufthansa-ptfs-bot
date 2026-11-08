@@ -1,5 +1,5 @@
 /**
- * site.js — Shared frontend runtime for every VietJet PTFS page.
+ * site.js — Shared frontend runtime for every Lufthansa PTFS page.
  *
  * Responsibilities:
  *  - Render the header and footer so pages stay consistent and DRY.
@@ -17,7 +17,7 @@ export const CONFIG = {
   // Discord invite. Loaded from the server at runtime (see loadSiteConfig) so
   // the owner can change it in .env without editing this file. The value here
   // is only a fallback for when the config endpoint is unavailable.
-  discordInviteUrl: "https://discord.gg/vietjetptfs",
+  discordInviteUrl: "https://discord.gg/lufthansaptfs",
 };
 
 /**
@@ -217,7 +217,7 @@ function brandMarkup(inverse = false) {
       </svg>
     </span>
     <span class="brand-text">
-      <span class="brand-name">VietJet PTFS</span>
+      <span class="brand-name">Lufthansa PTFS</span>
       <span class="brand-sub">Virtual Airline</span>
     </span>`;
 }
@@ -258,7 +258,7 @@ export function mountHeader() {
 
   host.innerHTML = `
     <div class="container site-header-inner">
-      <a class="brand" href="/" aria-label="VietJet PTFS home">${brandMarkup()}</a>
+      <a class="brand" href="/" aria-label="Lufthansa PTFS home">${brandMarkup()}</a>
       <nav class="nav" id="primary-nav" aria-label="Primary">
         ${NAV_ITEMS.map((i) => {
           const active = current === i.href || (i.href !== "/" && current.startsWith(i.href.replace(".html", "")));
@@ -417,11 +417,10 @@ export function mountFooter() {
       </div>
       <div class="footer-legal">
         <p>
-          VietJet PTFS is an unofficial fan community for Roblox Pilot To Server. It is not
-          affiliated with, endorsed by, or operated by VietJet Air. All routes, staff and
-          rewards are fictional and hold no cash value.
+          Lufthansa PTFS is an unofficial Roblox virtual airline community. It is not
+          affiliated with, endorsed by, or operated by Deutsche Lufthansa AG or any real-world loyalty programme. All in-game balances are fictional and hold no cash value.
         </p>
-        <p>&copy; ${year} VietJet PTFS</p>
+        <p>&copy; ${year} Lufthansa PTFS</p>
       </div>
     </div>`;
 }
@@ -583,5 +582,5 @@ function initRevealObserver() {
 
 /** Set the document title suffix consistently. */
 export function setTitle(title) {
-  document.title = `${title} · VietJet PTFS`;
+  document.title = `${title} | Lufthansa PTFS`;
 }

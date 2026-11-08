@@ -9,10 +9,10 @@ import { buildText } from "../utils/builders.js";
 const COLLECTION = "adsOrders";
 
 export const TIERS = [
-  { id: "basic", name: "VietJet Basic", price: 45, duration: "1 day", pings: "None", embed: "No", placement: "Standard" },
-  { id: "featured", name: "VietJet Featured", price: 125, duration: "2 days", pings: "1 (here)", embed: "Choice of a few", placement: "Priority over Basic" },
-  { id: "premium", name: "VietJet Premium", price: 320, duration: "4 days", pings: "2 (here + engagement)", embed: "Fully custom", placement: "High-priority queue" },
-  { id: "spotlight", name: "VietJet Spotlight", price: 600, duration: "7 days", pings: "2 (@everyone + choice)", embed: "Fully custom, pinned", placement: "Top priority" },
+  { id: "basic", name: "Basic", price: 45, duration: "1 day", pings: "None", embed: "No", placement: "Standard" },
+  { id: "featured", name: "Featured", price: 125, duration: "2 days", pings: "1 (here)", embed: "Choice of a few", placement: "Priority over Basic" },
+  { id: "premium", name: "Premium", price: 320, duration: "4 days", pings: "2 (here + engagement)", embed: "Fully custom", placement: "High-priority queue" },
+  { id: "spotlight", name: "Spotlight", price: 600, duration: "7 days", pings: "2 (@everyone + choice)", embed: "Fully custom, pinned", placement: "Top priority" },
 ];
 
 export async function purchaseAd(member, tierId, client) {

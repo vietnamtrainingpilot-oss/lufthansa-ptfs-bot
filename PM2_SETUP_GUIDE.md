@@ -1,6 +1,6 @@
-# VietJet PTFS Bot — Windows Setup & PM2 Guide
+# Lufthansa PTFS Bot — Windows Setup & PM2 Guide
 
-This guide covers initial setup, PM2 process management, and troubleshooting for the VietJet PTFS Discord bot on Windows.
+This guide covers initial setup, PM2 process management, and troubleshooting for the Lufthansa PTFS Discord bot on Windows.
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ ROLE_ID_REWARDS_LEVEL_3=
 # Paid Ads
 ADS_CHANNEL_ID=                   # Where ads appear
 ADS_SALES_CONTACT_USER_ID=       # @iamadivineprogamer (reference)
-ROLE_ID_VietJet_PARTNER=          # Partner discount eligibility
+ROLE_ID_PARTNER=          # Partner discount eligibility
 
 # Ops
 BOT_OWNER_ID=                     # Your Discord user ID
@@ -111,7 +111,7 @@ ERROR_LOG_CHANNEL_ID=             # Error log channel
 
 ```powershell
 # Start the bot process
-pm2 start index.js --name vietjet-ptfs-bot
+pm2 start index.js --name lufthansa-ptfs-bot
 
 # Save the PM2 process list so it survives reboots
 pm2 save
@@ -126,15 +126,15 @@ pm2-startup install
 - **Sleep/Display-off**: PM2 survives display sleep/reboots as long as the PC is powered and logged in
 - **Full shutdown**: PM2 does **not** survive the PC being completely powered off. For that, you'd need a Windows Service or scheduled task.
 - **Check status**: `pm2 status`
-- **View logs**: `pm2 logs vietjet-ptfs-bot`
-- **Restart after crash**: `pm2 restart vietjet-ptfs-bot`
+- **View logs**: `pm2 logs lufthansa-ptfs-bot`
+- **Restart after crash**: `pm2 restart lufthansa-ptfs-bot`
 - **Auto-restart on PM2 startup**: `pm2 startup powershell` (registers as a Windows startup task)
 
 ## Step 5: Verify the Bot is Running
 
 ```powershell
 pm2 status
-# Should show: vietjet-ptfs-bot online
+# Should show: lufthansa-ptfs-bot online
 
 # Test the /ping command in Discord
 # Type /ping in any channel the bot has access to
@@ -157,13 +157,13 @@ If you want the flight-booking website running:
 | Symptom | Cause | Fix |
 |---|---|---|
 | Bot crashes on startup | Missing `.env` variables | Copy `.env.example` → `.env` and fill all values |
-| `/ping` doesn't respond | Bot not logged in / wrong token | `pm2 restart vietjet-ptfs-bot`; verify token in `.env` |
+| `/ping` doesn't respond | Bot not logged in / wrong token | `pm2 restart lufthansa-ptfs-bot`; verify token in `.env` |
 | Timer not firing after restart | Timer poller not catching up | The poller runs an immediate catch-up on startup — ensure bot is online when timers are due |
 | Ticket channel permissions wrong | `ROLE_IDS_TICKET_VIEW` not set correctly | Ensure role IDs are correct and roles exist in the Main guild |
 | Website can't fetch flights | `API_BASE_URL` wrong or CORS | Verify `API_BASE_URL` matches bot's public address; ensure Express CORS allows your site's domain |
 | `administrator` error on commands | Missing bot permissions | Add bot to both Main and Staff guilds; enable all privileged intents in Dev Portal |
 | Rewards level-up not assigning roles | Role IDs not configured | Set `ROLE_ID_REWARDS_LEVEL_1/2/3` in `.env` and ensure roles exist in Main guild |
-| Ads ticket not opening | `ADS_CHANNEL_ID` missing or partner role not found | Set `ADS_CHANNEL_ID` and ensure `ROLE_ID_VietJet_PARTNER` role exists |
+| Ads ticket not opening | `ADS_CHANNEL_ID` missing or partner role not found | Set `ADS_CHANNEL_ID` and ensure `ROLE_ID_PARTNER` role exists |
 
 ## Development & Commands
 
@@ -178,10 +178,10 @@ npm run lint
 pm2 list
 
 # View live logs
-pm2 logs vietjet-ptfs-bot --lines 50
+pm2 logs lufthansa-ptfs-bot --lines 50
 
 # Delete a process from PM2 tracking (not recommended during active use)
-pm2 delete vietjet-ptfs-bot
+pm2 delete lufthansa-ptfs-bot
 ```
 
 ## Directory Overview
@@ -209,7 +209,7 @@ VietJet/
 
 ## Need Help?
 
-- Discuss setup issues in the VietJet PTFS Discord server
-- Check the `pm2 logs vietjet-ptfs-bot` output for error details
+- Discuss setup issues in the Lufthansa PTFS Discord server
+- Check the `pm2 logs lufthansa-ptfs-bot` output for error details
 - Verify all Discord intents are enabled in the Developer Portal
 - Ensure Firestore is in test mode during initial setup (can switch to production after)

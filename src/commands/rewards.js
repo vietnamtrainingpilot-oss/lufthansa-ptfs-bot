@@ -1,5 +1,5 @@
 /**
- * /rewards — Loyalty namespace.
+ * /rewards ï¿½ Loyalty namespace.
  *
  * Existing subcommands preserved: profile, award, deduct, leaderboard, configure.
  * New subcommands added: history, catalogue, redeem, missions, mission-manage.
@@ -16,12 +16,13 @@ import * as missions from "../services/missions.js";
 import rewardsService from "../services/rewards.js";
 import config from "../config/config.js";
 import fmt from "../utils/loyaltyFormat.js";
+import { ACCENT } from "../config/brand.js";
 
 const STAFF_ROLES = () => [config.roleBoardOfDirectors, config.roleManagementTeam];
 
 export const data = new SlashCommandBuilder()
   .setName("rewards")
-  .setDescription("VietJet Rewards loyalty programme")
+  .setDescription("LH Rewards loyalty programme")
   .addSubcommand((s) =>
     s
       .setName("profile")
@@ -36,7 +37,7 @@ export const data = new SlashCommandBuilder()
       o
         .setName("currency")
         .setDescription("Filter by currency")
-        .addChoices({ name: "Loyalty points", value: "points" }, { name: "VJ Credits", value: "credits" })
+        .addChoices({ name: "Loyalty points", value: "points" }, { name: "LH Credits", value: "credits" })
     )
     .addIntegerOption((o) => o.setName("page").setDescription("Page number (default 1)"))
   )
@@ -49,7 +50,7 @@ export const data = new SlashCommandBuilder()
           { name: "Current points", value: "points" },
           { name: "Lifetime points", value: "lifetimePoints" },
           { name: "Qualifying flights", value: "qualifyingFlights" },
-          { name: "VJ Credits", value: "credits" }
+          { name: "LH Credits", value: "credits" }
         )
     )
   )
@@ -104,7 +105,7 @@ export const data = new SlashCommandBuilder()
       .addStringOption((o) => o.setName("name").setDescription("Display name (required for add)"))
       .addStringOption((o) => o.setName("description").setDescription("Description (required for add)"))
       .addStringOption((o) => o.setName("currency").setDescription("Currency type")
-        .addChoices({ name: "Loyalty points", value: "points" }, { name: "VJ Credits", value: "credits" }))
+        .addChoices({ name: "Loyalty points", value: "points" }, { name: "LH Credits", value: "credits" }))
       .addIntegerOption((o) => o.setName("price").setDescription("Price (required for add)"))
       .addIntegerOption((o) => o.setName("stock").setDescription("Stock, omit for unlimited"))
       .addStringOption((o) => o.setName("fulfillment").setDescription("How it is delivered")
@@ -133,7 +134,7 @@ export const data = new SlashCommandBuilder()
       .addIntegerOption((o) => o.setName("target").setDescription("Target count (create, default 1)"))
       .addIntegerOption((o) => o.setName("reward").setDescription("Reward amount (create)").setRequired(true))
       .addStringOption((o) => o.setName("currency").setDescription("Reward currency")
-        .addChoices({ name: "Loyalty points", value: "points" }, { name: "VJ Credits", value: "credits" }))
+        .addChoices({ name: "Loyalty points", value: "points" }, { name: "LH Credits", value: "credits" }))
       .addStringOption((o) => o.setName("period").setDescription("Reset period (create)")
         .addChoices({ name: "Daily", value: "daily" }, { name: "Weekly", value: "weekly" }, { name: "Monthly", value: "monthly" }))
   );
@@ -168,7 +169,7 @@ export async function execute(interaction, client) {
         points: "Current loyalty points",
         lifetimePoints: "Lifetime points earned",
         qualifyingFlights: "Qualifying flights completed",
-        credits: "VJ Credits",
+        credits: "LH Credits",
       };
       return interaction.reply(fmt.leaderboardMessage(rows, labels[metric], loyaltyCfg.branding));
     }
@@ -360,7 +361,7 @@ async function postRewardsLog(client, action, targetId, amount, reason, staffId)
       components: [
         {
           type: 17,
-          accent_color: 0x70a1ff,
+          accent_color: ACCENT.DEFAULT,
           components: [
             {
               type: 10,

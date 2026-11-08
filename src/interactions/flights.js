@@ -6,6 +6,7 @@ import { getDb } from "../services/firestore.js";
 import config from "../config/config.js";
 import { isFlightOpsAuthorized, isStaffAuthorized } from "../utils/permissions.js";
 import { buildText } from "../utils/builders.js";
+import { flightLabel } from "../config/brand.js";
 
 const COLLECTION = "flights";
 
@@ -58,7 +59,7 @@ export async function handleFlightClaim(interaction, client) {
   });
 
   await interaction.reply({
-    ...buildText(`You have claimed the ${slot.label} position for VJ${data.flightNumber}.`),
+    ...buildText(`You have claimed the ${slot.label} position for LH${data.flightNumber}.`),
     ephemeral: true,
   });
 }

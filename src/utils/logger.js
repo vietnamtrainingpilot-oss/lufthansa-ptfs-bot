@@ -3,6 +3,8 @@
  * Never logs bot tokens, Firebase private keys, webhook secrets, or other credentials.
  */
 
+import { ACCENT } from "../config/brand.js";
+
 const SENSITIVE_KEYS = [
   "token",
   "privateKey",
@@ -73,7 +75,7 @@ export async function logErrorToDiscord(client, title, body) {
       components: [
         {
           type: 17,
-          accent_color: 15158332,
+          accent_color: ACCENT.DANGER,
           components: [
             { type: 10, content: String(body).slice(0, 1900) },
           ],

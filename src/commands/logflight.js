@@ -6,14 +6,19 @@ import { isFlightOpsAuthorized } from "../utils/permissions.js";
 import { logFlight } from "../services/flightOps.js";
 import { getDb } from "../services/firestore.js";
 import { buildText } from "../utils/builders.js";
+import { flightLabel, isValidFlightNumber, normalizeFlightNumber } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("logflight")
   .setDescription("Log a flight as completed (staff or host only)")
-  .addStringOption((o) => o.setName("flightnum").setDescription("Flight number (e.g. VJ101)").setRequired(true));
+  .addStringOption((o) => o.setName("flightnum").setDescription("Flight number (e.g. LH 101)").setRequired(true));
 
 export async function execute(interaction, client) {
-  const flightNum = interaction.options.getString("flightnum");
+  const flightNumInput = interaction.options.getString("flightnum");
+  if (!isValidFlightNumber(flightNumInput)) {
+    return interaction.reply({ ...buildText(`Invalid flight number. Use the format shown in briefings, for example ${flightLabel("101")}.`), ephemeral: true });
+  }
+  const flightNum = normalizeFlightNumber(flightNumInput);
   const db = getDb();
   const snap = await db.collection("flights").where("flightNumber", "==", flightNum).get();
   if (snap.empty) {
@@ -31,7 +36,7 @@ export async function execute(interaction, client) {
   await interaction.deferReply({ flags: 32768, ephemeral: true });
   try {
     await logFlight(flightId, client);
-    await interaction.editReply({ ...buildText(`Flight VJ${flightNum} logged as completed.`) });
+    await interaction.editReply({ ...buildText(`Flight ${flightLabel(flightNum)} logged as completed.`) });
   } catch (e) {
     await interaction.editReply({ ...buildText("Failed: " + e.message) });
   }

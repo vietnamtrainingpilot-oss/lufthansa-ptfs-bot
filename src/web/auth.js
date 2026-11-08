@@ -116,8 +116,16 @@ function verify(token, secret, maxAgeSeconds) {
 
 /* ── Cookie helpers ──────────────────────────────────────────────────────── */
 
-export const COOKIE_SESSION = "vjptfs_session";
-export const COOKIE_OAUTH_STATE = "vjptfs_oauth_state";
+export const COOKIE_SESSION = "lhptfs_session";
+export const COOKIE_OAUTH_STATE = "lhptfs_oauth_state";
+
+/**
+ * Legacy cookie names from the pre-rebrand build. They are still read
+ * (never written) so members already signed in keep their session through
+ * the upgrade instead of being silently signed out.
+ */
+export const LEGACY_COOKIE_SESSION = "vjptfs_session";
+export const LEGACY_COOKIE_OAUTH_STATE = "vjptfs_oauth_state";
 
 /**
  * Build Set-Cookie header value.
@@ -170,7 +178,7 @@ export function createSessionToken(discordUser, secret) {
  */
 export function readSession(req, secret) {
   const cookies = parseCookies(req.headers?.cookie);
-  const payload = verify(cookies[COOKIE_SESSION], secret, SESSION_MAX_AGE_SECONDS);
+  const payload = verify(cookies[COOKIE_SESSION] ?? cookies[LEGACY_COOKIE_SESSION], secret, SESSION_MAX_AGE_SECONDS);
   if (!payload || !payload.sub) return null;
   return {
     id: String(payload.sub),
@@ -238,7 +246,7 @@ export async function completeLogin(cfg, req, query, secure) {
   const state = typeof query.state === "string" ? query.state : null;
 
   const cookies = parseCookies(req.headers?.cookie);
-  const statePayload = verify(cookies[COOKIE_OAUTH_STATE], cfg.sessionSecret, STATE_MAX_AGE_SECONDS);
+  const statePayload = verify(cookies[COOKIE_OAUTH_STATE] ?? cookies[LEGACY_COOKIE_OAUTH_STATE], cfg.sessionSecret, STATE_MAX_AGE_SECONDS);
   const clearState = [serializeCookie(COOKIE_OAUTH_STATE, "", { maxAge: 0, secure })];
 
   // Deny if the member declined at the consent screen, or sent no code.

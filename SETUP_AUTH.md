@@ -5,8 +5,8 @@ an operator has to configure. Until every value below is present, the site runs
 normally and `/auth/login` shows a clear "not configured" page — sign-in is
 never faked or stubbed.
 
-VietJet PTFS is an unofficial community project and is not affiliated with
-VietJet Air.
+Lufthansa PTFS is an unofficial community project and is not affiliated with
+lufthansa Air.
 
 ## 1. Create the OAuth2 application
 

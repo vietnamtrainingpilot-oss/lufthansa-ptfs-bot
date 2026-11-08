@@ -8,11 +8,12 @@ import { isFlightOpsAuthorized } from "../utils/permissions.js";
 import { createFlight } from "../services/flightOps.js";
 import config from "../config/config.js";
 import { buildText } from "../utils/builders.js";
+import { flightLabel, isValidFlightNumber, normalizeFlightNumber } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("createflight")
   .setDescription("Create a new flight (staff only)")
-  .addStringOption((o) => o.setName("flightnumber").setDescription("Flight number (e.g. VJ101)").setRequired(true))
+  .addStringOption((o) => o.setName("flightnumber").setDescription("Flight number (e.g. LH101)").setRequired(true))
   .addIntegerOption((o) => o.setName("scheduled").setDescription("Unix timestamp for scheduled departure").setRequired(true))
   .addStringOption((o) => o.setName("departure").setDescription("Departure airport code").setRequired(true))
   .addStringOption((o) => o.setName("arrival").setDescription("Arrival airport code").setRequired(true))
@@ -33,11 +34,16 @@ export async function execute(interaction, client) {
 
   try {
     const flightNumber = interaction.options.getString("flightnumber");
+    if (!isValidFlightNumber(flightNumber)) {
+      return interaction.editReply(
+        buildText(`Invalid flight number. Use the brand prefix followed by three or four digits, for example ${flightLabel("101")}.`)
+      );
+    }
     const scheduledUnixTime = interaction.options.getInteger("scheduled");
     const hostId = interaction.options.getUser("host")?.id || interaction.user.id;
 
     const flight = await createFlight({
-      flightNumber,
+      flightNumber: normalizeFlightNumber(flightNumber),
       hostId,
       scheduledUnixTime,
       departureAirport: interaction.options.getString("departure"),
@@ -52,7 +58,7 @@ export async function execute(interaction, client) {
       guild: interaction.guild,
     });
 
-    await interaction.editReply(buildText(`Done! Flight VJ${flight.flightNumber} created (ID: ${flight.id}). Preview posted.`));
+    await interaction.editReply(buildText(`Done! Flight ${flightLabel(flight.flightNumber)} created (ID: ${flight.id}). Preview posted.`));
   } catch (e) {
     console.error("[createflight] Error:", e.message);
     await interaction.editReply(buildText(`Failed to create flight: ${e.message}`));

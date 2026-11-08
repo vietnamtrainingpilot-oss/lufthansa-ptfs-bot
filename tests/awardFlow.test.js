@@ -149,10 +149,10 @@ beforeEach(() => {
 function makeFlight(over = {}) {
   return {
     id: "F1",
-    flightNumber: "VJ101",
+    flightNumber: "LH101",
     status: "completed",
-    departureAirport: "HAN (Hanoi)",
-    arrivalAirport: "DAD (Da Nang)",
+    departureAirport: "FRA (Frankfurt)",
+    arrivalAirport: "MUC (Munich)",
     aircraft: "A321",
     routeDistanceKm: 600,
     flightTimeMinutes: 60,

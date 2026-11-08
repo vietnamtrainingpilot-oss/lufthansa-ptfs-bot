@@ -172,10 +172,9 @@ beforeEach(() => {
   fakeDb.store.clear();
   fakeDb.store.set("config/loyalty", cloneDefaults());
   invalidateConfigCache();
-  fakeDb.store.set("flights/VJ123", {
-    flightNumber: "VJ123",
-    departureAirport: "SGN",
-    arrivalAirport: "DAD",
+  fakeDb.store.set("flights/LH123", {
+    flightNumber: "123", departureAirport: "FRA",
+    arrivalAirport: "MUC",
     status: "scheduled",
   });
 });
@@ -205,8 +204,8 @@ async function withServer(fn) {
   }
 }
 
-const VALID = { flightNumber: "VJ123", discordUserId: "111222333444555666", class: "economy", seat: "12A" };
-const manifest = () => fakeDb.store.get("flightManifests/VJ123");
+const VALID = { flightNumber: "LH123", discordUserId: "111222333444555666", class: "economy", seat: "12A" };
+const manifest = () => fakeDb.store.get("flightManifests/LH123");
 
 /* ─── Public endpoint ──────────────────────────────────────────────────────── */
 
@@ -238,14 +237,22 @@ test("a repeat booking updates rather than duplicates the passenger", async () =
 
 test("an unknown flight is rejected", async () => {
   await withServer(async (call) => {
-    const res = await call("/api/bookings", { body: { ...VALID, flightNumber: "NOPE" } });
+    const res = await call("/api/bookings", { body: { ...VALID, flightNumber: "LH999" } });
     assert.equal(res.status, 404);
-    assert.equal(fakeDb.store.has("flightManifests/NOPE"), false);
+    assert.equal(fakeDb.store.has("flightManifests/LH999"), false);
+  });
+});
+
+test("the legacy pre-rebrand VJ flight prefix is rejected", async () => {
+  await withServer(async (call) => {
+    const res = await call("/api/bookings", { body: { ...VALID, flightNumber: "VJ123" } });
+    assert.equal(res.status, 400, "flights outside the brand prefix must not be bookable");
+    assert.equal(fakeDb.store.has("flightManifests/VJ123"), false, "nothing may be written");
   });
 });
 
 test("a flight that is no longer bookable is rejected", async () => {
-  fakeDb.store.set("flights/VJ123", { flightNumber: "VJ123", status: "landed" });
+  fakeDb.store.set("flights/LH123", { flightNumber: "123", status: "landed" });
   await withServer(async (call) => {
     const res = await call("/api/bookings", { body: VALID });
     assert.equal(res.status, 409);
@@ -279,7 +286,7 @@ test("the webhook rejects a request with no secret", async () => {
   await withServer(async (call) => {
     const res = await call("/webhook/booking", { body: VALID });
     assert.equal(res.status, 401);
-    assert.equal(fakeDb.store.has("flightManifests/VJ123"), false, "nothing may be written");
+    assert.equal(fakeDb.store.has("flightManifests/LH123"), false, "nothing may be written");
   });
 });
 
@@ -287,7 +294,7 @@ test("the webhook rejects a wrong secret", async () => {
   await withServer(async (call) => {
     const res = await call("/webhook/booking", { body: VALID, headers: { "x-webhook-secret": "wrong" } });
     assert.equal(res.status, 401);
-    assert.equal(fakeDb.store.has("flightManifests/VJ123"), false);
+    assert.equal(fakeDb.store.has("flightManifests/LH123"), false);
   });
 });
 

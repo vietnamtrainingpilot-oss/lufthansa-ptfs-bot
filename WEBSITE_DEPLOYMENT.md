@@ -1,6 +1,6 @@
-# VietJet PTFS Flight-Booking Website — Deployment Guide
+# Lufthansa PTFS Flight-Booking Website — Deployment Guide
 
-The booking website is a **static single-page application** (HTML/CSS/JS) that integrates with the VietJet PTFS Discord bot's Express API. It can be deployed to any static hosting provider.
+The booking website is a **static single-page application** (HTML/CSS/JS) that integrates with the Lufthansa PTFS Discord bot's Express API. It can be deployed to any static hosting provider.
 
 ## Quick Deploy Options
 
@@ -11,7 +11,7 @@ The booking website is a **static single-page application** (HTML/CSS/JS) that i
 npm i -g vercel
 
 # 2. Deploy from the website folder
-cd D:\Vietjet\website
+cd D:\lufthansa\website
 vercel --prod
 
 # 3. Set environment variable in Vercel dashboard:
@@ -40,7 +40,7 @@ vercel --prod
 
 ```bash
 # 1. Start the bot (must be running)
-pm2 start index.js --name vietjet-ptfs-bot
+pm2 start index.js --name lufthansa-ptfs-bot
 
 # 2. Tunnel the bot's API port
 ngrok http 3001
@@ -110,7 +110,7 @@ Edit `website/css/main.css`:
 
 ```css
 :root {
-  --color-primary: #E61E2D;    /* VietJet Red */
+  --color-primary: #E61E2D;    /* lufthansa Red */
   --color-secondary: #FFC72C;  /* Accent Yellow */
   --font-sans: 'Geist', sans-serif;
   --font-mono: 'Geist Mono', monospace;
@@ -125,7 +125,7 @@ Edit `website/css/main.css`:
 
 ### Brand Assets
 
-- Replace `website/assets/logo.svg` with VietJet PTFS logo
+- Replace `website/assets/logo.svg` with Lufthansa PTFS logo
 - Update `website/index.html` hero section copy as needed
 
 ## Security Notes
@@ -159,11 +159,11 @@ Edit `website/css/main.css`:
 
 ## Domain Setup (Production)
 
-1. Point a subdomain (e.g., `book.vietjet-ptfs.com`) to your hosting provider
+1. Point a subdomain (e.g., `book.lufthansa-ptfs.com`) to your hosting provider
 2. Enable HTTPS (automatic on Vercel/Netlify)
 3. Update Discord bot's `WEBSITE_BASE_URL` to the new domain
 4. Update website's `API_BASE_URL` if using a custom API domain
 
 ## License
 
-This website is for the VietJet PTFS Roblox virtual airline community. Not affiliated with VietJet Air.
+This website is for the Lufthansa PTFS Roblox virtual airline community. Not affiliated with lufthansa Air.

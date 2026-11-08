@@ -1,5 +1,5 @@
 /**
- * index.js — VietJet PTFS Discord Bot entry point.
+ * index.js — Lufthansa PTFS Discord Bot entry point.
  * Boots the bot, registers commands, starts the timer poller and API server.
  */
 
@@ -137,16 +137,16 @@ process.on("unhandledRejection", (reason) => {
  * Start the Express app that serves the public website, the Discord OAuth2
  * sign-in routes, and the JSON API.
  *
- * Bound to loopback so the port is never exposed directly to the internet.
- * For public access put a TLS-terminating reverse proxy (nginx/Caddy) or a
- * tunnel (Cloudflare Tunnel, ngrok) in front of it.
+ * Binds to 0.0.0.0 so it works behind a reverse proxy / platform router.
+ * The platform (Wispbyte / Pterodactyl) provides the public HTTPS endpoint.
+ * Port is read from the environment (BOOKING_API_PORT / PORT).
  */
 async function startWebServer() {
   const { createWebApp } = await import("./web/server.js");
   const app = createWebApp({ config, discordClient: client });
-  const port = config.bookingApiPort;
-  app.listen(port, "127.0.0.1", () => {
-    logger.info(`Web server and API listening on 127.0.0.1:${port}`);
+  const port = Number(process.env.PORT || process.env.BOOKING_API_PORT || 3001);
+  app.listen(port, "0.0.0.0", () => {
+    logger.info(`Web server and API listening on 0.0.0.0:${port}`);
   });
 }
 

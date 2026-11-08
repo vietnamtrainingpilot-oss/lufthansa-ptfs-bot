@@ -11,6 +11,7 @@ import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import { isStaffAuthorized } from "../utils/permissions.js";
 import config from "../config/config.js";
 import { buildText } from "../utils/builders.js";
+import { ACCENT } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("careersetup")
@@ -58,10 +59,10 @@ export async function execute(interaction, client) {
   const departments = await loadDepartments();
 
   // Accent colour and the select menu both live on the CONTAINER (type 17).
-  const container = new ContainerBuilder().setAccentColor(92807);
+  const container = new ContainerBuilder().setAccentColor(ACCENT.CAREERS);
   container.addTextDisplayComponents(
     new TextDisplayBuilder().setContent(
-      "## VietJet PTFS Careers\n> Select a department below to begin your application."
+      "## Lufthansa PTFS Careers\n> Select a department below to begin your application."
     )
   );
 

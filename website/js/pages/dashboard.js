@@ -77,7 +77,7 @@ function renderOverview(o) {
     `Welcome back, ${s.member.globalName || s.member.username}`;
 
   document.getElementById("stat-points-label").textContent = o.branding?.pointsLabel || "Loyalty points";
-  document.getElementById("stat-credits-label").textContent = o.branding?.creditsLabel || "VJ Credits";
+  document.getElementById("stat-credits-label").textContent = o.branding?.creditsLabel || "LH Credits";
   document.getElementById("stat-points").textContent = num(o.points);
   document.getElementById("stat-credits").textContent = num(o.credits);
   document.getElementById("stat-tier").textContent = o.tier.name;

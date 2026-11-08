@@ -1,5 +1,5 @@
 /**
- * catalogue.js — Loyalty redemption catalogue and VJ Credits shop.
+ * catalogue.js — Loyalty redemption catalogue and LH Credits shop.
  *
  * One collection `catalogueItems` with an explicit `currency` discriminator
  * ("points" | "credits") rather than two near-identical collections. Items are

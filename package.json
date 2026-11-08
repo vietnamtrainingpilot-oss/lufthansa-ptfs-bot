@@ -1,7 +1,7 @@
 {
-  "name": "vietjet-ptfs-bot",
+  "name": "lufthansa-ptfs-bot",
   "version": "1.0.0",
-  "description": "VietJet PTFS Roblox virtual airline Discord bot and flight-booking website",
+  "description": "Lufthansa PTFS Roblox virtual airline Discord bot and flight-booking website",
   "main": "src/index.js",
   "type": "module",
   "scripts": {

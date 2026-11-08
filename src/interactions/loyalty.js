@@ -11,6 +11,7 @@ import { getLoyaltyConfig } from "../services/loyaltyStore.js";
 import { isStaffAuthorized } from "../utils/permissions.js";
 import config from "../config/config.js";
 import fmt from "../utils/loyaltyFormat.js";
+import { ACCENT } from "../config/brand.js";
 
 /** Build the confirm step for a redemption or purchase. */
 async function buildConfirm(interaction, item, action) {
@@ -23,7 +24,7 @@ async function buildConfirm(interaction, item, action) {
     components: [
       {
         type: 17,
-        accent_color: 0x70a1ff,
+        accent_color: ACCENT.DEFAULT,
         components: [
           {
             type: 10,

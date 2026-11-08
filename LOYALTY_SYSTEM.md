@@ -1,4 +1,4 @@
-# VietJet PTFS — Loyalty and Economy System
+# Lufthansa PTFS — Loyalty and Economy System
 
 This document covers the loyalty programme and virtual economy added on top of the
 existing Discord bot. It is an extension, not a replacement: the original `/rewards`
@@ -13,24 +13,24 @@ commands, the `rewardsAccounts` collection and all existing behaviour continue t
 The system deliberately keeps two separate balances. They are never merged and never
 interchangeable.
 
-| | Loyalty points | VJ Credits |
+| | Loyalty points | LH Credits |
 |---|---|---|
 | Purpose | Loyalty programme recognition | Closed virtual economy |
 | Earned from | Verified completed flights, missions, staff awards | Verified flights, staff awards |
-| Spent on | Loyalty catalogue | VJ Credits shop |
+| Spent on | Loyalty catalogue | LH Credits shop |
 | Purchasable | Never | Never |
 | Transferable | No | No |
 | Cash value | None | None |
 | Convertible to Robux | No | No |
 
-Neither balance is presented as real-world currency. VJ Credits are a fictional
+Neither balance is presented as real-world currency. LH Credits are a fictional
 community currency with no monetary value.
 
 Display names are configuration, not code. Staff can rename both via
 `/rewards configure pointsLabel ...` and `/economy configure creditsLabel ...`
 without touching source or environment variables. The default labels are
-"VietJet Rewards" and "VJ Credits". The SkyJoy-inspired naming has **not** been
-applied — it is off by default (`branding.skyJoyBrandingApproved = false`) pending
+"LH Rewards" and "LH Credits". The LH Rewards-inspired naming has **not** been
+applied — it is off by default (`branding.LH RewardsBrandingApproved = false`) pending
 owner approval.
 
 ---
@@ -117,7 +117,7 @@ points = clamp(points, minPointsPerFlight, maxPointsPerFlight)
 points = min(points, hardCapPointsPerFlight)
 ```
 
-### VJ Credits
+### LH Credits
 
 ```
 hours     = flightTimeMinutes / 60
@@ -234,8 +234,8 @@ No real-world goods, cash-equivalent value, or Robux are sold.
 | `/rewards leaderboard [metric]` | top 10 by points / lifetime / flights / credits |
 | `/rewards catalogue` | loyalty redemption catalogue |
 | `/rewards missions` | missions with progress and claim state |
-| `/economy balance [user]` | VJ Credits balance |
-| `/economy shop` | VJ Credits shop |
+| `/economy balance [user]` | LH Credits balance |
+| `/economy shop` | LH Credits shop |
 
 ### Staff
 
@@ -266,7 +266,7 @@ config/loyalty                        # rates, caps, tiers, branding, eligibilit
 
 rewardsAccounts/{discordUserId}       # EXTENDED (existing collection)
   balance          points, spendable            (unchanged meaning)
-  credits          VJ Credits, spendable        (new)
+  credits          LH Credits, spendable        (new)
   lifetimePointsEarned                        (new)
   qualifyingPoints                            (new)
   qualifyingFlightCount                       (new)

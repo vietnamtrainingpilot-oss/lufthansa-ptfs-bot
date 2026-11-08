@@ -7,6 +7,7 @@ import admin from "firebase-admin";
 import { getDb } from "./firestore.js";
 import { createTimer } from "../timers/timers.js";
 import config from "../config/config.js";
+import { ACCENT } from "../config/brand.js";
 
 const COLLECTION = "careerApplications";
 
@@ -32,7 +33,7 @@ const DEPT_LABELS = {
 
 const QUESTION_BANKS = {
   flight_deck: [
-    "Why do you want to be a pilot for VietJet PTFS?",
+    "Why do you want to be a pilot for Lufthansa PTFS?",
     "What experience do you have with flight simulation or roleplaying?",
     "Describe a time when you had to make a quick decision during a flight. What did you do?",
     "How would you handle a passenger who is not following safety instructions?",
@@ -48,7 +49,7 @@ const QUESTION_BANKS = {
     "Describe a time when communication breakdown occurred and how you handled it.",
   ],
   cabin_crew: [
-    "Why do you want to join the VietJet PTFS cabin crew?",
+    "Why do you want to join the Lufthansa PTFS cabin crew?",
     "How would you handle a difficult or unruly passenger?",
     "Describe your approach to passenger safety announcements.",
     "What would you do if a passenger became ill during the flight?",
@@ -62,7 +63,7 @@ const QUESTION_BANKS = {
     "Describe how you would work as part of a cabin crew team.",
   ],
   ground_crew: [
-    "Why do you want to join the VietJet PTFS ground crew?",
+    "Why do you want to join the Lufthansa PTFS ground crew?",
     "Describe your understanding of airport ground operations.",
     "How would you handle a situation where a flight is delayed due to weather?",
     "What steps do you take to ensure passenger boarding runs smoothly?",
@@ -77,7 +78,7 @@ const QUESTION_BANKS = {
     "What steps would you take if a passenger misses their flight?",
   ],
   flight_operator: [
-    "Why do you want to become a flight operator for VietJet PTFS?",
+    "Why do you want to become a flight operator for Lufthansa PTFS?",
     "Describe your understanding of flight scheduling and coordination.",
     "How would you handle a last-minute schedule change for a flight?",
     "What steps do you take to ensure a flight is properly staffed?",
@@ -94,7 +95,7 @@ const QUESTION_BANKS = {
     "How do you ensure a smooth handoff between pre-flight and post-flight stages?",
   ],
   human_resources: [
-    "Why do you want to join the VietJet PTFS Human Resources department?",
+    "Why do you want to join the Lufthansa PTFS Human Resources department?",
     "Describe your approach to handling sensitive employee information.",
     "How would you process a new career application from start to finish?",
     "What steps do you take to ensure fair and consistent recruitment?",
@@ -111,7 +112,7 @@ const QUESTION_BANKS = {
     "How do you balance efficiency with empathy in HR decisions?",
   ],
   public_relations: [
-    "Why do you want to join the VietJet PTFS Public Relations department?",
+    "Why do you want to join the Lufthansa PTFS Public Relations department?",
     "Describe your approach to communicating important announcements to the community.",
     "How would you handle a negative situation or crisis in the community?",
     "What steps do you take to ensure accurate and timely information dissemination?",
@@ -155,7 +156,7 @@ export async function startApplication(client, user, department) {
       components: [
         {
           type: 17,
-          accent_color: 92807,
+          accent_color: ACCENT.CAREERS,
           components: [
             {
               type: 10,
@@ -229,7 +230,7 @@ export async function submitApplication(appId, client) {
       components: [
         {
           type: 17,
-          accent_color: 92807,
+          accent_color: ACCENT.CAREERS,
           components: [
             { type: 10, content: "## Application Review\n> Please review the application above and choose Accept or Deny." },
             { type: 14 },
@@ -256,7 +257,7 @@ export async function submitApplication(appId, client) {
       components: [
         {
           type: 17,
-          accent_color: 92807,
+          accent_color: ACCENT.CAREERS,
           components: [
             {
               type: 10,
@@ -310,7 +311,7 @@ export async function approveApplication(appId, reason, client, reviewer) {
       components: [
         {
           type: 17,
-          accent_color: 92807,
+          accent_color: ACCENT.CAREERS,
           components: [
             {
               type: 10,
@@ -364,7 +365,7 @@ export async function denyApplication(appId, reason, client, reviewer) {
       components: [
         {
           type: 17,
-          accent_color: 92807,
+          accent_color: ACCENT.CAREERS,
           components: [
             {
               type: 10,

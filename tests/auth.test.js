@@ -69,13 +69,13 @@ test("resolveAuthConfig reports missing variables instead of throwing", () => {
 
 test("resolveAuthConfig derives redirect uri from PUBLIC_BASE_URL", () => {
   const saved = { ...process.env };
-  process.env.PUBLIC_BASE_URL = "https://vietjet.example/";
+  process.env.PUBLIC_BASE_URL = "https://lufthansa.example/";
   process.env.DISCORD_CLIENT_ID = "1";
   process.env.DISCORD_CLIENT_SECRET = "2";
   process.env.SESSION_SECRET = "3";
   delete process.env.DISCORD_REDIRECT_URI;
   const r = resolveAuthConfig({});
-  assert.equal(r.redirectUri, "https://vietjet.example/auth/callback");
+  assert.equal(r.redirectUri, "https://lufthansa.example/auth/callback");
   assert.equal(r.configured, true);
   Object.assign(process.env, saved);
 });

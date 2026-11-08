@@ -28,3 +28,6 @@ desktop.ini
 # OS temp
 *.tmp
 *.bak
+.playwright-mcp/
+assets_vietjet/
+Media assets/

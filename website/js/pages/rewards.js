@@ -77,7 +77,7 @@ async function load() {
     const data = await api("/api/loyalty/public");
 
     document.getElementById("points-label").textContent = data.branding?.pointsLabel || "Loyalty points";
-    document.getElementById("credits-label").textContent = data.branding?.creditsLabel || "VJ Credits";
+    document.getElementById("credits-label").textContent = data.branding?.creditsLabel || "LH Credits";
 
     const unitP = data.branding?.pointsUnit || "points";
     const unitC = data.branding?.creditsUnit || "credits";

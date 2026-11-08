@@ -1,5 +1,5 @@
 /**
- * server.js — Express app factory for the VietJet PTFS website and API.
+ * server.js — Express app factory for the Lufthansa PTFS website and API.
  *
  * Responsibilities:
  *  - Serve the static site from `website/`.
@@ -15,6 +15,7 @@ import express from "express";
 import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isValidFlightNumber, normalizeFlightNumber } from "../config/brand.js";
 
 import {
   resolveAuthConfig,
@@ -86,6 +87,10 @@ export function createWebApp({ config, discordClient = null }) {
   const app = express();
 
   app.disable("x-powered-by");
+  app.set("trust proxy", true);
+
+  // Health endpoint (lightweight, no auth, no DB)
+  app.get("/api/health", (_req, res) => res.json({ ok: true, service: "lufthansa-ptfs" }));
 
   // Baseline security headers. A CSP is set that allows only same-origin
   // scripts/styles plus the Discord avatar CDN and Google Fonts, so no
@@ -345,6 +350,20 @@ async function recordBooking(body) {
   const seat = typeof body?.seat === "string" ? body.seat.trim().slice(0, 8) : null;
 
   if (!flightNumber) return { status: 400, payload: { error: "A flight is required." } };
+  // The booking page posts the stored bare numeral ("123"); staff and API
+  // callers may use the brand format ("LH 123" / "LH123"). An alphanumeric
+  // value must carry the brand prefix; anything else (including the legacy
+  // VJ prefix) is rejected so no flight outside the brand catalogue can be
+  // booked.
+  const trimmedFlightNumber = flightNumber.trim();
+  const hasLetterPrefix = /^[A-Za-z]{2}/.test(trimmedFlightNumber);
+  const bareFlightNumber = normalizeFlightNumber(flightNumber);
+  const flightNumberOk = hasLetterPrefix
+    ? isValidFlightNumber(trimmedFlightNumber)
+    : /^\d{3,4}$/.test(bareFlightNumber);
+  if (!flightNumberOk) {
+    return { status: 400, payload: { error: "Enter the flight number exactly as shown, for example LH 123." } };
+  }
   if (!discordUserId || !/^\d{15,22}$/.test(discordUserId)) {
     return { status: 400, payload: { error: "Enter your Discord user ID. To find it, enable Developer Mode in Discord settings, then right-click your profile and choose Copy User ID." } };
   }
@@ -355,7 +374,7 @@ async function recordBooking(body) {
 
   const { getDb } = await import("../services/firestore.js");
   const db = getDb();
-  const snap = await db.collection("flights").where("flightNumber", "==", flightNumber).limit(1).get();
+  const snap = await db.collection("flights").where("flightNumber", "==", bareFlightNumber).limit(1).get();
   if (snap.empty) return { status: 404, payload: { error: "That flight is not currently open for booking." } };
 
   const flight = { id: snap.docs[0].id, ...snap.docs[0].data() };
@@ -474,7 +493,7 @@ function pageShell(title, heading, bodyHtml) {
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>${title} · VietJet PTFS</title>
+<title>${title} · Lufthansa PTFS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">

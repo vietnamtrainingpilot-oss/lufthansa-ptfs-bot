@@ -291,15 +291,15 @@ test("spending points never reduces lifetime or qualifying metrics", async () =>
 test("ledger entry records before/after balances and metadata", async () => {
   await ledger.applyLedgerEntry({
     userId: "u", currency: CURRENCY.POINTS, amount: 60, type: "flightEarn",
-    reason: "VJ204", idempotencyKey: "k", referenceType: "flight", referenceId: "F204",
-    metadata: { flightNumber: "VJ204" },
+    reason: "LH204", idempotencyKey: "k", referenceType: "flight", referenceId: "F204",
+    metadata: { flightNumber: "LH204" },
   });
   const entry = fakeDb.store.get("economyLedger/k");
   assert.equal(entry.balanceBefore, 0);
   assert.equal(entry.balanceAfter, 60);
   assert.equal(entry.currency, "points");
   assert.equal(entry.referenceId, "F204");
-  assert.equal(entry.metadata.flightNumber, "VJ204");
+  assert.equal(entry.metadata.flightNumber, "LH204");
 });
 
 test("missing idempotency key is rejected", async () => {

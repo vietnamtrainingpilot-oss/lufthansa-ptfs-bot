@@ -1,5 +1,5 @@
 /**
- * loyaltyConfig.js — Default configuration for VietJet Rewards + VJ Credits.
+ * loyaltyConfig.js — Default configuration for LH Rewards + LH Credits.
  *
  * All rates are STARTING PLACEHOLDERS that staff can change at runtime via
  * `/rewards configure` and `/economy configure`. Nothing here is hardcoded into
@@ -9,23 +9,27 @@
  * Two separate currencies:
  *   points  — loyalty points. Earned from verified flights + missions. Redeemed
  *             from the loyalty catalogue. Never purchasable, never transferable.
- *   credits — VJ Credits. Fictional closed virtual economy. Earned from verified
- *             flights + approved activities. Spent in the VJ Credits shop.
+ *             Display label is "Miles"; the backend key stays "points".
+ *   credits — LH Credits. Fictional closed virtual economy. Earned from verified
+ *             flights + approved activities. Spent in the LH Credits shop.
  */
+
+import { MILES_LABEL, MILES_UNIT, CREDITS_LABEL, CREDITS_UNIT } from "./brand.js";
 
 export const CURRENCY = {
   POINTS: "points",
   CREDITS: "credits",
 };
 
-/** Display names are configurable so the owner can rename without code changes. */
+/** Display names are configurable so the owner can rename without code changes.
+ *  Defaults are read from the brand config module; staff can override the
+ *  display labels at runtime via `/rewards configure branding.pointsLabel`
+ *  without touching any ledger key. */
 export const DEFAULT_BRANDING = {
-  pointsLabel: "VietJet Rewards",
-  pointsUnit: "points",
-  creditsLabel: "VJ Credits",
-  creditsUnit: "credits",
-  /** Set true once the owner approves the SkyJoy-inspired naming. */
-  skyJoyBrandingApproved: false,
+  pointsLabel: MILES_LABEL,
+  pointsUnit: MILES_UNIT,
+  creditsLabel: CREDITS_LABEL,
+  creditsUnit: CREDITS_UNIT,
 };
 
 export const DEFAULT_LOYALTY_CONFIG = {
@@ -70,7 +74,7 @@ export const DEFAULT_LOYALTY_CONFIG = {
     maxTierBonusPerFlight: 75,
   },
 
-  // ─── VJ Credits formula ───────────────────────────────────────────────────
+  // ─── LH Credits formula ───────────────────────────────────────────────────
   creditsFormula: {
     creditsPerHour: 20,
     creditsMultiplier: {

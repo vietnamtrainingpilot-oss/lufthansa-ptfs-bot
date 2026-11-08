@@ -5,6 +5,8 @@
  * staff annotations. Only display-safe fields reach these helpers.
  */
 
+import { ACCENT } from "../config/brand.js";
+
 const V = 32768; // MessageFlags.IsComponentsV2
 
 /** Discord-safe string escaping for user-supplied display text. */
@@ -21,7 +23,7 @@ export function num(n) {
 }
 
 /** Components V2 payload from plain text lines. */
-export function lines(text, { accentColor = 0x70a1ff } = {}) {
+export function lines(text, { accentColor = ACCENT.DEFAULT } = {}) {
   return {
     flags: V,
     components: [
@@ -76,7 +78,7 @@ export function profileMessage(profile) {
     linesOut.push("No activity yet. Complete a verified flight to earn your first rewards.");
   }
 
-  return lines(linesOut, { accentColor: 0x70a1ff });
+  return lines(linesOut, { accentColor: ACCENT.DEFAULT });
 }
 
 /** Public profile for another member — no ledger detail, no internal metrics. */
@@ -89,7 +91,7 @@ export function publicProfileMessage(profile) {
       `> Status: **${profile.tierName}**`,
       `> Qualifying flights: ${num(profile.qualifyingFlightCount)}`,
     ],
-    { accentColor: 0x70a1ff }
+    { accentColor: ACCENT.DEFAULT }
   );
 }
 
@@ -125,7 +127,7 @@ export function historyMessage(history, { page, pageCount, branding, currency })
   }
   linesOut.push("");
   linesOut.push(`Page ${page} of ${pageCount}`);
-  return lines(linesOut, { accentColor: 0x70a1ff });
+  return lines(linesOut, { accentColor: ACCENT.DEFAULT });
 }
 
 /** Leaderboard. */
@@ -141,7 +143,7 @@ export function leaderboardMessage(rows, metricLabel, branding) {
       );
     }
   }
-  return lines(linesOut, { accentColor: 0x70a1ff });
+  return lines(linesOut, { accentColor: ACCENT.DEFAULT });
 }
 
 /** Catalogue / shop listing with confirm buttons per item (max 5 per row). */
@@ -158,7 +160,7 @@ export function catalogueMessage(items, { title, branding, actionPrefix, unitLab
   }
   if (!items.length) out.push("Nothing available right now.");
 
-  const components = [{ type: 17, accent_color: 0x70a1ff, components: [{ type: 10, content: out.join("\n") }] }];
+  const components = [{ type: 17, accent_color: ACCENT.DEFAULT, components: [{ type: 10, content: out.join("\n") }] }];
 
   if (actionPrefix && items.length) {
     const buttons = items.slice(0, 5).map((it) => ({
@@ -187,13 +189,13 @@ export function missionsMessage(missions, branding) {
       out.push("");
     }
   }
-  return lines(out, { accentColor: 0x70a1ff });
+  return lines(out, { accentColor: ACCENT.DEFAULT });
 }
 
 /** Simple confirmation / result card. */
 export function resultMessage(title, body, { ok = true } = {}) {
   return lines([`## ${title}`, `> ${safeText(body, 900)}`], {
-    accentColor: ok ? 0x57f287 : 0xed4245,
+    accentColor: ok ? ACCENT.SUCCESS : ACCENT.DANGER,
   });
 }
 

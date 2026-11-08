@@ -8,10 +8,10 @@ import config from "../config/config.js";
 import { buildText } from "../utils/builders.js";
 
 const TIERS = [
-  { name: "VietJet Basic (45 Robux, 1 day)", value: "basic" },
-  { name: "VietJet Featured (125 Robux, 2 days)", value: "featured" },
-  { name: "VietJet Premium (320 Robux, 4 days)", value: "premium" },
-  { name: "VietJet Spotlight (600 Robux, 7 days)", value: "spotlight" },
+  { name: "Basic (45 Robux, 1 day)", value: "basic" },
+  { name: "Featured (125 Robux, 2 days)", value: "featured" },
+  { name: "Premium (320 Robux, 4 days)", value: "premium" },
+  { name: "Spotlight (600 Robux, 7 days)", value: "spotlight" },
 ];
 
 export const data = new SlashCommandBuilder()

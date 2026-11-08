@@ -49,7 +49,7 @@ const REQUIRED = [
   "ROLE_ID_REWARDS_LEVEL_3",
   "ADS_CHANNEL_ID",
   "ADS_SALES_CONTACT_USER_ID",
-  "ROLE_ID_VietJet_PARTNER",
+  "ROLE_ID_PARTNER",
   "BOT_OWNER_ID",
   "ERROR_LOG_CHANNEL_ID",
 ];
@@ -153,7 +153,7 @@ export const config = {
   bookingWebhookSecret: process.env.BOOKING_WEBHOOK_SECRET,
   bookingApiPort: parseInt(process.env.BOOKING_API_PORT, 10) || 3001,
 
-  // VietJet Rewards
+  // Loyalty programme (display labels come from src/config/brand.js)
   rewardsLogChannelId: process.env.REWARDS_LOG_CHANNEL_ID,
   rewardsLevel1RoleId: process.env.ROLE_ID_REWARDS_LEVEL_1,
   rewardsLevel2RoleId: process.env.ROLE_ID_REWARDS_LEVEL_2,
@@ -162,7 +162,7 @@ export const config = {
   // Paid Ads
   adsChannelId: process.env.ADS_CHANNEL_ID,
   adsSalesContactUserId: process.env.ADS_SALES_CONTACT_USER_ID,
-  adsPartnerRoleId: process.env.ROLE_ID_VietJet_PARTNER,
+  adsPartnerRoleId: process.env.ROLE_ID_PARTNER,
 
   // Ops
   botOwnerId: process.env.BOT_OWNER_ID,

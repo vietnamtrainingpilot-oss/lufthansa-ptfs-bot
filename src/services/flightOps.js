@@ -8,6 +8,7 @@ import { getDb } from "./firestore.js";
 import { createTimer } from "../timers/timers.js";
 import config from "../config/config.js";
 import { buildMessage, buildText } from "../utils/builders.js";
+import { flightLabel, AIRLINE_NAME, COMMUNITY_NAME, ACCENT } from "../config/brand.js";
 
 const COLLECTION = "flights";
 
@@ -58,10 +59,10 @@ export async function createFlight({
 
   // Create Discord Scheduled Event
   const event = await guild.events.create({
-    name: `VJ ${flightNumber}`,
+    name: flightLabel(flightNumber),
     scheduledStartTime: new Date(scheduledUnixTime * 1000),
     entityType: "EXTERNAL",
-    description: `**${flightNumber}**\n\n | **Departure:** ${departureAirport}\n | **Arrival:** ${arrivalAirport}\n | **Operating Aircraft:** ${aircraft}\n\n\u2139 | **Classes:** Premium, Economy (Business class depending on aircraft)\n | **Flight Time:** ${flightTimeMinutes}\n\n | **Thank you for choosing VietJet as your airline for this flight!`,
+    description: `**${flightLabel(flightNumber)}**\n\n | **Departure:** ${departureAirport}\n | **Arrival:** ${arrivalAirport}\n | **Operating Aircraft:** ${aircraft}\n\n\u2139 | **Classes:** Premium, Economy (Business class depending on aircraft)\n | **Flight Time:** ${flightTimeMinutes}\n\n | **Thank you for choosing ${AIRLINE_NAME} for this flight.**`,
     entityMetadata: { location: "Discord Event" },
   });
 
@@ -94,9 +95,9 @@ export async function createFlight({
   const announceChannel = await client.channels.fetch(config.flightAnnounceChannelId);
   if (announceChannel && announceChannel.isTextBased()) {
     const previewMsg = buildMessage({
-      accentColor: 0x1a8cff,
+      accentColor: ACCENT.DEFAULT,
       text: [
-        `## VJ ${flightNumber} \n-# Hosted By: ${hostId} \n> You're all set to fly! For **VJ ${flightNumber}**. More information may be found in the event link and below.\n\n> **Departing:** ${departureAirport}\n> **Arriving:** ${arrivalAirport}\n> **Flight Time:** ${flightTimeMinutes} minutes\n> **Aircraft:** ${aircraft}\n> **Event Link:** ${eventLink}\n> \u2139 **Classes:** ${classes}\n\n-# <@&${config.flightPingRoleId1}> <@&${config.flightPingRoleId2}>`,
+        `## ${flightLabel(flightNumber)} \n-# Hosted By: ${hostId} \n> You're all set to fly! For **${flightLabel(flightNumber)}**. More information may be found in the event link and below.\n\n> **Departing:** ${departureAirport}\n> **Arriving:** ${arrivalAirport}\n> **Flight Time:** ${flightTimeMinutes} minutes\n> **Aircraft:** ${aircraft}\n> **Event Link:** ${eventLink}\n> \u2139 **Classes:** ${classes}\n\n-# <@&${config.flightPingRoleId1}> <@&${config.flightPingRoleId2}>`,
       ],
       buttons: [
         { label: "Book This Flight", style: 5, url: config.bookingWebsiteBaseUrl + "/book?flight=" + flightNumber },
@@ -108,7 +109,7 @@ export async function createFlight({
   // Post briefing to staff channel with role-claim buttons
   const briefingChannel = await client.channels.fetch(config.flightBriefingChannelId);
   if (briefingChannel && briefingChannel.isTextBased()) {
-    const briefContent = `## VJ ${flightNumber} Staff Briefing\n` +
+    const briefContent = `## ${flightLabel(flightNumber)} Staff Briefing\n` +
       `**Departure:** ${departureAirport} | **Arrival:** ${arrivalAirport} | **Aircraft:** ${aircraft}\n` +
       `**Scheduled:** ${new Date(scheduledUnixTime * 1000).toLocaleString()} | **Gate:** ${gateNumber}\n` +
       `**Spawn:** ${spawnLocation} | **Private Server:** ${privateServerLink}\n` +
@@ -119,9 +120,9 @@ export async function createFlight({
       components: [
         {
           type: 17,
-          accent_color: 0x1a8cff,
+          accent_color: ACCENT.DEFAULT,
           components: [
-            { type: 10, content: "Staff Positions for VJ " + flightNumber },
+            { type: 10, content: "Staff Positions for " + flightLabel(flightNumber) },
             { type: 14 },
             {
               type: 1,
@@ -183,7 +184,7 @@ export async function logFlight(flightId, client) {
     const staffList = (data.staffClaims || []).length > 0
       ? data.staffClaims.map(c => c.userId).join(", ")
       : "None";
-    const logMsg = `## VJ ${data.flightNumber} Completed\n` +
+    const logMsg = `## ${flightLabel(data.flightNumber)} Completed\n` +
       `**Flight ID:** ${data.id}\n` +
       `**Departure:** ${data.departureAirport} -> **Arrival:** ${data.arrivalAirport}\n` +
       `**Aircraft:** ${data.aircraft} | **Flight Time:** ${data.flightTimeMinutes} min\n` +
@@ -245,7 +246,7 @@ export async function updateFlight(flightId, updates, updateType, client) {
     // Post delay notice to announce channel
     const announceChannel = await client.channels.fetch(config.flightAnnounceChannelId);
     if (announceChannel && announceChannel.isTextBased()) {
-      const delayNotice = `# Delay Notice\n\n> Dear Passengers, VietJet Air Flight **VJ ${data.flightNumber}** on service to ${data.arrivalAirport} has been delayed.\n\n> We apologize on this issue and hope to see everyone onboard.`;
+      const delayNotice = `# Delay Notice\n\n> Dear Passengers, ${AIRLINE_NAME} Flight **${flightLabel(data.flightNumber)}** on service to ${data.arrivalAirport} has been delayed.\n\n> We apologize on this issue and hope to see everyone onboard.`;
       await announceChannel.send(buildText(delayNotice));
     }
   } else if (updateType === "cancel") {
@@ -276,7 +277,7 @@ export async function updateFlight(flightId, updates, updateType, client) {
     const announceChannel = await client.channels.fetch(config.flightAnnounceChannelId).catch(() => null);
     if (announceChannel && announceChannel.isTextBased()) {
       const cancelNotice =
-        `# Cancellation Notice\n\n> VietJet PTFS Flight **VJ ${data.flightNumber}** to ${data.arrivalAirport} ` +
+        `# Cancellation Notice\n\n> ${COMMUNITY_NAME} Flight **${flightLabel(data.flightNumber)}** to ${data.arrivalAirport} ` +
         `has been cancelled.\n\n> Please check the Discord server for further announcements.`;
       await announceChannel.send(buildText(cancelNotice));
     }
@@ -311,7 +312,7 @@ export async function handleCheckIn(timer, client) {
   // Post check-in announcement
   const announceChannel = await client.channels.fetch(config.flightAnnounceChannelId);
   if (announceChannel && announceChannel.isTextBased()) {
-    const checkinMsg = `**VJ${flightNumber}** has started check-in!\n\n | **Spawn at ${spawnLocation}**, go to check in at gate ${gateNumber}\n\u2139 | People who violate the rules will be **kicked**!\n\n | ${eventLink}\n | ${privateServerLink}`;
+    const checkinMsg = `**${flightLabel(flightNumber)}** has started check-in!\n\n | **Spawn at ${spawnLocation}**, go to check in at gate ${gateNumber}\n\u2139 | People who violate the rules will be **kicked**!\n\n | ${eventLink}\n | ${privateServerLink}`;
     const sent = await announceChannel.send(buildText(checkinMsg));
 
     // Schedule deletion of this specific message after 10 minutes.

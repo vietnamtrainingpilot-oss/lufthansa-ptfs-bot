@@ -116,7 +116,7 @@ async function onSubmit(e) {
     const res = await api("/api/bookings", { method: "POST", body: payload });
     dlg.close();
     form.reset();
-    toast(res.message || "Seat request recorded.", { type: "success", title: `VJ ${payload.flightNumber}` });
+    toast(res.message || "Seat request recorded.", { type: "success", title: `LH ${payload.flightNumber}` });
   } catch (err) {
     errBox.textContent = err.message;
     errBox.hidden = false;
@@ -135,7 +135,7 @@ export function openBooking(flightNumber, availableClasses = "") {
 
   form.flightNumber.value = flightNumber || "";
   form.querySelector("#booking-sub").textContent =
-    `VJ ${flightNumber || ""}. Your seat is confirmed once the flight is completed.`;
+    `LH ${flightNumber || ""}. Your seat is confirmed once the flight is completed.`;
 
   // Enable only the cabins this flight actually offers.
   const select = form.querySelector("#booking-class");

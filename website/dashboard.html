@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My dashboard · VietJet PTFS</title>
-  <meta name="description" content="Your VietJet PTFS loyalty balance, status tier, VJ Credits, flight history and transactions.">
+  <title>My dashboard · Lufthansa PTFS</title>
+  <meta name="description" content="Your Lufthansa PTFS loyalty balance, status tier, LH Credits, flight history and transactions.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
           <div class="empty">
             <p class="empty-title">Sign in to view your dashboard</p>
             <p class="empty-body">
-              Your loyalty balance, VJ Credits, flight history and redemptions are private to your
+              Your loyalty balance, LH Credits, flight history and redemptions are private to your
               Discord account. Sign in to see your own record.
             </p>
             <div class="mt-6 flex gap-3 wrap" style="justify-content:center" id="signed-out-actions"></div>
@@ -54,7 +54,7 @@
               <p class="stat-sub" id="stat-tier-sub">Loading</p>
             </div>
             <div class="stat">
-              <p class="stat-label" id="stat-credits-label">VJ Credits</p>
+              <p class="stat-label" id="stat-credits-label">LH Credits</p>
               <p class="stat-value" id="stat-credits">—</p>
               <p class="stat-sub">Separate balance</p>
             </div>
@@ -100,7 +100,7 @@
                 <select class="select" id="hist-currency" style="width:auto;min-height:36px;padding-block:6px">
                   <option value="">All currencies</option>
                   <option value="points">Loyalty points</option>
-                  <option value="credits">VJ Credits</option>
+                  <option value="credits">LH Credits</option>
                 </select>
                 <button class="btn btn-secondary btn-sm" id="hist-prev" disabled>Previous</button>
                 <span class="small soft" id="hist-page" style="align-self:center">Page 1</span>
@@ -143,7 +143,7 @@
             <p class="card-body mt-2 mb-6">Redemptions spend your balance immediately. Prices and availability are always read from the server.</p>
             <div class="tabs mb-6" role="tablist" aria-label="Catalogue type">
               <button class="tab" role="tab" id="cat-points-tab" aria-selected="true">Loyalty catalogue</button>
-              <button class="tab" role="tab" id="cat-credits-tab" aria-selected="false">VJ Credits shop</button>
+              <button class="tab" role="tab" id="cat-credits-tab" aria-selected="false">LH Credits shop</button>
             </div>
             <div class="grid grid-2" id="redeem-grid"><div class="skeleton" style="height:170px"></div></div>
           </div>

@@ -121,7 +121,7 @@ ROLE_ID_REWARDS_LEVEL_3=
 # --- Paid Ads ---
 ADS_CHANNEL_ID=                   # Main — where ads actually get posted once purchased
 ADS_SALES_CONTACT_USER_ID=        # currently @iamadivineprogamer per source doc
-ROLE_ID_VietJet_PARTNER=              # Main — auto-detects partner discount eligibility
+ROLE_ID_PARTNER=              # Main — auto-detects partner discount eligibility
 
 # --- Ops ---
 BOT_OWNER_ID=
@@ -583,7 +583,7 @@ Use the four advertising tiers below as the initial VietJet PTFS pricing configu
 Partner discount: 5–10%, staff-applied manually by default. Do not claim that payment has been verified automatically. Robux payment verification is out of scope unless a later, separately specified Roblox integration is added.
 
 ### Command
-`/ads purchase` → select menu of the 4 tiers → opens a ticket (reuse the Tickets system, type `"other"` with a pre-filled note: "Ads Purchase — {tier}") → if the buyer has `ROLE_ID_VietJet_PARTNER`, auto-note their discount eligibility in the ticket's opening message → staff confirms payment manually, then posts to `ADS_CHANNEL_ID` with the requested embed style once ready.
+`/ads purchase` → select menu of the 4 tiers → opens a ticket (reuse the Tickets system, type `"other"` with a pre-filled note: "Ads Purchase — {tier}") → if the buyer has `ROLE_ID_PARTNER`, auto-note their discount eligibility in the ticket's opening message → staff confirms payment manually, then posts to `ADS_CHANNEL_ID` with the requested embed style once ready.
 
 ---
 

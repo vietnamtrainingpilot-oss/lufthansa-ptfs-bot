@@ -20,6 +20,7 @@ import { syncTier } from "../services/tiers.js";
 import config from "../config/config.js";
 import fmt from "../utils/loyaltyFormat.js";
 import { buildText } from "../utils/builders.js";
+import { flightLabel, ACCENT } from "../config/brand.js";
 
 const STAFF_ROLES = () => [config.roleBoardOfDirectors, config.roleManagementTeam];
 
@@ -127,7 +128,7 @@ async function handleManifest(interaction, flight) {
     out.push(`Eligible for rewards: **${summary.eligibleCount}** of ${summary.totalPassengers}`);
     out.push(`Manifest finalized: **${man?.finalized ? "yes" : "no"}**`);
     out.push(`Rewards applied: **${man?.rewardsApplied ? "yes" : "no"}**`);
-    return interaction.reply(fmt.lines(out, { accentColor: 0x1a8cff }));
+    return interaction.reply(fmt.lines(out, { accentColor: ACCENT.DEFAULT }));
   }
 
   const user = interaction.options.getUser("user");
@@ -195,7 +196,7 @@ async function handlePreview(interaction, flight) {
   }
   const b = preview.branding;
   const out = [
-    `## Reward preview: VJ ${preview.flightNumber}`,
+    `## Reward preview: ${flightLabel(preview.flightNumber)}`,
     `> Route: ${preview.route}`,
     `> Manifest finalized: ${preview.finalized ? "yes" : "no"}`,
     `> Passengers: ${preview.totalPassengers} | Eligible: ${preview.eligibleCount} | Excluded: ${preview.excludedCount}`,
@@ -215,7 +216,7 @@ async function handlePreview(interaction, flight) {
   out.push("");
   out.push(`Totals: **${fmt.num(preview.totalPoints)} ${b.pointsUnit}**, **${fmt.num(preview.totalCredits)} ${b.creditsUnit}**`);
   out.push("Use /flight rewards-finalize to apply.");
-  return interaction.reply(fmt.lines(out, { accentColor: 0x1a8cff }));
+  return interaction.reply(fmt.lines(out, { accentColor: ACCENT.DEFAULT }));
 }
 
 async function handleFinalize(interaction, client, flight) {
@@ -256,7 +257,7 @@ async function handleFinalize(interaction, client, flight) {
     try {
       const u = await client.users.fetch(entry.userId);
       await u.send(buildText(
-        `Flight completed: VJ ${flight.flightNumber}, ${flight.departureAirport} to ${flight.arrivalAirport}. ` +
+        `Flight completed: ${flightLabel(flight.flightNumber)}, ${flight.departureAirport} to ${flight.arrivalAirport}. ` +
         `You earned ${entry.points} ${cfg.branding.pointsUnit} and ${entry.credits} ${cfg.branding.creditsUnit}.\n` +
         `${entry.explanation.detail}`
       ));
@@ -270,7 +271,7 @@ async function handleFinalize(interaction, client, flight) {
     const ch = await client.channels.fetch(config.flightLogChannelId);
     if (ch?.isTextBased()) {
       await ch.send(buildText(
-        `## Flight rewards applied: VJ ${flight.flightNumber}\n` +
+        `## Flight rewards applied: ${flightLabel(flight.flightNumber)}\n` +
         `Route: ${flight.departureAirport} to ${flight.arrivalAirport}\n` +
         `Rewarded: ${result.totals.rewardedPassengers} passengers\n` +
         `Totals: ${result.totals.totalPoints} points, ${result.totals.totalCredits} credits\n` +

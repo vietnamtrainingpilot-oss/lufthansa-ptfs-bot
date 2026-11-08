@@ -136,8 +136,8 @@ async function withServer(fn) {
   try { await fn(call); } finally { server.close(); }
 }
 
-function cookieFor(userId) {
-  return `${"vjptfs_session"}=${createSessionToken({ id: userId, username: `u${userId}` }, SECRET)}`;
+function cookieFor(userId, name) {
+  return `${name ?? "lhptfs_session"}=${createSessionToken({ id: userId, username: `u${userId}` }, SECRET)}`;
 }
 
 test("session endpoint reports unauthenticated when no cookie", async () => {
@@ -152,6 +152,14 @@ test("session endpoint identifies the signed-in member", async () => {
   await withServer(async (call) => {
     const res = await call("/api/session", { cookie: cookieFor("111222333444555666") });
     assert.equal(res.data.authenticated, true);
+    assert.equal(res.data.member.id, "111222333444555666");
+  });
+});
+
+test("legacy pre-rebrand session cookie name is still accepted", async () => {
+  await withServer(async (call) => {
+    const res = await call("/api/session", { cookie: cookieFor("111222333444555666", "vjptfs_session") });
+    assert.equal(res.data.authenticated, true, "legacy vjptfs_session must keep working through the upgrade");
     assert.equal(res.data.member.id, "111222333444555666");
   });
 });
@@ -171,7 +179,7 @@ test("all private member routes reject an anonymous request", async () => {
 
 test("private routes reject a forged session cookie", async () => {
   await withServer(async (call) => {
-    const forged = "vjptfs_session=" + Buffer.from(JSON.stringify({ sub: "999", exp: 9e9, iat: Math.floor(Date.now() / 1000), username: "x" })).toString("base64url") + ".deadbeef";
+    const forged = "lhptfs_session=" + Buffer.from(JSON.stringify({ sub: "999", exp: 9e9, iat: Math.floor(Date.now() / 1000), username: "x" })).toString("base64url") + ".deadbeef";
     const res = await call("/api/member/overview", { cookie: forged });
     assert.equal(res.status, 401);
   });
@@ -205,7 +213,7 @@ test("signout clears the session cookie", async () => {
     const res = await call("/api/signout", { method: "POST", cookie: cookieFor("111") });
     assert.equal(res.status, 200);
     const setCookie = res.headers.getSetCookie ? res.headers.getSetCookie() : [];
-    assert.ok(setCookie.some((c) => c.includes("vjptfs_session=") && c.includes("Max-Age=0")));
+    assert.ok(setCookie.some((c) => c.includes("lhptfs_session=") && c.includes("Max-Age=0")));
   });
 });
 

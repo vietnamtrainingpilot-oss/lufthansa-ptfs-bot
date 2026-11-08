@@ -1,5 +1,5 @@
-﻿/**
- * /economy — VJ Credits virtual economy.
+/**
+ * /economy � LH Credits virtual economy.
  *
  * Separate namespace from /rewards so the two balances are never confused.
  * Credits are a closed, non-cash, non-transferable virtual currency.
@@ -14,22 +14,23 @@ import * as catalogue from "../services/catalogue.js";
 import rewardsService from "../services/rewards.js";
 import config from "../config/config.js";
 import fmt from "../utils/loyaltyFormat.js";
+import { ACCENT } from "../config/brand.js";
 
 const STAFF_ROLES = () => [config.roleBoardOfDirectors, config.roleManagementTeam];
 
 export const data = new SlashCommandBuilder()
   .setName("economy")
-  .setDescription("VJ Credits virtual economy")
+  .setDescription("LH Credits virtual economy")
   .addSubcommand((s) =>
-    s.setName("balance").setDescription("View a VJ Credits balance").addUserOption((o) =>
+    s.setName("balance").setDescription("View a LH Credits balance").addUserOption((o) =>
       o.setName("user").setDescription("Member to look up (defaults to you)")
     )
   )
-  .addSubcommand((s) => s.setName("shop").setDescription("Browse the VJ Credits shop"))
+  .addSubcommand((s) => s.setName("shop").setDescription("Browse the LH Credits shop"))
   .addSubcommand((s) =>
     s
       .setName("award")
-      .setDescription("Award VJ Credits to a member (staff)")
+      .setDescription("Award LH Credits to a member (staff)")
       .addUserOption((o) => o.setName("user").setDescription("Member to adjust").setRequired(true))
       .addIntegerOption((o) => o.setName("amount").setDescription("Positive whole number").setRequired(true))
       .addStringOption((o) => o.setName("reason").setDescription("Reason (recorded in the audit log)").setRequired(true))
@@ -37,7 +38,7 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) =>
     s
       .setName("deduct")
-      .setDescription("Deduct VJ Credits from a member (staff)")
+      .setDescription("Deduct LH Credits from a member (staff)")
       .addUserOption((o) => o.setName("user").setDescription("Member to adjust").setRequired(true))
       .addIntegerOption((o) => o.setName("amount").setDescription("Positive whole number").setRequired(true))
       .addStringOption((o) => o.setName("reason").setDescription("Reason (recorded in the audit log)").setRequired(true))
@@ -78,7 +79,7 @@ export async function execute(interaction, client) {
       } else {
         out.push("No activity yet. Complete a verified flight to earn credits.");
       }
-      return interaction.reply(fmt.lines(out, { accentColor: 0xffc72c }));
+      return interaction.reply(fmt.lines(out, { accentColor: ACCENT.DEFAULT }));
     }
 
     case "shop": {
@@ -133,7 +134,7 @@ export async function execute(interaction, client) {
 
       return interaction.reply(
         fmt.resultMessage(
-          `VJ Credits ${sub === "award" ? "awarded" : "deducted"}`,
+          `LH Credits ${sub === "award" ? "awarded" : "deducted"}`,
           `<@!${target.id}> ${signed > 0 ? "+" : ""}${signed} ${b.creditsUnit}. New balance: ${fmt.num(res.balance)}.`
         )
       );

@@ -1,10 +1,10 @@
-# VietJet PTFS Discord Bot & Website
+# Lufthansa PTFS Discord Bot & Website
 
-A complete digital system for the VietJet PTFS Roblox virtual airline community, consisting of:
+A complete digital system for the Lufthansa PTFS Roblox virtual airline community, consisting of:
 
 - A Node.js Discord bot (v14.16+) with Components V2 messaging
 - A responsive flight-booking website
-- A loyalty programme and virtual economy (`VietJet Rewards` points + `VJ Credits`)
+- A loyalty programme and virtual economy (`VietJet Rewards` points + `LH Credits`)
 - Integration through Firebase Firestore
 
 See `LOYALTY_SYSTEM.md` for the full loyalty and economy documentation.
@@ -21,8 +21,8 @@ See `LOYALTY_SYSTEM.md` for the full loyalty and economy documentation.
 | `/rewards leaderboard [metric]` | Top 10 by points, lifetime points, flights or credits |
 | `/rewards catalogue` | Loyalty redemption catalogue |
 | `/rewards missions` | Missions with progress and claim state |
-| `/economy balance [user]` | VJ Credits balance |
-| `/economy shop` | VJ Credits shop |
+| `/economy balance [user]` | LH Credits balance |
+| `/economy shop` | LH Credits shop |
 
 **Staff commands**
 
@@ -37,7 +37,7 @@ See `LOYALTY_SYSTEM.md` for the full loyalty and economy documentation.
 | `/rewards award`, `/rewards deduct` | Adjust loyalty points (audited) |
 | `/rewards configure` | Rates, caps, tiers, multipliers, branding (validated and audited) |
 | `/rewards catalogue-manage`, `/rewards mission-manage` | Manage catalogue items and missions |
-| `/economy award`, `/economy deduct`, `/economy configure` | Manage VJ Credits (audited) |
+| `/economy award`, `/economy deduct`, `/economy configure` | Manage LH Credits (audited) |
 | `/ads purchase` | Open a paid-ad purchase ticket |
 
 **The verified flight reward workflow**
@@ -69,7 +69,7 @@ copy .env.example .env
 npm install pm2 -g
 
 # 4. Start the bot
-pm2 start src/index.js --name vietjet-ptfs-bot
+pm2 start src/index.js --name lufthansa-ptfs-bot
 pm2 save
 ```
 
@@ -122,7 +122,7 @@ node scripts/migrate-rewards.js --apply --backup backup/accounts.json
 
 Two separate balances, both earned by flying **verified completed flights**:
 
-| | Loyalty points | VJ Credits |
+| | Loyalty points | LH Credits |
 |---|---|---|
 | Earned from | Verified flights, missions, staff awards | Verified flights, staff awards |
 | Spent on | `/rewards catalogue` | `/economy shop` |
@@ -156,7 +156,7 @@ All timed actions are **Firestore-backed**, never bare `setTimeout`/`setInterval
 
 ### 1. Create a Discord Application
 - Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-- Create a new application named "VietJet PTFS Bot"
+- Create a new application named "Lufthansa PTFS Bot"
 - Bot → Add Bot → Reset Token → Copy the token
 - Bot → Privileged Gateway Intents → Enable Message Content Intent, Server Members Intent
 - Bot → Bot Permissions → Select all needed permissions:
@@ -182,7 +182,7 @@ Create these channels and roles (IDs go in `.env`):
 - `FLIGHT_OPS_COMMANDS` — Role required for /createflight, /logflight, /flightupdate
 - `FLIGHT_PING_ROLE_ID_1`, `FLIGHT_PING_ROLE_ID_2` — Roles pinged at bottom of flight previews
 - `REWARDS_LEVEL_1`, `REWARDS_LEVEL_2`, `REWARDS_LEVEL_3` — Roles auto-assigned at loyalty thresholds
-- `VietJet_PARTNER` — Role auto-detects partner discount eligibility
+- `ROLE_ID_PARTNER` — Role auto-detects partner discount eligibility
 - `ADS_CHANNEL_ID` — Channel where posted ads appear
 - `CAREER_SETUP_CHANNEL_ID` — Where /careersetup posts the department select
 - `CAREER_REVIEW_CHANNEL_ID` — Where career reviews + Accept/Deny buttons land
@@ -197,7 +197,7 @@ Create these channels and roles (IDs go in `.env`):
 
 ### 4. Firebase Setup
 - Go to the [Firebase Console](https://console.firebase.google.com/)
-- Add a new project named "VietJet PTFS"
+- Add a new project named "Lufthansa PTFS"
 - Project Settings → Service accounts → "Generate new private key"
 - Save the JSON file contents as environment variables:
   - `FIREBASE_PROJECT_ID`
@@ -217,7 +217,7 @@ Create these channels and roles (IDs go in `.env`):
 ### 5. Run the Bot
 ```powershell
 npm install          # Install dependencies (already done)
-pm2 start src/index.js --name vietjet-ptfs-bot
+pm2 start src/index.js --name lufthansa-ptfs-bot
 pm2 save             # Survives reboots (survives sleep/display-off, not full shutdown)
 ```
 
@@ -291,12 +291,12 @@ The website uses:
 To customize:
 - Edit `website/css/site.css` for colors, spacing, and typography
 - Edit `website/js/site.js` for shared navigation, session handling, and API calls
-- The design follows VietJet PTFS branding: energetic red (#E61E2D) with white and restrained yellow accents (#FFC72C)
+- The design follows Lufthansa PTFS branding: energetic red (#E61E2D) with white and restrained yellow accents (#FFC72C)
 
-## VietJet PTFS Branding Guidelines
+## Lufthansa PTFS Branding Guidelines
 
-- **Primary brand**: "VietJet PTFS" for the virtual airline community
-- **Airline name**: "VietJet Air" only where needed in passenger-facing flight copy
+- **Primary brand**: "Lufthansa PTFS" for the virtual airline community
+- **Airline name**: "Lufthansa" only where needed in passenger-facing flight copy
 - **Voice**: Clean, energetic, aviation-focused
 - **No emojis** in bot messages, website, documentation, or code comments (owner may add manually later)
 - **Not official airline-operated**: This is for a Roblox virtual airline community
@@ -338,7 +338,7 @@ VietJet/
 |-- firestore.rules         - Denies ALL direct client access (bot-only)
 |-- firestore.indexes.json  - Composite indexes the bot's queries require
 |-- SETUP_AUTH.md           - Discord OAuth / sign-in setup walkthrough
-|-- LOYALTY_SYSTEM.md       - Points, VJ Credits, tiers, missions, catalogue
+|-- LOYALTY_SYSTEM.md       - Points, LH Credits, tiers, missions, catalogue
 |-- PM2_SETUP_GUIDE.md      - Running the bot as a service on Windows
 |-- WEBSITE_DEPLOYMENT.md   - Hosting the website
 |-- CHECKLIST.md            - Specification acceptance checklist

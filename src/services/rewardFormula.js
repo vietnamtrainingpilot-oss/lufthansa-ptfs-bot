@@ -21,7 +21,7 @@
  *     points += min(tierBonus[tier], maxTierBonusPerFlight)
  *     points = clamp(points, minPointsPerFlight, maxPointsPerFlight)
  *     points = min(points, hardCapPointsPerFlight)   // absolute ceiling
- *  3. VJ Credits
+ *  3. LH Credits
  *     hours = minutes / 60
  *     credits = round(hours * creditsPerHour * creditsMultiplier[class])
  *     credits = clamp(credits, minCreditsPerFlight, maxCreditsPerFlight)
@@ -118,7 +118,7 @@ export function calculateFlightReward({ flight, cabinClass, tierKey, config }) {
   points = Math.min(points, f.hardCapPointsPerFlight);
   const pointsCapApplied = points < preCap;
 
-  // ── VJ Credits ────────────────────────────────────────────────────────────
+  // ── LH Credits ────────────────────────────────────────────────────────────
   const effectiveMinutes = basis === "duration" ? minutes : (flight.flightTimeMinutes > 0 ? Number(flight.flightTimeMinutes) : 0);
   const hours = Math.round((effectiveMinutes / 60) * 100) / 100; // 2dp
   const creditsMultiplier = cf.creditsMultiplier[cabin] ?? 1;

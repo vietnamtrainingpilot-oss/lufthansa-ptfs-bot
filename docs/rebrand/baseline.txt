@@ -1,0 +1,103 @@
+REBRAND BEHAVIOUR BASELINE - captured before any file was changed
+=================================================================
+
+Captured: 2026-11-07
+Branch at capture: main (commit 308d0e1 "Initial commit: VietJet PTFS pre-rebrand baseline")
+Working copy: D:\Vietjet
+Node: v22.x (see `node -v` below)
+Platform: win32 (Windows, PowerShell)
+
+Command: node -v
+Result: see VERSIONS section at the bottom.
+
+-----------------------------------------------------------------
+1. npm test  ->  node --test "tests/*.test.js"
+-----------------------------------------------------------------
+Result: PASS
+
+  tests      151
+  suites       0
+  pass       151
+  fail         0
+  cancelled    0
+  skipped      0
+  todo         0
+  duration_ms  9478.3483
+
+Test files that produced results (15 files):
+  tests/auth.test.js
+  tests/awardFlow.test.js
+  tests/bookingApi.test.js
+  tests/catalogue.test.js
+  tests/commands.test.js
+  tests/componentsV2.test.js
+  tests/eligibility.test.js
+  tests/ledger.test.js
+  tests/manifest.test.js
+  tests/memberApi.test.js
+  tests/missions.test.js
+  tests/noEmoji.test.js
+  tests/permissions.test.js
+  tests/rewardFormula.test.js
+  tests/tiers.test.js
+
+NOTES OBSERVED IN BASELINE OUTPUT (pre-existing, not introduced by the rebrand):
+  - One line is printed to stdout during tests/bookingApi.test.js:
+      "[web] redeem failed: db.collection(...).where(...).where is not a function"
+    It comes from the fake Firestore used by the test; the test itself asserts the
+    error path and passes. Recorded here so the final comparison can confirm it is
+    still the only such line.
+
+-----------------------------------------------------------------
+2. npm run lint  ->  node scripts/lint.js
+-----------------------------------------------------------------
+Result: PASS
+
+  Checked 68 file(s); 0 with errors.
+
+The lint script is a syntax check (`node --check`) over .js/.mjs files in
+src/, scripts/ and tests/. It is not a style linter.
+
+-----------------------------------------------------------------
+3. Type check
+-----------------------------------------------------------------
+Result: NOT AVAILABLE - no TypeScript in this project.
+
+  Command: npx tsc --noEmit
+  Output : "This is not the tsc command you are looking for" (typescript is not
+           installed and there is no tsconfig.json).
+  The only type-related devDependency is @types/node ^20.0.0.
+  There is therefore no type-check baseline. `npm run lint` above is the closest
+  static check and is used as the baseline.
+
+-----------------------------------------------------------------
+4. Production build
+-----------------------------------------------------------------
+Result: NOT APPLICABLE - this project has no build step.
+
+  Command: npm run build
+  Output : npm error Missing script: "build"
+
+  package.json scripts are exactly: start, dev, test, lint, migrate:rewards,
+  migrate:manifests, pm2:start, pm2:save. There is no bundler and no compile
+  step. The website is plain static HTML/CSS/JS served by Express from
+  website/, and the bot/website run directly from source with Node >= 20.
+  The "production start" equivalent for later verification is `npm start`
+  (node src/index.js), which requires real credentials and is therefore
+  verified with a credentials-free boot harness rather than a build.
+
+-----------------------------------------------------------------
+5. Baseline counts to compare against after the rebrand
+-----------------------------------------------------------------
+  tests passing  : 151   (final must be >= 151)
+  tests failing  : 0
+  lint files     : 68    (final will be higher because new files are added;
+                          errors must remain 0)
+  build step     : none
+  type check     : none
+
+VERSIONS
+-----------------------------------------------------------------
+  node    v26.5.1   (package.json engines requires >=20.0.0)
+  npm     11.17.0
+  git     2.55.0.windows.5

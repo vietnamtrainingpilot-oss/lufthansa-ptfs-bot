@@ -1,5 +1,5 @@
 /**
- * rewardsInteractions.js — VietJet Rewards interaction handlers.
+ * rewardsInteractions.js — LH Rewards interaction handlers.
  */
 
 import rewardsService from "../services/rewards.js";
@@ -22,7 +22,7 @@ export async function handleRewardsInteraction(interaction, client) {
     .join("\n");
 
   return interaction.reply({
-    ...buildText(`## VietJet Rewards Leaderboard\n\n${lines || "No entries yet."}`),
+    ...buildText(`## LH Rewards Leaderboard\n\n${lines || "No entries yet."}`),
     ephemeral: true,
   });
 }

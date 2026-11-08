@@ -7,6 +7,7 @@ import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import { isStaffAuthorized } from "../utils/permissions.js";
 import config from "../config/config.js";
 import { buildText } from "../utils/builders.js";
+import { ACCENT } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("ticketsetup")
@@ -45,7 +46,7 @@ export async function execute(interaction, client) {
 
   // Accent colour and the select menu both live on the CONTAINER (type 17).
   // A SectionBuilder cannot host an Action Row and has no accent colour.
-  const container = new ContainerBuilder().setAccentColor(7392244);
+  const container = new ContainerBuilder().setAccentColor(ACCENT.TICKET);
 
   container.addTextDisplayComponents(
     new TextDisplayBuilder().setContent(

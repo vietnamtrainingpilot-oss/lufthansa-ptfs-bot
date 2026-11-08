@@ -1,4 +1,4 @@
-# VietJet PTFS - Build Checklist & Verification
+# Lufthansa PTFS - Build Checklist & Verification
 
 ## [x] Completed Components
 
@@ -42,7 +42,7 @@
 - [x] **`/flightupdate`** - Delay (reschedules timer + delay notice) or cancel (logs flight)
 - [x] **Authorization** - `ROLE_ID_FLIGHT_OPS_COMMANDS` in Main guild OR BoD/Management in Staff guild
 
-### VietJet Rewards
+### LH Rewards
 - [x] **`/rewards profile [user]`** - Balance, level, next-threshold progress
 - [x] **`/rewards award/deduct <user> <amount> <reason>`** - Staff only, logs to `REWARDS_LOG_CHANNEL_ID`
 - [x] **Level-up** - Auto-assigns `ROLE_ID_REWARDS_LEVEL_2/3` (idempotent), removes prior level
@@ -51,7 +51,7 @@
 
 ### Paid Ads
 - [~] **`/ads purchase`** - Tier select (Basic/Featured/Premium/Spotlight) opens a ticket. NOT YET: currently staff-only, and the ticket is not pre-filled with the tier name.
-- [x] **Partner discount** - Auto-detects `ROLE_ID_VietJet_PARTNER`, notes in ticket
+- [x] **Partner discount** - Auto-detects `ROLE_ID_PARTNER`, notes in ticket
 - [x] **Tier config** - `TIERS` array in `services/ads.js` (editable without code changes)
 
 ### Website + API
@@ -61,7 +61,7 @@
 - [x] **Bot API** - Express server on `BOOKING_API_PORT` with webhook validation
 - [x] **Webhook** - DMs user, posts to `FLIGHT_BOOKING_STAFF_CHANNEL_ID`
 - [x] **Responsive** - Mobile-first, 320px-1440px, dark mode, reduced-motion
-- [x] **Design** - VietJet red/white/yellow palette, Geist font, WCAG AA contrast
+- [x] **Design** - Lufthansa red/white/yellow palette, Geist font, WCAG AA contrast
 
 ### Documentation
 - [x] **README.md** - Complete setup guide, Discord/Firebase/PM2 instructions
@@ -119,7 +119,7 @@
 
 | Asset | Source | Status |
 |---|---|---|
-| VietJet PTFS logo | Owner-provided or generated |  Placeholder (SVG in HTML) |
+| Lufthansa PTFS logo | Owner-provided or generated |  Placeholder (SVG in HTML) |
 | Ticket banner images (top/bottom) | Owner-provided |  Placeholders (`TICKET_BANNER_TOP_URL`, `TICKET_BANNER_BOTTOM_URL`) |
 | Flight banner images | Owner-provided |  Not used (text-only preview) |
 | Website hero image | `imagegen-frontend-web` (not available) |  Placeholder (gradient) |
@@ -134,7 +134,7 @@
 | Item | Status | Notes |
 |---|---|---|
 | Main-guild equivalents of BoD/Management roles |  Pending | If roles need channel-overwrite permissions in Main vs. just Staff-guild check |
-| VietJet Rewards level thresholds |  Pending | Currently placeholders; editable via `/rewards configure` |
+| LH Rewards level thresholds |  Pending | Currently placeholders; editable via `/rewards configure` |
 | Unbelievaboat integration |  Pending | Changes Rewards architecture if already running |
 | Fresh banner image URLs |  Pending | Spec flagged as expired CDN links |
 | "Spin the Globe" / "Pack Your Bags" mini-games |  Pending | Flagged as Phase 2 / out of scope |
@@ -146,7 +146,7 @@
 1. **Fill `.env`** - Copy `.env.example` ? `.env`, populate all 60+ variables
 2. **Set up Discord** - Create channels/roles per `README.md`, add bot to Main + Staff guilds
 3. **Set up Firebase** - Generate service account key, create Firestore DB, copy 3 values to `.env`
-4. **Start bot** - `pm2 start src/index.js --name vietjet-ptfs-bot && pm2 save`
+4. **Start bot** - `pm2 start src/index.js --name Lufthansa-ptfs-bot && pm2 save`
 5. **Test `/ping`** - Verify bot responds in Discord
 6. **Deploy website** - Follow `WEBSITE_DEPLOYMENT.md` (Vercel/Netlify recommended)
 7. **Run acceptance tests** - Verify each item in the "Verification Status" table above

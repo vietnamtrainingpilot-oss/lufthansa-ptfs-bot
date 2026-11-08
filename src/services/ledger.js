@@ -34,7 +34,7 @@ export const TX_TYPE = {
 const DEFAULT_ACCOUNT = {
   userId: null,
   balance: 0, // current spendable loyalty points (legacy field name, kept for compatibility)
-  credits: 0, // current spendable VJ Credits
+  credits: 0, // current spendable LH Credits
   lifetimePointsEarned: 0, // lifetime points from every source, never decreases
   qualifyingPoints: 0, // lifetime points from verified flights only — drives tiers
   qualifyingFlightCount: 0, // lifetime count of verified eligible flights

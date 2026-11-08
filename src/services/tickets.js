@@ -29,9 +29,9 @@ const TYPE_NAMES = {
 
 /** Body text for each ticket type (starter message). */
 const TYPE_BODY_TEXT = {
-  general: "Thank you for contacting VietJet PTFS Support. Please state your support after creating the ticket. We will soon come and analyze and give you the perfect support. Thank you.",
+  general: "Thank you for contacting Lufthansa PTFS Support. Please state your support after creating the ticket. We will soon come and analyze and give you the perfect support. Thank you.",
   report: "Thank you for reporting this issue. Please describe what you're reporting in detail below. Our staff will investigate promptly.",
-  other: "Thank you for reaching out to VietJet PTFS. Please describe your enquiry below and our staff will assist you.",
+  other: "Thank you for reaching out to Lufthansa PTFS. Please describe your enquiry below and our staff will assist you.",
   partnership: `Thank you for your interest in partnering with us. Please fill out the form via the format given below. We will soon analyze and discuss the partnership. Thank you.`,
   fastpass: `Thank you for your interest in joining into the staff team via direct entry. Please fill out the form below via the format so we can analyze and give out the exact role matches your experience. Thank you.`,
 };

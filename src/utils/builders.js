@@ -25,9 +25,20 @@ import {
   MessageFlags,
 } from "discord.js";
 
+import { ACCENT } from "../config/brand.js";
+
 export const FLAGS = MessageFlags.IsComponentsV2;
-export const ACCENT_TICKET = 7392244; // blue
-export const ACCENT_CAREER = 92807; // gold-ish
+
+/**
+ * Discord Components V2 accent colours, read from the brand config so every
+ * message builder shares one definition. Raw integers never appear in a
+ * message builder again.
+ *
+ *  ACCENT.DEFAULT  (yellow) — tickets, flights, rewards, ads
+ *  ACCENT.CAREERS  (sky)   — careers and informational messages
+ */
+export const ACCENT_TICKET = ACCENT.DEFAULT;
+export const ACCENT_CAREER = ACCENT.CAREERS;
 
 /**
  * Build a container with an accent colour, text blocks, and an optional row of

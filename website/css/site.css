@@ -50,10 +50,14 @@
    --accent-hover: var(--lh-yellow-600);
 
    /* Type */
-   --font-sans: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-   --font-mono: "Source Sans 3", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
-   --t-xs: 0.75rem;
+ 
+/* Headings: Barlow 600/700 per DESIGN.md 5. */
+h1, h2, h3, h4, .heading, .title, .section-title { font-family: "Barlow", var(--font-sans); font-weight: 600; }
+h1 { font-weight: 700; }
+  --t-xs: 0.75rem;
    --t-sm: 0.8125rem;
    --t-base: 0.9375rem;
    --t-md: 1rem;
@@ -70,7 +74,7 @@
    --s12: 3rem; --s16: 4rem; --s20: 5rem; --s24: 6rem;
 
    /* Radius */
-   --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-xl: 16px; --r-full: 999px;
+   --r-sm: 4px; --r-md: 8px; --r-lg: 10px; --r-xl: 12px; --r-full: 999px;
 
    /* Elevation: one subtle elevation only */
    --e1: 0 1px 2px rgba(3, 13, 46, 0.08);
@@ -179,9 +183,7 @@
    top: 0;
    z-index: 100;
    height: var(--header-h);
-   background: rgba(255, 255, 255, 0.88);
-   backdrop-filter: saturate(180%) blur(12px);
-   -webkit-backdrop-filter: saturate(180%) blur(12px);
+   background: var(--lh-white);
    border-bottom: 1px solid var(--border);
  }
  .site-header-inner {
@@ -195,7 +197,7 @@
  .brand { display: inline-flex; align-items: center; gap: var(--s3); flex-shrink: 0; }
  .brand-mark { width: 30px; height: 30px; color: var(--lh-yellow-500); flex-shrink: 0; }
  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
- .brand-name { font-weight: 700; font-size: var(--t-md); letter-spacing: -0.02em; }
+ .brand-name { font-weight: 700; font-size: var(--t-md); letter-spacing: 0; }
  .brand-sub { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mute); font-weight: 500; }
 
  .nav { display: flex; align-items: center; gap: var(--s1); }
@@ -241,7 +243,7 @@
      z-index: 90;
    }
    .nav[data-open="true"] { display: flex; }
-   .nav-link { padding: var(--s3) var(--s2); font-size: var(--t-md); border-bottom: 1px solid var(--lh-grey-100); border-radius: 0; }
+   .nav-link { padding: var(--s3) var(--s2); font-size: var(--t-md); border-bottom: 1px solid var(--lh-grey-100); border-radius: var(--r-sm); }
    .nav-actions { margin-top: var(--s4); flex-direction: column; align-items: stretch; }
    .nav-actions .btn { width: 100%; justify-content: center; }
  }
@@ -257,8 +259,8 @@
    justify-content: center;
    gap: var(--s2);
    padding: 0 var(--s5);
-   height: 40px;
-   font-size: var(--t-sm);
+   height: 44px;
+    font-size: var(--t-sm);
    font-weight: 600;
    border-radius: var(--r-sm);
    border: 1px solid transparent;
@@ -300,8 +302,6 @@
    inset: 0;
    z-index: -2;
    background:
-     radial-gradient(1200px 600px at 78% 18%, rgba(255, 173, 0, 0.25), transparent 60%),
-     radial-gradient(900px 520px at 12% 88%, rgba(91, 141, 239, 0.12), transparent 62%),
      linear-gradient(160deg, var(--lh-navy-900) 0%, var(--lh-navy-700) 55%, var(--lh-navy-900) 100%);
  }
  .hero-grid-lines {
@@ -312,8 +312,6 @@
      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
    background-size: 64px 64px;
-   mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 100%);
-   -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 100%);
  }
 
  /* Hero entrance animation */
@@ -390,12 +388,10 @@
 
  /* Hero side panel: live operational summary */
  .ops-panel {
-   background: rgba(255,255,255,0.05);
-   border: 1px solid rgba(255,255,255,0.12);
-   border-radius: var(--r-xl);
-   padding: var(--s6);
-   backdrop-filter: blur(8px);
-   -webkit-backdrop-filter: blur(8px);
+   background: var(--lh-navy-700);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--r-md);
+    padding: var(--s6);
  }
  .ops-panel-title {
    font-size: var(--t-xs);
@@ -480,7 +476,7 @@
 
  .route-path { display: flex; align-items: center; gap: var(--s3); min-width: 0; }
  .route-end { display: flex; flex-direction: column; min-width: 0; }
- .route-code { font-family: var(--font-mono); font-size: var(--t-xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+ .route-code { font-family: var(--font-mono); font-size: var(--t-xl); font-weight: 700; letter-spacing: 0; line-height: 1; }
  .route-city { font-size: var(--t-xs); color: var(--text-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 15ch; }
  .route-arrow { color: var(--lh-grey-400); flex-shrink: 0; }
  .route-line { flex: 1; min-width: var(--s6); height: 1px; background: linear-gradient(90deg, var(--lh-grey-300), var(--lh-grey-200)); position: relative; }
@@ -508,11 +504,11 @@
 
  /* --- Badges ------------------------------------------------------------- */
  .badge {
-   display: inline-flex;
-   align-items: center;
-   gap: var(--s1);
-   padding: 2px var(--s2);
-   border-radius: var(--r-full);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+    padding: 2px var(--s2);
+    border-radius: var(--r-sm);
    font-size: 0.6875rem;
    font-weight: 600;
    letter-spacing: 0.02em;
@@ -641,7 +637,7 @@
    padding: var(--s5);
  }
  .stat-label { font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); font-weight: 600; }
- .stat-value { font-family: var(--font-mono); font-size: var(--t-3xl); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: var(--s2); }
+ .stat-value { font-family: var(--font-mono); font-size: var(--t-3xl); font-weight: 700; letter-spacing: 0; line-height: 1.1; margin-top: var(--s2); }
  .stat-value-sm { font-size: var(--t-2xl); }
  .stat-sub { font-size: var(--t-xs); color: var(--text-mute); margin-top: var(--s1); }
 
@@ -651,7 +647,7 @@
  .tier-name { font-weight: 600; font-size: var(--t-sm); }
  .pct { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--text-soft); }
  .bar { height: 7px; background: var(--lh-grey-100); border-radius: var(--r-full); overflow: hidden; max-width: 100%; }
- .bar-fill { display: block; height: 100%; max-width: 100%; background: linear-gradient(90deg, var(--lh-yellow-500), var(--lh-yellow-600)); border-radius: var(--r-full); transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1); }
+ .bar-fill { display: block; height: 100%; max-width: 100%; background: var(--lh-yellow-500); border-radius: var(--r-full); transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1); }
  .tier-foot { display: flex; justify-content: space-between; font-size: var(--t-xs); color: var(--text-mute); margin-top: var(--s2); }
 
  /* --- Progress (missions) ------------------------------------------------- */
@@ -736,10 +732,10 @@
    width: 100%;
    background: transparent;
  }
- dialog::backdrop { background: rgba(3, 13, 46, 0.6); backdrop-filter: blur(3px); }
+ dialog::backdrop { background: rgba(3, 13, 46, 0.6); }
  .modal {
    background: var(--bg-raised);
-   border-radius: var(--r-xl);
+   border-radius: var(--r-md);
    box-shadow: var(--e4);
    overflow: hidden;
  }
@@ -763,12 +759,12 @@
  .account-trigger {
    display: inline-flex; align-items: center; gap: var(--s2);
    padding: var(--s1) var(--s2) var(--s1) var(--s1);
-   border: 1px solid var(--border); border-radius: var(--r-full);
+   border: 1px solid var(--border); border-radius: var(--r-sm);
    background: var(--bg); transition: border-color var(--fast), background var(--fast);
  }
  .account-trigger:hover { border-color: var(--border-strong); background: var(--lh-grey-50); }
  .avatar {
-   width: 28px; height: 28px; border-radius: 50%;
+   width: 28px; height: 28px; border-radius: var(--r-sm);
    background: var(--lh-grey-200); color: var(--lh-grey-600);
    display: inline-flex; align-items: center; justify-content: center;
    font-size: var(--t-xs); font-weight: 700; flex-shrink: 0;
@@ -801,7 +797,7 @@
    padding-block: clamp(var(--s10), 5vw, var(--s16));
    padding-inline: var(--s6);
  }
- .page-title { font-size: clamp(var(--t-2xl), 4vw, var(--t-4xl)); letter-spacing: -0.03em; }
+ .page-title { font-size: clamp(var(--t-2xl), 4vw, var(--t-4xl)); letter-spacing: 0; }
  .page-lead { font-size: var(--t-lg); color: var(--text-soft); max-width: 62ch; margin-top: var(--s3); }
 
  .crumbs { display: flex; gap: var(--s2); font-size: var(--t-xs); color: var(--text-mute); margin-bottom: var(--s4); }

@@ -19,10 +19,10 @@ export const data = new SlashCommandBuilder()
   .addStringOption((o) => o.setName("arrival").setDescription("Arrival airport code").setRequired(true))
   .addStringOption((o) => o.setName("aircraft").setDescription("Aircraft type").setRequired(true))
   .addStringOption((o) => o.setName("classes").setDescription("Classes offered").setRequired(true))
-  .addStringOption((o) => o.setName("privateserver").setDescription("Private server link").setRequired(false))
   .addStringOption((o) => o.setName("spawn").setDescription("PTFS spawn location").setRequired(true))
   .addStringOption((o) => o.setName("gate").setDescription("Gate number").setRequired(true))
   .addIntegerOption((o) => o.setName("duration").setDescription("Flight time in minutes").setRequired(true))
+  .addStringOption((o) => o.setName("privateserver").setDescription("Private server link").setRequired(false))
   .addUserOption((o) => o.setName("host").setDescription("Flight host (defaults to invoker)").setRequired(false));
 
 export async function execute(interaction, client) {

@@ -1,4 +1,13 @@
 {
   "rules": "firestore.rules",
-  "indexes": "firestore.indexes.json"
+  "indexes": "firestore.indexes.json",
+  "database": {
+    "rules": "firestore.rules"
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "asia-southeast1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
 }

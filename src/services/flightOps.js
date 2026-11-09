@@ -100,7 +100,7 @@ export async function createFlight({
         `## ${flightLabel(flightNumber)} \n-# Hosted By: ${hostId} \n> You're all set to fly! For **${flightLabel(flightNumber)}**. More information may be found in the event link and below.\n\n> **Departing:** ${departureAirport}\n> **Arriving:** ${arrivalAirport}\n> **Flight Time:** ${flightTimeMinutes} minutes\n> **Aircraft:** ${aircraft}\n> **Event Link:** ${eventLink}\n> \u2139 **Classes:** ${classes}\n\n-# <@&${config.flightPingRoleId1}> <@&${config.flightPingRoleId2}>`,
       ],
       buttons: [
-        { label: "Book This Flight", style: 5, url: config.bookingWebsiteBaseUrl + "/book?flight=" + flightNumber },
+        { label: "Book This Flight", style: 1, customId: "book_flight_" + flightId },
       ],
     });
     await announceChannel.send(previewMsg);

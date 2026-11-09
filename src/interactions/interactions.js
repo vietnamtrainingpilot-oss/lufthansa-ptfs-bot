@@ -6,6 +6,7 @@
 import * as ticketHandlers from "./tickets.js";
 import * as careerHandlers from "./careers.js";
 import * as flightHandlers from "./flights.js";
+import * as bookingHandlers from "./booking.js";
 import * as rewardHandlers from "./rewards.js";
 import * as adHandlers from "./ads.js";
 import * as loyaltyHandlers from "./loyalty.js";
@@ -66,6 +67,14 @@ export async function handleInteraction(interaction, client) {
   }
   if (customId.startsWith("flight_staff_click_")) {
     return flightHandlers.handleFlightStaffClick(interaction, client);
+  }
+
+  // ── Bot-only booking (no website) ──
+  if (customId.startsWith("book_flight_") && !customId.startsWith("book_flight_modal_")) {
+    return bookingHandlers.handleBookFlightButton(interaction);
+  }
+  if (customId.startsWith("book_flight_modal_")) {
+    return bookingHandlers.handleBookFlightModal(interaction, client);
   }
 
   // ── Rewards ──

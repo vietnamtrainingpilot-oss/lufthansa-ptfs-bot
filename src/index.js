@@ -62,6 +62,14 @@ client.once("ready", async () => {
   // Init Firestore
   initFirestore();
 
+  // Seed default achievements catalog (System 11.5).
+  try {
+    const { seedAchievements } = await import("./services/achievements.js");
+    await seedAchievements();
+  } catch (e) {
+    logger.error("Achievement seed failed:", e.message);
+  }
+
   // Start timer poller (catches up on missed timers)
   startTimerPoller();
 

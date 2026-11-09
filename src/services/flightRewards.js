@@ -205,6 +205,34 @@ export async function awardFlightRewards(flight, staffId, { config = null, manif
     }
   }
 
+  // Trigger achievement evaluation and automation events for each rewarded member.
+  // These are best-effort: a failure here must not roll back the ledger entries.
+  for (const entry of preview.awarded) {
+    try {
+      const { evaluateAutomaticAchievements } = await import("./achievements.js");
+      const account = await (await import("./ledger.js")).readAccount(entry.userId);
+      await evaluateAutomaticAchievements(entry.userId, {
+        qualifyingFlightCount: account.qualifyingFlightCount,
+        qualifyingPoints: account.qualifyingPoints,
+      });
+    } catch (e) {
+      console.error("[flightRewards] Achievement eval failed:", e.message);
+    }
+  }
+
+  try {
+    const { dispatchEvent } = await import("./automation.js");
+    await dispatchEvent("flight.completed", {
+      flightId: flight.id,
+      flightNumber: flight.flightNumber,
+      departureAirport: flight.departureAirport,
+      arrivalAirport: flight.arrivalAirport,
+      rewardedUserIds: results.map((r) => r.userId),
+    });
+  } catch (e) {
+    console.error("[flightRewards] Automation dispatch failed:", e.message);
+  }
+
   const totals = {
     totalPoints: preview.totalPoints,
     totalCredits: preview.totalCredits,

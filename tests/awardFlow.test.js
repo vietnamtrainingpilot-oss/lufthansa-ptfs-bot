@@ -190,7 +190,8 @@ test("completed flight awards points and credits to an eligible passenger", asyn
   assert.ok(acc.balance > 0, "points awarded");
   assert.ok(acc.credits > 0, "credits awarded");
   assert.equal(acc.qualifyingFlightCount, 1, "qualifying flight recorded");
-  assert.equal(acc.qualifyingPoints, acc.balance, "qualifying equals earned on first flight");
+  assert.equal(acc.qualifyingPoints, 60, "qualifying points from flight only");
+  assert.equal(acc.balance, 160, "balance includes flight + achievement bonus");
 });
 
 test("no-show passengers receive nothing", async () => {

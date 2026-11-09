@@ -501,18 +501,52 @@ npm ci
 - Upload all files except `node_modules/` and `.env`
 - Run `npm ci` in the server console
 
+### 7.2.1 Updating Code (After Initial Deploy)
+When you push new changes to GitHub, update the server:
+```bash
+# In the server console or via SSH:
+git pull origin rebrand/lufthansa
+npm ci
+pm2 restart lufthansa-ptfs-bot
+```
+
+Or in Wispbyte panel: **File Manager** → **Pull from Git** → **Restart**
+
 ### 7.3 Set Environment Variables
 In the Wispbyte panel:
 1. Go to **Startup** tab
 2. Add each env var from your `.env` file as a separate environment variable
 3. Or upload `.env` to the server root directory
 
-### 7.4 Deploy Firestore Rules
+### 7.4 Deploy Firestore Rules & Indexes (CRITICAL)
+**You MUST deploy the Firestore indexes, or the bot will crash on startup** with:
+```
+[timers] pollTimers error: FAILED_PRECONDITION: The query requires an index.
+```
+
 From your local machine:
 ```bash
+# Login to Firebase (one-time)
+firebase login
+
+# Deploy rules AND indexes together
+firebase deploy --only firestore:rules,firestore:indexes
+
+# Or deploy them separately:
 firebase deploy --only firestore:rules
 firebase deploy --only firestore:indexes
 ```
+
+**Alternative: Click the link in the console error.** When the bot starts and shows the FAILED_PRECONDITION error, it includes a URL like:
+```
+https://console.firebase.google.com/v1/r/project/YOUR-PROJECT/firestore/indexes?create_composite=...
+```
+Click that link → it opens the Firebase Console with a pre-filled index creation form → click **Create** → wait 1-2 minutes for the index to build.
+
+**Verify indexes are deployed:**
+1. Go to Firebase Console → Firestore Database → **Indexes** tab
+2. You should see composite indexes for: `economyLedger`, `flights`, `rewardsAccounts`, `timers`
+3. All should show status **"Enabled"** (not "Building")
 
 ### 7.5 Start the Server
 1. In Wispbyte panel → **Console** tab
@@ -656,6 +690,15 @@ npm test
 - Wait 1-2 minutes after bot starts (Discord caches commands)
 - Ensure bot has `applications.commands` scope
 - Check console for "Slash commands registered" log
+- If you see "Invalid Form Body" errors, pull the latest code: `git pull origin rebrand/lufthansa && npm ci && pm2 restart lufthansa-ptfs-bot`
+- Discord requires **required options to come before non-required options** in each command. The latest code fixes this for `createflight` and `rewards mission-manage`.
+
+### Firestore Index Error (FAILED_PRECONDITION)
+- The bot needs composite indexes on the `timers` collection
+- Click the link in the console error to create the index automatically
+- Or run: `firebase deploy --only firestore:indexes`
+- Wait 1-2 minutes for the index to build (status changes from "Building" to "Enabled")
+- The bot will retry automatically on the next poll cycle
 
 ### Booking Modal Not Opening
 - Ensure the flight is in `scheduled` or `checkin` status

@@ -1,94 +1,40 @@
 {
-  "//": "Composite indexes required by the bot's queries. Without these, Firestore returns FAILED_PRECONDITION at runtime. Deploy with: firebase deploy --only firestore:indexes",
   "indexes": [
     {
-      "//": "Member ledger filtered by currency and ordered newest-first (src/services/ledger.js getHistory).",
-      "collectionGroup": "economyLedger",
+      "collectionGroup": "members",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "mileageLedger",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "at", "order": "DESCENDING" }
+        { "fieldPath": "appliedAt", "order": "DESCENDING" }
       ]
     },
     {
-      "//": "Same, but narrowed to one currency (src/services/ledger.js getHistory with currency filter).",
-      "collectionGroup": "economyLedger",
+      "collectionGroup": "claims",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "member.userId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "redemptions",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "currency", "order": "ASCENDING" },
-        { "fieldPath": "at", "order": "DESCENDING" }
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     },
     {
-      "//": "Rolling 24h transaction count for rate limiting (src/services/ledger.js countRecentTransactions).",
-      "collectionGroup": "economyLedger",
+      "collectionGroup": "rewardsCatalog",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "at", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "//": "Per-currency flight reward lookup for the member dashboard (src/web/memberRoutes.js loadFlightRewards).",
-      "collectionGroup": "economyLedger",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "referenceId", "order": "ASCENDING" },
-        { "fieldPath": "referenceType", "order": "ASCENDING" },
-        { "fieldPath": "currency", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "//": "Active flights list for the booking site (src/web/server.js /api/flights/active).",
-      "collectionGroup": "flights",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "scheduledUnixTime", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "//": "Leaderboard ordering by each spendable balance (src/services/rewards.js getLeaderboard).",
-      "collectionGroup": "rewardsAccounts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "balance", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "//": "Leaderboard ordering by credits.",
-      "collectionGroup": "rewardsAccounts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "credits", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "//": "Leaderboard ordering by lifetime qualifying points (drives tier display).",
-      "collectionGroup": "rewardsAccounts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "qualifyingPoints", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "//": "Pending timers for a flight, used when rescheduling or cancelling (src/services/flightOps.js).",
-      "collectionGroup": "timers",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "payload.flightId", "order": "ASCENDING" },
-        { "fieldPath": "fired", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "//": "Due-timer poll (src/timers/timers.js getDueTimers).",
-      "collectionGroup": "timers",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "fired", "order": "ASCENDING" },
-        { "fieldPath": "dueAt", "order": "ASCENDING" }
+        { "fieldPath": "name", "order": "ASCENDING" }
       ]
     }
   ],

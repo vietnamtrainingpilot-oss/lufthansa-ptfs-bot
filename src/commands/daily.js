@@ -1,5 +1,5 @@
 /**
- * /daily — Daily check-in & streak rewards (AeroNexus 11.2).
+ * /daily — Claim daily reward (AeroNexus 11.2)
  */
 import { SlashCommandBuilder } from "discord.js";
 import * as streaks from "../services/streaks.js";

@@ -1,87 +1,57 @@
 /**
- * /achievements — Milestone & badge system (AeroNexus 11.5).
- *
- * Subcommands:
- *  - profile: view your unlocked achievements
- *  - list: view the achievement catalogue
- *  - grant: staff-only manual grant
+ * /achievements — View member achievements
  */
 import { SlashCommandBuilder } from "discord.js";
-import { isStaffAuthorized } from "../utils/permissions.js";
-import * as achievements from "../services/achievements.js";
-import { buildText, buildMessage } from "../utils/builders.js";
+import { getMemberAccount } from "../services/members.js";
+import { getDb } from "../services/firestore.js";
+import { buildMessage } from "../utils/builders.js";
 import { ACCENT } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("achievements")
-  .setDescription("View and manage achievements")
-  .addSubcommand((s) =>
-    s
-      .setName("profile")
-      .setDescription("View your unlocked achievements")
-      .addUserOption((o) => o.setName("user").setDescription("Member to look up (defaults to you)"))
-  )
-  .addSubcommand((s) =>
-    s
-      .setName("list")
-      .setDescription("View the achievement catalogue")
-  )
-  .addSubcommand((s) =>
-    s
-      .setName("grant")
-      .setDescription("Manually grant an achievement (staff only)")
-      .addUserOption((o) => o.setName("user").setDescription("Member to grant to").setRequired(true))
-      .addStringOption((o) => o.setName("achievement").setDescription("Achievement ID").setRequired(true))
-  );
+  .setDescription("View your achievements")
+  .addUserOption(o => o.setName("user").setDescription("Another member"));
 
-export async function execute(interaction, client) {
-  const sub = interaction.options.getSubcommand();
-
-  if (sub === "profile") {
-    const user = interaction.options.getUser("user") || interaction.user;
-    const list = await achievements.getMemberAchievements(user.id);
-    const unlocked = list.filter((a) => a.unlocked);
-    const locked = list.filter((a) => !a.unlocked);
-
+export async function execute(interaction) {
+  const target = interaction.options.getUser("user") || interaction.user;
+  
+  try {
+    const account = await getMemberAccount(target.id);
+    const db = getDb();
+    
+    // Get achievements for this user
+    const snap = await db.collection("achievements").where("userId", "==", target.id).get();
+    const unlocked = snap.docs.map(d => d.data().name || d.data().achievementId);
+    
+    // Standard achievements based on stats
+    const milestones = [];
+    if ((account.history?.totalFlights || 0) >= 1) milestones.push("First Flight");
+    if ((account.history?.totalFlights || 0) >= 10) milestones.push("Veteran Traveler");
+    if ((account.history?.totalFlights || 0) >= 50) milestones.push("Frequent Flyer");
+    if ((account.membership?.statusPoints || 0) >= 650) milestones.push("Frequent Traveller");
+    if ((account.membership?.statusPoints || 0) >= 2000) milestones.push("Senator");
+    if ((account.awards?.awardMiles?.lifetimeEarned || 0) >= 1000) milestones.push("Miler");
+    if ((account.awards?.awardMiles?.lifetimeEarned || 0) >= 10000) milestones.push("Century");
+    
+    const allAchievements = [...new Set([...unlocked, ...milestones])];
+    
     const lines = [
-      `**${user.username}** — ${unlocked.length}/${list.length} achievements unlocked`,
+      `**Achievements — ${target.displayName}`,
       "",
-      "Unlocked:",
-      ...unlocked.slice(0, 8).map((a) => `  - ${a.title}`),
+      `Unlocked: ${allAchievements.length}`,
       "",
-      "Remaining:",
-      ...locked.slice(0, 8).map((a) => `  · ${a.title}`),
+      ...allAchievements.slice(0, 10).map(a => `* ${a}`)
     ];
-
+    
     return interaction.reply({
-      ...buildMessage({ accentColor: ACCENT.DEFAULT, text: [lines.join("\n")] }),
+      ...buildMessage({ accentColor: ACCENT.BRAND_NAVY, text: [lines.join("\n")] }),
+      ephemeral: true
     });
-  }
-
-  if (sub === "list") {
-    const list = await achievements.listAchievements();
-    const lines = list.map((a) => `${a.title} — ${a.description}`).join("\n");
-    return interaction.reply({
-      ...buildMessage({ accentColor: ACCENT.DEFAULT, text: [`Achievement Catalogue (${list.length} total)\n\n${lines}`] }),
+  } catch (e) {
+    return interaction.reply({ 
+      ...buildText(`Not registered. Use /sign-up first.`), 
+      ephemeral: true 
     });
-  }
-
-  if (sub === "grant") {
-    if (!(await isStaffAuthorized(client, interaction.user.id))) {
-      return interaction.reply({ ...buildText("You do not have permission to grant achievements."), ephemeral: true });
-    }
-    const user = interaction.options.getUser("user");
-    const achId = interaction.options.getString("achievement");
-    try {
-      const result = await achievements.unlockAchievement({
-        userId: user.id,
-        achievementId: achId,
-        actorId: interaction.user.id,
-      });
-      return interaction.reply(buildText(`Granted ${result.achievement.title} to ${user.username}.`));
-    } catch (e) {
-      return interaction.reply({ ...buildText(`Failed: ${e.message}`), ephemeral: true });
-    }
   }
 }
 

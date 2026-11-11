@@ -10,6 +10,8 @@ import { assertConfigComplete } from "./config/config.js";
 import config from "./config/config.js";
 import { handleInteraction } from "./interactions/interactions.js";
 import { handleCareerQuestionReply } from "./interactions/careers.js";
+import { handleFlightClaim } from "./interactions/flightClaims.js";
+import { handleMileageQuestion } from "./interactions/mileage.js";
 import { handleCheckIn } from "./services/flightOps.js";
 import { createLogger } from "./utils/logger.js";
 import { buildText } from "./utils/builders.js";
@@ -61,6 +63,15 @@ client.once("ready", async () => {
 
   // Init Firestore
   initFirestore();
+
+  // Initialize new Mileage & More system
+  try {
+    const { seedMileageSystem } = await import("./services/mileageSystem.js");
+    await seedMileageSystem(logger);
+    logger.info("[mileage] Mileage & More system initialized");
+  } catch (e) {
+    logger.error("Mileage initialization failed:", e.message);
+  }
 
   // Seed default achievements catalog (System 11.5).
   try {
@@ -166,6 +177,12 @@ process.on("SIGINT", async () => {
   stopTimerPoller();
   client.destroy();
   process.exit(0);
+});
+
+// ─── Lifetime expiration ───────────────────────────────────────────────────
+
+client.once(" lifetimeExpiration", config, async () => {
+  logger.info("Lifetime expansions expired");
 });
 
 // ─── Login ─────────────────────────────────────────────────────────────────

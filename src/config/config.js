@@ -18,38 +18,17 @@ const REQUIRED = [
   "FIREBASE_PROJECT_ID",
   "FIREBASE_CLIENT_EMAIL",
   "FIREBASE_PRIVATE_KEY",
-  "TICKETS_CATEGORY_ID",
-  "TICKETS_LOG_CHANNEL_ID",
   "ROLE_ID_BOARD_OF_DIRECTORS",
   "ROLE_ID_MANAGEMENT_TEAM",
-  "STAFF_PING_ROLE_ID",
-  "CAREER_SETUP_CHANNEL_ID",
-  "CAREER_REVIEW_CHANNEL_ID",
-  "CAREER_RESULTS_ANNOUNCE_CHANNEL_ID",
-  "SUPPORT_CONTACT_CHANNEL_ID",
-  "ROLE_ID_FLIGHT_DECK",
-  "ROLE_ID_CABIN_CREW",
-  "ROLE_ID_GROUND_CREW",
-  "ROLE_ID_FLIGHT_OPERATOR",
-  "ROLE_ID_HUMAN_RESOURCES",
-  "ROLE_ID_PUBLIC_RELATIONS",
   "FLIGHT_ANNOUNCE_CHANNEL_ID",
   "FLIGHT_BRIEFING_CHANNEL_ID",
   "FLIGHT_LOG_CHANNEL_ID",
-  "ROLE_ID_FLIGHT_OPS_COMMANDS",
   "FLIGHT_PING_ROLE_ID_1",
   "FLIGHT_PING_ROLE_ID_2",
   "FLIGHT_BOOKING_STAFF_CHANNEL_ID",
-  "BOOKING_WEBSITE_BASE_URL",
-  "BOOKING_WEBHOOK_SECRET",
-  "BOOKING_API_PORT",
-  "REWARDS_LOG_CHANNEL_ID",
-  "ROLE_ID_REWARDS_LEVEL_1",
-  "ROLE_ID_REWARDS_LEVEL_2",
-  "ROLE_ID_REWARDS_LEVEL_3",
-  "ADS_CHANNEL_ID",
-  "ADS_SALES_CONTACT_USER_ID",
-  "ROLE_ID_PARTNER",
+  "COUPON_LOG_CHANNEL_ID",
+  "ROLE_ID_MILEAGE_SUPPORT",
+  "ROLE_ID_ANNOUNCE",
   "BOT_OWNER_ID",
   "ERROR_LOG_CHANNEL_ID",
 ];
@@ -98,10 +77,8 @@ export const config = {
   timerPollIntervalSeconds: parseInt(process.env.TIMER_POLL_INTERVAL_SECONDS, 10) || 30,
 
   // Guilds
-  guildIdMain: process.env.GUILD_ID_MAIN,
-  // Public Discord invite shown by the website's "Join Discord" calls to
-  // action. Served from /api/site/config so the site never hardcodes it.
   discordInviteUrl: process.env.DISCORD_INVITE_URL || "",
+  guildIdMain: process.env.GUILD_ID_MAIN,
   guildIdStaff: process.env.GUILD_ID_STAFF,
 
   // Firebase
@@ -109,22 +86,18 @@ export const config = {
   firebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   firebasePrivateKey: process.env.FIREBASE_PRIVATE_KEY,
 
-  // Tickets
+  // Ticket
   ticketsCategoryId: process.env.TICKETS_CATEGORY_ID,
   ticketsLogChannelId: process.env.TICKETS_LOG_CHANNEL_ID,
   roleBoardOfDirectors: process.env.ROLE_ID_BOARD_OF_DIRECTORS,
   roleManagementTeam: process.env.ROLE_ID_MANAGEMENT_TEAM,
   staffPingRoleId: process.env.STAFF_PING_ROLE_ID,
   ticketViewRoleIds: roleIds("ROLE_IDS_TICKET_VIEW"),
-  // Optional banner images shown in the ticket Main Menu. Left empty, the
-  // matching media gallery is simply omitted.
+  ticketBlockedRoleIds: roleIds("ROLE_IDS_TICKET_BLOCKED"),
   ticketBannerTopUrl: process.env.TICKET_BANNER_TOP_URL || null,
   ticketBannerBottomUrl: process.env.TICKET_BANNER_BOTTOM_URL || null,
-  // Roles explicitly denied access to ticket channels. Re-applied every time
-  // ticket permissions are rebuilt.
-  ticketBlockedRoleIds: roleIds("ROLE_IDS_TICKET_BLOCKED"),
 
-  // Careers
+  // Flight Ops
   careerSetupChannelId: process.env.CAREER_SETUP_CHANNEL_ID,
   careerReviewChannelId: process.env.CAREER_REVIEW_CHANNEL_ID,
   careerResultsAnnounceChannelId: process.env.CAREER_RESULTS_ANNOUNCE_CHANNEL_ID,
@@ -136,12 +109,7 @@ export const config = {
   roleHumanResources: process.env.ROLE_ID_HUMAN_RESOURCES,
   rolePublicRelations: process.env.ROLE_ID_PUBLIC_RELATIONS,
 
-  // Website / Booking API
-  websiteBaseUrl: process.env.WEBSITE_BASE_URL,
-  websiteSessionSecret: process.env.WEBSITE_SESSION_SECRET,
-  discordOAuthClientSecret: process.env.DISCORD_OAUTH_CLIENT_SECRET,
-
-  // Flight Operations
+  // Flight Ops
   flightAnnounceChannelId: process.env.FLIGHT_ANNOUNCE_CHANNEL_ID,
   flightBriefingChannelId: process.env.FLIGHT_BRIEFING_CHANNEL_ID,
   flightLogChannelId: process.env.FLIGHT_LOG_CHANNEL_ID,
@@ -153,6 +121,21 @@ export const config = {
   bookingWebhookSecret: process.env.BOOKING_WEBHOOK_SECRET,
   bookingApiPort: parseInt(process.env.BOOKING_API_PORT, 10) || 3001,
 
+  // Mileage & More
+  mileageSupportRoleId: process.env.ROLE_ID_MILEAGE_SUPPORT,
+  tierRoleIds: {
+    frequentTraveler: process.env.ROLE_ID_FREQUENT_TRAVELLER || null,
+    senator: process.env.ROLE_ID_SENATOR || null,
+    honCircle: process.env.ROLE_ID_HON_circle || null,
+  },
+  airports: {
+    HAN: { name: "Hanz", iata: "HAN", timezone: "Asia/Hanoi", offsetsFromUTC: 7 },
+    MUC: { name: "Munich", iata: "MUC", timezone: "Europe/Berlin", offsetsFromUTC: 1 },
+    FRA: { name: "Frankfurt", iata: "FRA", timezone: "Europe/Berlin", offsetsFromUTC: 1 },
+    VRN: { name: "Vienna", iata: "VRN", timezone: "Europe/Vienna", offsetsFromUTC: 1 },
+    SIF: { name: "Simeulue", iata: "SIF", timezone: "Asia/Jakarta", offsetsFromUTC: 7 },
+  },
+
   // Loyalty programme (display labels come from src/config/brand.js)
   rewardsLogChannelId: process.env.REWARDS_LOG_CHANNEL_ID,
   rewardsLevel1RoleId: process.env.ROLE_ID_REWARDS_LEVEL_1,
@@ -163,10 +146,6 @@ export const config = {
   adsChannelId: process.env.ADS_CHANNEL_ID,
   adsSalesContactUserId: process.env.ADS_SALES_CONTACT_USER_ID,
   adsPartnerRoleId: process.env.ROLE_ID_PARTNER,
-
-  // Ops
-  botOwnerId: process.env.BOT_OWNER_ID,
-  errorLogChannelId: process.env.ERROR_LOG_CHANNEL_ID,
 };
 
 export default config;

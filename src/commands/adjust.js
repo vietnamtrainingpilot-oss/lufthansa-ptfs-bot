@@ -10,13 +10,13 @@ import { buildText } from "../utils/builders.js";
 export const data = new SlashCommandBuilder()
   .setName("adjust")
   .setDescription("Adjust member miles (staff)")
-  .addSubcommand(s => s.setName("add").setDescription("Add miles to a member")
+  .addSubcommand(s => s.setName("add").setDescription("Add miles")
     .addUserOption(o => o.setName("user").setDescription("Member").setRequired(true))
-    .addIntegerOption(o => o.setName("amount").setDescription("Amount to add").setRequired(true))
+    .addIntegerOption(o => o.setName("amount").setDescription("Amount").setRequired(true))
     .addStringOption(o => o.setName("reason").setDescription("Reason").setRequired(true)))
-  .addSubcommand(s => s.setName("remove").setDescription("Remove miles from a member")
+  .addSubcommand(s => s.setName("remove").setDescription("Remove miles")
     .addUserOption(o => o.setName("user").setDescription("Member").setRequired(true))
-    .addIntegerOption(o => o.setName("amount").setDescription("Amount to remove").setRequired(true))
+    .addIntegerOption(o => o.setName("amount").setDescription("Amount").setRequired(true))
     .addStringOption(o => o.setName("reason").setDescription("Reason").setRequired(true)));
 
 export async function execute(interaction) {
@@ -24,43 +24,25 @@ export async function execute(interaction) {
   if (!await isStaffAuthorized(interaction.client, interaction.user.id, staffRoles)) {
     return interaction.reply({ ...buildText("Unauthorized."), ephemeral: true });
   }
-  
   const sub = interaction.options.getSubcommand();
   const user = interaction.options.getUser("user");
   const amount = interaction.options.getInteger("amount");
   const reason = interaction.options.getString("reason");
-  
   try {
     const db = getDb();
-    const memberRef = db.collection("members").doc(user.id);
-    const doc = await memberRef.get();
-    
-    if (!doc.exists) {
-      return interaction.reply({ ...buildText(`Account not found for ${user.tag}.`), ephemeral: true });
-    }
-    
-    const current = doc.data()?.awards?.awardMiles?.balance || 0;
+    const memberDoc = await db.collection("members").doc(user.id).get();
+    if (!memberDoc.exists) return interaction.reply({ ...buildText(`Account not found for ${user.tag}.`), ephemeral: true });
+    const current = memberDoc.data()?.awards?.awardMiles?.balance || 0;
     const newData = sub === "add" ? current + amount : Math.max(0, current - amount);
-    
-    await memberRef.update({
+    await db.collection("members").doc(user.id).update({
       "awards.awardMiles.balance": newData,
+      "awards.awardMiles.lifetimeEarned": (memberDoc.data()?.awards?.awardMiles?.lifetimeEarned || 0) + (sub === "add" ? amount : 0),
     });
-    
-    // Record transaction
     await db.collection("mileageLedger").add({
-      userId: user.id,
-      type: sub === "add" ? "earning" : "spending",
-      transactionType: "adjustment",
-      amount: sub === "add" ? amount : -amount,
-      reason,
-      adjustedBy: interaction.user.id,
-      appliedAt: new Date(),
+      userId: user.id, type: sub === "add" ? "earning" : "spending", transactionType: "adjustment",
+      amount: sub === "add" ? amount : -amount, reason, adjustedBy: interaction.user.id, appliedAt: new Date(),
     });
-    
-    return interaction.reply({
-      ...buildText(`${sub === "add" ? "Added" : "Removed"} ${amount.toLocaleString()} miles from ${user.tag}.\nNew balance: ${newData.toLocaleString()}`),
-      ephemeral: true
-    });
+    return interaction.reply({ ...buildText(`${sub === "add" ? "Added" : "Removed"} ${amount.toLocaleString()} miles. New balance: ${newData.toLocaleString()}`), ephemeral: true });
   } catch (e) {
     return interaction.reply({ ...buildText(`Failed: ${e.message}`), ephemeral: true });
   }

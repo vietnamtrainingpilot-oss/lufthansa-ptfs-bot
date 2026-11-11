@@ -34,12 +34,12 @@ async function migrate() {
 
     // Skip if total is too low to be a real user
     if (totalMiles < 100) {
-      console.log(`⏭️  Skipping ${userId} (${totalMiles} miles)`);
+      console.log(`[migration] Skipping ${userId} (${totalMiles} miles)`);
       continue;
     }
 
     totalMigrated++;
-    console.log(`✅ Migrating ${userId} (${totalMiles.toFixed(1)} miles)\n`);
+    console.log(`[migration] Migrating ${userId} (${totalMiles.toFixed(1)} miles)\n`);
 
     mapping.push({
       userId,

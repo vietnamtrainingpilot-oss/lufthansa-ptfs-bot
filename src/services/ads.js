@@ -3,7 +3,6 @@
  */
 import { getDb } from "./firestore.js";
 import config from "../config/config.js";
-import { createTicket } from "./tickets.js";
 import { buildText } from "../utils/builders.js";
 
 const COLLECTION = "adsOrders";

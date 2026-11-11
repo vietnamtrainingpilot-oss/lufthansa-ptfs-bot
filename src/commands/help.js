@@ -21,11 +21,12 @@ export async function execute(interaction) {
     "**Flights:**",
     "• `/claim <code>` — Claim flight miles",
     "• `/flight create` — Create flight (staff)",
-    "• `/flight log` — Log completed flight (staff)",
-    "• `/flight update` — Delay/cancel flight (staff)",
+    "• `/flight add` — Manual passenger registration (staff)",
+    "• `/flight close` — Close flight claims (staff)",
+    "• `/flight void` — Void a flight (staff)",
     "",
     "**Rewards:**",
-    "• `/shop` — Browse rewards",
+    "• `/shop` — Browse rewards catalog",
     "• `/redeem <name>` — Redeem miles for rewards",
     "• `/history` — View transaction history",
     "",
@@ -37,9 +38,12 @@ export async function execute(interaction) {
     "**Admin (Staff):**",
     "• `/adjust add/remove` — Award or deduct miles",
     "• `/setup` — Configure system settings",
-    "• `/tiers` — Manage membership tiers"
+    "• `/tiers` — Manage membership tiers",
+    "• `/route` — Manage flight routes",
+    "",
+    "**Privacy:**",
+    "• `/privacy delete` — Delete your account"
   ];
-  
   return interaction.reply({
     ...buildMessage({ accentColor: ACCENT.DEFAULT, text: [lines.join("\n")] }),
     ephemeral: true

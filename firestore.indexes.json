@@ -19,7 +19,7 @@
       "collectionGroup": "claims",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "member.userId", "order": "ASCENDING" }
+        { "fieldPath": "memberUserId", "order": "ASCENDING" }
       ]
     },
     {
@@ -35,6 +35,14 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "name", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "flights",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "scheduledUnixTime", "order": "ASCENDING" }
       ]
     }
   ],

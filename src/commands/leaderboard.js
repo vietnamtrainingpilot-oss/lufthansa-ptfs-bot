@@ -1,16 +1,15 @@
 /**
- * /leaderboard — View Miles & More rankings
+ * /leaderboard — View member rankings
  */
 import { SlashCommandBuilder } from "discord.js";
 import { getDb } from "../services/firestore.js";
-import { buildMessage } from "../utils/builders.js";
+import { buildMessage, buildText } from "../utils/builders.js";
 import { ACCENT } from "../config/brand.js";
 
 export const data = new SlashCommandBuilder()
   .setName("leaderboard")
   .setDescription("View member rankings")
   .addStringOption(o => o.setName("sort")
-    .setDescription("Sort by")
     .addChoices(
       { name: "Award Miles", value: "miles" },
       { name: "Total Flights", value: "flights" },
@@ -19,41 +18,24 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
   const sort = interaction.options.getString("sort") || "miles";
-  
   try {
     const db = getDb();
-    
-    let query;
-    if (sort === "miles") {
-      query = db.collection("members").orderBy("awards.awardMiles.balance", "DESC").limit(10);
-    } else if (sort === "points") {
-      query = db.collection("members").orderBy("membership.statusPoints", "DESC").limit(10);
-    } else {
-      // count flights
-      const snap = await db.collection("members").get();
-      const sorted = snap.docs.map(d => ({ id: d.id, flights: d.data()?.history?.totalFlights || 0 }))
-        .sort((a, b) => b.flights - a.flights).slice(0, 10);
-      
-      const lines = ["**Leaderboard — Most Flights**", "", ...sorted.map((e, i) => 
-        `#${i+1}: ${e.id} (${e.flights} flights)`
-      )];
-      
-      return interaction.reply({ ...buildText(lines.join("\n")), ephemeral: true });
-    }
-    
-    const snap = await query.get();
-    const members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    
+    let snap;
+    if (sort === "miles") snap = await db.collection("members").orderBy("awards.awardMiles.balance", "desc").limit(10).get();
+    else if (sort === "points") snap = await db.collection("members").orderBy("membership.statusPoints", "desc").limit(10).get();
+    else snap = await db.collection("members").orderBy("membership.totalFlights", "desc").limit(10).get();
+
     const lines = [
       `**Miles & More Leaderboard** — ${sort}`,
       "",
-      ...members.slice(0, 10).map((m, i) => {
-        const miles = m.awards?.awardMiles?.balance?.toLocaleString() || 0;
-        const tier = m.membership?.tier || "Frequent Traveller";
-        return `#${i+1}: <@!${m.id}> — ${miles} miles | ${tier}`;
+      ...snap.docs.slice(0, 10).map((d, i) => {
+        const m = d.data();
+        const val = sort === "miles" ? (m.awards?.awardMiles?.balance || 0).toLocaleString() :
+          sort === "points" ? (m.membership?.statusPoints || 0).toLocaleString() :
+          (m.membership?.totalFlights || 0);
+        return `#${i+1}: <@!${m.userId}> — ${val}`;
       })
     ];
-    
     return interaction.reply({
       ...buildMessage({ accentColor: ACCENT.BRAND_NAVY, text: [lines.join("\n")] }),
       ephemeral: true

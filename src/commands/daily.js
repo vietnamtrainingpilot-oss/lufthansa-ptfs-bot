@@ -1,8 +1,8 @@
 /**
- * /daily — Claim daily reward (AeroNexus 11.2)
+ * /daily — Claim daily check-in
  */
 import { SlashCommandBuilder } from "discord.js";
-import * as streaks from "../services/streaks.js";
+import { claimDaily } from "../services/dailyRewards.js";
 import { buildText, buildMessage } from "../utils/builders.js";
 import { ACCENT } from "../config/brand.js";
 
@@ -11,26 +11,17 @@ export const data = new SlashCommandBuilder()
   .setDescription("Claim your daily check-in reward");
 
 export async function execute(interaction) {
-  await interaction.deferReply({ ephemeral: true });
   try {
-    const result = await streaks.claimDailyReward(interaction.user.id);
-    if (!result.ok) {
-      return interaction.editReply({ ...buildText(result.reason), ephemeral: true });
-    }
-    return interaction.editReply({
+    const result = await claimDaily(interaction.user.id);
+    return interaction.reply({
       ...buildMessage({
         accentColor: ACCENT.SUCCESS,
-        text: [
-          `Daily Check-in Complete!\n\n` +
-          `Day ${result.streakDays} streak.\n` +
-          `Earned ${result.pointsAwarded} Miles and ${result.creditsAwarded} Credits.\n\n` +
-          `Keep it up for bigger bonuses!`
-        ]
+        text: [`Daily Check-in Complete!\n\nDay ${result.streak} streak.\nEarned ${result.totalMiles} Award Miles.\n\nKeep it up for bigger bonuses!`]
       }),
-      ephemeral: true,
+      ephemeral: true
     });
   } catch (e) {
-    return interaction.editReply({ ...buildText(`Error: ${e.message}`), ephemeral: true });
+    return interaction.reply({ ...buildText(`Error: ${e.message}`), ephemeral: true });
   }
 }
 

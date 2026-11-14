@@ -25,18 +25,23 @@ export async function claimDaily(userId) {
   const bonusMiles = Math.floor(streak * STREAK_BONUS);
   const totalMiles = DAILY_MILES + bonusMiles;
 
+  const { applyLedgerEntry, TX_TYPE } = await import("./ledger.js");
+  
+  // Use ledger for the balance update atomically
+  await applyLedgerEntry({
+    userId,
+    currency: "points",
+    amount: totalMiles,
+    type: TX_TYPE.MISSION_EARN,
+    reason: `Daily check-in (streak ${streak})`,
+    idempotencyKey: `daily:${userId}:${today}`,
+    referenceType: "daily",
+    referenceId: today,
+  });
+
   await db.collection("dailyClaims").add({ userId, date: today, streak, milesAwarded: totalMiles, baseMiles: DAILY_MILES, bonusMiles, claimedAt: new Date() });
-  await db.collection("members").doc(userId).update({
-    "awards.awardMiles.balance": (account.awards?.awardMiles?.balance || 0) + totalMiles,
-    "awards.awardMiles.lifetimeEarned": (account.awards?.awardMiles?.lifetimeEarned || 0) + totalMiles,
-  });
 
-  await db.collection("mileageLedger").add({
-    userId, type: "earning", transactionType: "daily", amount: totalMiles,
-    reason: `Daily check-in (streak ${streak})`, appliedAt: new Date(),
-  });
-
-  return { streak, baseMiles: DAILY_Miles, bonusMiles, totalMiles };
+  return { streak, baseMiles: DAILY_MILES, bonusMiles, totalMiles };
 }
 
 export default { claimDaily };

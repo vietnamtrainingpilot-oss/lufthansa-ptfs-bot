@@ -31,18 +31,36 @@ export async function isStaffAuthorized(client, discordUserId, requiredRoleIds) 
 }
 
 /**
+ * Flatten an env value into a deduped list of Discord role IDs. Handles both
+ * single-role keys (e.g. ROLE_ID_*_COMMANDS) and multi-role comma lists.
+ * Returns empty array when nothing is configured — callers must still
+ * decide whether that means "deny" or "allow all".
+ */
+function resolveRoleIds(...keys) {
+  const set = new Set();
+  for (const key of keys) {
+    const raw = process.env[key];
+    if (!raw) continue;
+    for (const id of raw.split(",").map((s) => s.trim()).filter(Boolean)) {
+      set.add(id);
+    }
+  }
+  return Array.from(set);
+}
+
+/**
  * Flight-ops authorization: ROLE_ID_FLIGHT_OPS_COMMANDS in Main guild, OR
  * BoD/Management in Staff guild (admin override).
- *
- * @param {import("discord.js").Client} client
- * @param {string} discordUserId
- * @returns {Promise<boolean>}
  */
 export async function isFlightOpsAuthorized(client, discordUserId) {
   try {
-    const mainGuild = await client.guilds.fetch(config.guildIdMain);
-    const member = await mainGuild.members.fetch(discordUserId).catch(() => null);
-    if (member?.roles.cache.has(config.flightOpsCommandsRoleId)) return true;
+    const flightOpsIds = resolveRoleIds("ROLE_ID_FLIGHT_OPS_COMMANDS");
+    if (flightOpsIds.length > 0) {
+      const mainGuild = await client.guilds.fetch(config.guildIdMain);
+      const member = await mainGuild.members.fetch(discordUserId).catch(() => null);
+      if (member && flightOpsIds.some((id) => member.roles.cache.has(id))) return true;
+    }
+    // Admin override: board or management roles in Staff guild
     return isStaffAuthorized(client, discordUserId, [
       config.roleBoardOfDirectors,
       config.roleManagementTeam,
@@ -56,15 +74,12 @@ export async function isFlightOpsAuthorized(client, discordUserId) {
 /**
  * Check whether a user can interact with a ticket channel.
  * Opener and claimer always pass; otherwise must hold a ticket-view role.
- *
- * @param {import("discord.js").GuildMember} member
- * @param {string} openerId
- * @param {string} claimerId
- * @returns {boolean}
  */
 export function canViewTicket(member, openerId, claimerId) {
   if (member.id === openerId || member.id === claimerId) return true;
-  return config.ticketViewRoleIds.some((id) => member.roles.cache.has(id));
+  const ticketViewIds = resolveRoleIds("ROLE_ID_TICKET_VIEW");
+  if (!ticketViewIds.length) return false;
+  return ticketViewIds.some((id) => member.roles.cache.has(id));
 }
 
 export default {

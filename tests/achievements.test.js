@@ -67,7 +67,7 @@ test("seedAchievements creates default catalog", async () => {
   const achievements = SYSTEM_ACHIEVEMENTS;
   assert.ok(achievements.length >= 5, "at least 5 default achievements defined");
   const first = achievements.find((a) => a.id === "first_flight");
-  assert.equal(first.title, "First Wings");
+  assert.equal(first.name, "First Flight");
 });
 
 test("unlockAchievement is idempotent", async () => {

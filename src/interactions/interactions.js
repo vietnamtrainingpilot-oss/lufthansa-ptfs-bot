@@ -21,6 +21,17 @@ export async function handleInteraction(interaction, client) {
     return loyaltyHandlers.handleLoyaltyInteraction(interaction, client);
   }
   if (customId.startsWith("ads_tier_")) return adHandlers.handleAdsTierSelect(interaction, client);
+  if (customId.startsWith("setup_")) {
+    // Handle interactive modal responses inside the setup flow. The command's
+    // execute() handles /setup start and final save; modals/submits route here.
+    try {
+      const mod = await import("./../commands/setup.js");
+      if (typeof mod.handleInteraction === "function") {
+        return mod.handleInteraction(interaction, client);
+      }
+    } catch {}
+    return interaction.reply({ content: "Internal error: setup handler not found.", ephemeral: true });
+  }
 }
 
 export default { handleInteraction };

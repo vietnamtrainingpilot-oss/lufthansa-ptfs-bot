@@ -24,6 +24,7 @@ export async function execute(interaction) {
   const code = interaction.options.getString("code");
   const cabin = interaction.options.getString("cabin") || "economy";
   try {
+    // Ensure both legacy member doc and ledger account exist
     await getOrCreateAccount(interaction.user.id);
     const result = await claimFlight({ code, cabin, memberId: interaction.user.id });
     const breakdown = breakdownText(result, interaction.user.id);

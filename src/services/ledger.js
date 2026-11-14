@@ -273,9 +273,27 @@ export async function writeAudit({ actorId, action, targetUserId = null, amount 
  */
 export async function getHistory(userId, { limit = 25, currency = null } = {}) {
   const db = getDb();
-  let q = db.collection(LEDGER).where("userId", "==", String(userId));
-  if (currency) q = q.where("currency", "==", currency);
-  const snap = await q.orderBy("at", "desc").limit(Math.min(Math.max(limit, 1), 100)).get();
+  // Use separate queries for compound filters; Firestore requires indexes for combined where + orderBy
+  let baseQ = db.collection(LEDGER).where("userId", "==", String(userId));
+  let snap;
+  if (currency) {
+    // If we have a currency filter, also order by at — but without an index this
+    // may fail in production. Fetch all matching rows and sort client-side as fallback.
+    try {
+      snap = await baseQ.where("currency", "==", currency).orderBy("at", "desc")
+        .limit(Math.min(Math.max(limit, 1), 100)).get();
+    } catch {
+      // Fallback: fetch without orderBy, sort in memory
+      const unsorted = await baseQ.where("currency", "==", currency).get();
+      snap = { docs: unsorted.docs.sort((a, b) => {
+        const ta = a.data().at?.toMillis?.() ?? new Date(a.data().at || 0).getTime();
+        const tb = b.data().at?.toMillis?.() ?? new Date(b.data().at || 0).getTime();
+        return tb - ta;
+      }) };
+    }
+  } else {
+    snap = await baseQ.orderBy("at", "desc").limit(Math.min(Math.max(limit, 1), 100)).get();
+  }
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 

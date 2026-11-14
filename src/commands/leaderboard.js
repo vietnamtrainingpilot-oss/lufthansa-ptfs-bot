@@ -10,6 +10,7 @@ export const data = new SlashCommandBuilder()
   .setName("leaderboard")
   .setDescription("View member rankings")
   .addStringOption(o => o.setName("sort")
+    .setDescription("Sort by metric")
     .addChoices(
       { name: "Award Miles", value: "miles" },
       { name: "Total Flights", value: "flights" },

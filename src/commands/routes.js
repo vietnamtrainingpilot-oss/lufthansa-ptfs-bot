@@ -1,5 +1,5 @@
 /**
- * /route — Manage flight routes (admin)
+ * /routes — Manage flight routes (admin)
  */
 import { SlashCommandBuilder } from "discord.js";
 import { getDb } from "../services/firestore.js";
@@ -8,7 +8,7 @@ import config from "../config/config.js";
 import { buildText } from "../utils/builders.js";
 
 export const data = new SlashCommandBuilder()
-  .setName("route")
+  .setName("routes")
   .setDescription("Manage flight routes (admin)")
   .addSubcommand(s => s.setName("check").setDescription("Check route distance")
     .addStringOption(o => o.setName("origin").setDescription("Origin airport").setRequired(true))
